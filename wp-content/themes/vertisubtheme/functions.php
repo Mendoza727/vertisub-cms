@@ -327,7 +327,7 @@ function vertisub_save_social_url($post_id)
 add_action('save_post', 'vertisub_save_social_url');
 
 
-// 1. Registrar CPT "Nosotros"
+// 1. Registrar CPT "Nosotros" (igual que antes)
 function vertisub_create_about_post_type()
 {
     register_post_type(
@@ -348,7 +348,7 @@ function vertisub_create_about_post_type()
             'public'      => true,
             'has_archive' => false,
             'menu_icon'   => 'dashicons-groups',
-            'supports'    => array('title', 'editor', 'thumbnail'), // título, descripción, imagen
+            'supports'    => array('title', 'editor', 'thumbnail'),
             'rewrite'     => array('slug' => 'nosotros'),
         )
     );
@@ -356,12 +356,12 @@ function vertisub_create_about_post_type()
 add_action('init', 'vertisub_create_about_post_type');
 
 
-// 2. Metabox para media extra (video o ninguno)
+// 2. Metabox para videos repetibles
 function vertisub_add_about_media_metabox()
 {
     add_meta_box(
         'about_media_box',
-        'Media (Imagen, Video o Ninguno)',
+        'Videos (puedes agregar varios)',
         'vertisub_render_about_media_box',
         'nosotros',
         'normal',
@@ -370,33 +370,78 @@ function vertisub_add_about_media_metabox()
 }
 add_action('add_meta_boxes', 'vertisub_add_about_media_metabox');
 
-// Render del Metabox
+
+// Render del metabox
 function vertisub_render_about_media_box($post)
 {
-    $video_url = get_post_meta($post->ID, '_about_video_url', true);
-?>
+    // Recuperar los videos guardados (array)
+    $videos = get_post_meta($post->ID, '_about_video_urls', true);
+    if (!is_array($videos)) $videos = array();
+
+    // Añadir nonce para seguridad
+    wp_nonce_field('vertisub_save_about_media', 'vertisub_about_media_nonce');
+    ?>
+
+    <div id="about-videos-container">
+        <?php foreach ($videos as $index => $url) : ?>
+            <p>
+                <label>Video <?php echo $index + 1; ?> URL:</label><br>
+                <input type="url" name="about_video_urls[]" value="<?php echo esc_attr($url); ?>" style="width:100%;">
+                <button class="button remove-video">Eliminar</button>
+            </p>
+        <?php endforeach; ?>
+    </div>
+
     <p>
-        <label for="about_video_url">URL del Video (YouTube, Vimeo, etc.):</label><br>
-        <input type="url" id="about_video_url" name="about_video_url"
-            value="<?php echo esc_attr($video_url); ?>"
-            placeholder="https://youtube.com/..." style="width:100%;">
+        <button id="add-video" class="button">Agregar Video</button>
     </p>
-    <p><em>Si no quieres usar video, deja el campo vacío. Puedes usar la <strong>Imagen Destacada</strong> para subir una imagen.</em></p>
+
+    <p><em>Si no quieres usar video, deja los campos vacíos. También puedes usar la Imagen Destacada.</em></p>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.getElementById('about-videos-container');
+            document.getElementById('add-video').addEventListener('click', function(e){
+                e.preventDefault();
+                const index = container.children.length;
+                const p = document.createElement('p');
+                p.innerHTML = '<label>Video ' + (index+1) + ' URL:</label><br>' +
+                              '<input type="url" name="about_video_urls[]" style="width:100%;"> ' +
+                              '<button class="button remove-video">Eliminar</button>';
+                container.appendChild(p);
+            });
+
+            container.addEventListener('click', function(e){
+                if(e.target.classList.contains('remove-video')){
+                    e.preventDefault();
+                    e.target.parentElement.remove();
+                }
+            });
+        });
+    </script>
+
 <?php
 }
 
-// Guardar el campo video
+// Guardar los videos
 function vertisub_save_about_media($post_id)
 {
-    if (array_key_exists('about_video_url', $_POST)) {
-        update_post_meta(
-            $post_id,
-            '_about_video_url',
-            esc_url_raw($_POST['about_video_url'])
-        );
+    if (!isset($_POST['vertisub_about_media_nonce']) || !wp_verify_nonce($_POST['vertisub_about_media_nonce'], 'vertisub_save_about_media')) {
+        return;
+    }
+
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+
+    if (isset($_POST['about_video_urls']) && is_array($_POST['about_video_urls'])) {
+        // Limpiar URLs vacías
+        $urls = array_filter(array_map('esc_url_raw', $_POST['about_video_urls']));
+        update_post_meta($post_id, '_about_video_urls', $urls);
+    } else {
+        delete_post_meta($post_id, '_about_video_urls');
     }
 }
 add_action('save_post', 'vertisub_save_about_media');
+
 
 // Registrar logo dinámico para Header
 function vertisub_custom_logos()
