@@ -70,24 +70,35 @@ Template Name: Sancho Landing Page
             <div class="certifications-carousel">
                 <div class="carousel-container">
                     <div class="carousel-track" id="certificationsTrack">
-                        <div class="certification-item">
-                            <img src="/placeholder.svg?height=80&width=120" alt="Certificación 1" class="cert-logo">
-                        </div>
-                        <div class="certification-item">
-                            <img src="/placeholder.svg?height=80&width=120" alt="Certificación 2" class="cert-logo">
-                        </div>
-                        <div class="certification-item">
-                            <img src="/placeholder.svg?height=80&width=120" alt="Certificación 3" class="cert-logo">
-                        </div>
-                        <div class="certification-item">
-                            <img src="/placeholder.svg?height=80&width=120" alt="Certificación 4" class="cert-logo">
-                        </div>
-                        <div class="certification-item">
-                            <img src="/placeholder.svg?height=80&width=120" alt="Certificación 5" class="cert-logo">
-                        </div>
-                        <div class="certification-item">
-                            <img src="/placeholder.svg?height=80&width=120" alt="Certificación 6" class="cert-logo">
-                        </div>
+                        <?php
+                        $certificaciones = new WP_Query(array(
+                            'post_type'      => 'certificaciones',
+                            'posts_per_page' => -1, // todas las certificaciones
+                            'orderby'        => 'date',
+                            'order'          => 'DESC'
+                        ));
+
+                        if ($certificaciones->have_posts()) :
+                            while ($certificaciones->have_posts()) : $certificaciones->the_post();
+                        ?>
+                                <div class="certification-item">
+                                    <?php if (has_post_thumbnail()) : ?>
+                                        <img src="<?php the_post_thumbnail_url('medium'); ?>"
+                                            alt="<?php the_title(); ?>"
+                                            class="cert-logo">
+                                    <?php else : ?>
+                                        <img src="/placeholder.svg?height=80&width=120"
+                                            alt="<?php the_title(); ?>"
+                                            class="cert-logo">
+                                    <?php endif; ?>
+                                </div>
+                            <?php
+                            endwhile;
+                            wp_reset_postdata();
+                        else :
+                            ?>
+                            <p>No hay certificaciones registradas.</p>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -104,95 +115,64 @@ Template Name: Sancho Landing Page
                     <!-- Increased column size and removed card wrapper, added icons to work items -->
                     <div class="col-lg-9 mt-5">
                         <div class="work-items-container">
-                            <div class="work-item" data-project="expovinos">
-                                <div class="work-header">
-                                    <div class="work-icon">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                            <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                            <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                        </svg>
-                                    </div>
-                                    <h3 class="work-title">Lorem</h3>
-                                    <div class="work-meta">
-                                        <div class="collapse-icon">
-                                            <span class="icon-plus">+</span>
-                                            <span class="icon-minus">-</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="work-content">
-                                    <p class="work-description">Desarrollo de estrategia integral para la exposición de vinos más importante del país, incluyendo branding, experiencia digital y activaciones presenciales.</p>
-                                    <img src="/placeholder.svg?height=200&width=300" alt="Expovinos Project" class="work-image">
-                                </div>
-                            </div>
+                            <?php
+                            $args = array(
+                                'post_type'      => 'nosotros',
+                                'posts_per_page' => 4, // limitar a 4
+                                'post_status'    => 'publish'
+                            );
 
-                            <div class="work-item" data-project="futbol">
-                                <div class="work-header">
-                                    <div class="work-icon">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
-                                            <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                        </svg>
-                                    </div>
-                                    <h3 class="work-title">Lorem</h3>
-                                    <div class="work-meta">
-                                        <div class="collapse-icon">
-                                            <span class="icon-plus">+</span>
-                                            <span class="icon-minus">-</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="work-content">
-                                    <p class="work-description">Campaña de comunicación para promover el fútbol amateur y semiprofesional, conectando comunidades a través del deporte.</p>
-                                    <img src="/placeholder.svg?height=200&width=300" alt="Fútbol Project" class="work-image">
-                                </div>
-                            </div>
+                            $nosotros_query = new WP_Query($args);
 
-                            <div class="work-item" data-project="innovar">
-                                <div class="work-header">
-                                    <div class="work-icon">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M9 12L11 14L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                            <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" />
-                                        </svg>
-                                    </div>
-                                    <h3 class="work-title">Lorem</h3>
-                                    <div class="work-meta">
-                                        <div class="collapse-icon">
-                                            <span class="icon-plus">+</span>
-                                            <span class="icon-minus">-</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="work-content">
-                                    <p class="work-description">Plataforma de innovación empresarial que conecta startups con grandes corporaciones para desarrollar soluciones disruptivas.</p>
-                                    <img src="/placeholder.svg?height=200&width=300" alt="Innovar Project" class="work-image">
-                                </div>
-                            </div>
+                            if ($nosotros_query->have_posts()) :
+                                while ($nosotros_query->have_posts()) : $nosotros_query->the_post();
+                                    $video_url = get_post_meta(get_the_ID(), '_about_video_url', true);
+                                    $has_image = has_post_thumbnail();
+                            ?>
 
-                            <div class="work-item" data-project="lorenzoneta">
-                                <div class="work-header">
-                                    <div class="work-icon">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M20.24 12.24C21.3658 11.1142 21.9983 9.58722 21.9983 7.99504C21.9983 6.40285 21.3658 4.87588 20.24 3.75004C19.1142 2.62419 17.5872 1.9917 15.995 1.9917C14.4028 1.9917 12.8758 2.62419 11.75 3.75004L5 10.5V19H13.5L20.24 12.24Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                            <path d="M16 8L2 22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                            <path d="M17.5 15H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                        </svg>
-                                    </div>
-                                    <h3 class="work-title">LOREm</h3>
-                                    <div class="work-meta">
-                                        <div class="collapse-icon">
-                                            <span class="icon-plus">+</span>
-                                            <span class="icon-minus">-</span>
+                                    <div class="work-item" data-project="<?php echo esc_attr(get_post_field('post_name', get_the_ID())); ?>">
+                                        <div class="work-header">
+                                            <div class="work-icon">
+                                                <!-- puedes cambiar el ícono a gusto -->
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                                    <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                                    <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                                </svg>
+                                            </div>
+                                            <h3 class="work-title"><?php the_title(); ?></h3>
+                                            <div class="work-meta">
+                                                <div class="collapse-icon">
+                                                    <span class="icon-plus">+</span>
+                                                    <span class="icon-minus">-</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="work-content">
+                                            <p class="work-description"><?php the_content(); ?></p>
+
+                                            <?php if ($video_url) : ?>
+                                                <div class="work-video">
+                                                    <iframe width="560" height="315"
+                                                        src="<?php echo esc_url($video_url); ?>"
+                                                        frameborder="0" allowfullscreen>
+                                                    </iframe>
+                                                </div>
+                                            <?php elseif ($has_image) : ?>
+                                                <div class="work-image">
+                                                    <?php the_post_thumbnail('medium'); ?>
+                                                </div>
+                                            <?php endif; ?>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="work-content">
-                                    <p class="work-description">Identidad visual y estrategia digital para marca de moda sostenible, enfocada en la producción local y materiales eco-friendly.</p>
-                                    <img src="/placeholder.svg?height=200&width=300" alt="Lorenzoneta Project" class="work-image">
-                                </div>
-                            </div>
+
+                            <?php
+                                endwhile;
+                                wp_reset_postdata();
+                            else :
+                                echo '<p>No hay apartados de nosotros aún.</p>';
+                            endif;
+                            ?>
                         </div>
                     </div>
                 </div>

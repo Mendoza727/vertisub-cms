@@ -28,7 +28,15 @@
             <div class="nav-logo">
                 <!-- Logo dinámico -->
                 <a href="<?php echo esc_url(home_url('/')); ?>" class="logo-text">
-                    <?php bloginfo('name'); ?>
+                    <?php
+                    if (function_exists('the_custom_logo') && has_custom_logo()) {
+                        $custom_logo_id = get_theme_mod('custom_logo');
+                        $logo = wp_get_attachment_image_src($custom_logo_id, 'full');
+                        echo '<img src="' . esc_url($logo[0]) . '" alt="' . get_bloginfo('name') . '" style="width:130px; height:auto;">';
+                    } else {
+                        bloginfo('name');
+                    }
+                    ?>
                 </a>
             </div>
 
@@ -76,9 +84,29 @@
 
                 <div class="offcanvas-footer">
                     <div class="social-links">
-                        <a href="#" class="social-link">Instagram</a>
-                        <a href="#" class="social-link">LinkedIn</a>
-                        <a href="#" class="social-link">Behance</a>
+                        <?php
+                        $redes = new WP_Query(array(
+                            'post_type'      => 'redes_sociales',
+                            'posts_per_page' => -1,
+                            'orderby'        => 'date',
+                            'order'          => 'ASC'
+                        ));
+
+                        if ($redes->have_posts()) :
+                            while ($redes->have_posts()) : $redes->the_post();
+                                $url = get_post_meta(get_the_ID(), '_social_url', true);
+                        ?>
+                                <a href="<?php echo esc_url($url); ?>"
+                                    class="social-link"
+                                    target="_blank"
+                                    rel="noopener">
+                                    <?php the_title(); ?>
+                                </a>
+                        <?php
+                            endwhile;
+                            wp_reset_postdata();
+                        endif;
+                        ?>
                     </div>
                 </div>
             </div>

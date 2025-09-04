@@ -7,10 +7,21 @@
             <!-- Logo and Company Info -->
             <div class="footer-logo-section">
                 <div class="footer-logo">
-                    <span class="footer-logo-text">VERTISUB</span>
+                    <div class="footer-logo">
+                        <?php
+                        $logo = get_theme_mod('vertisub_footer_logo');
+                        if ($logo) {
+                            // Mostrar la imagen del logo
+                            echo '<img width="120px" src="' . esc_url($logo) . '" alt="' . get_bloginfo('name') . '">';
+                        } else {
+                            // Si no hay logo, mostrar el texto
+                            echo '<span class="footer-logo-text">' . get_bloginfo('name') . '</span>';
+                        }
+                        ?>
+                    </div>
                 </div>
-                <p class="footer-company-desc">
-                    Transformamos ideas en experiencias digitales únicas. Especialistas en desarrollo web, branding y marketing digital.
+                <p class="footer-company-desc mt-4">
+                    ofrecemos soluciones seguras e innovadoras para trabajos en altura, industria y energías renovables, cuidando siempre la vida y el entorno.
                 </p>
                 <div class="footer-social-links">
                     <a href="#" class="footer-social-link" aria-label="Facebook">
@@ -33,7 +44,7 @@
 
             <!-- Services Links -->
             <div class="footer-links-section">
-                <h3 class="footer-section-title">Servicios</h3>
+                <h3 class="footer-section-title">Link Interes</h3>
                 <ul class="footer-links-list">
                     <li class="footer-link-item">
                         <a href="#" class="footer-link">Desarrollo Web</a>
@@ -56,31 +67,6 @@
                 </ul>
             </div>
 
-            <!-- Company Links -->
-            <div class="footer-links-section">
-                <h3 class="footer-section-title">Empresa</h3>
-                <ul class="footer-links-list">
-                    <li class="footer-link-item">
-                        <a href="#" class="footer-link">Acerca de</a>
-                    </li>
-                    <li class="footer-link-item">
-                        <a href="#" class="footer-link">Nuestro Equipo</a>
-                    </li>
-                    <li class="footer-link-item">
-                        <a href="#" class="footer-link">Portafolio</a>
-                    </li>
-                    <li class="footer-link-item">
-                        <a href="#" class="footer-link">Blog</a>
-                    </li>
-                    <li class="footer-link-item">
-                        <a href="#" class="footer-link">Carreras</a>
-                    </li>
-                    <li class="footer-link-item">
-                        <a href="#" class="footer-link">Contacto</a>
-                    </li>
-                </ul>
-            </div>
-
             <!-- Contact and Newsletter -->
             <div class="footer-links-section">
                 <h3 class="footer-section-title">Contacto</h3>
@@ -94,7 +80,7 @@
                     <svg class="footer-contact-icon" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
                     </svg>
-                    <span class="footer-contact-text">+57 123 456 789</span>
+                    <span class="footer-contact-text">+57 (601) 671 66 20</span>
                 </div>
                 <div class="footer-contact-item">
                     <svg class="footer-contact-icon" viewBox="0 0 24 24" fill="currentColor">
@@ -106,25 +92,7 @@
                     <svg class="footer-contact-icon" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
                     </svg>
-                    <span class="footer-contact-text">Calle 123 #45-67, Bogotá</span>
-                </div>
-
-                <!-- Newsletter Section -->
-                <div class="newsletter-section">
-                    <h4 class="newsletter-title">Newsletter</h4>
-                    <p class="newsletter-description">
-                        Suscríbete para recibir las últimas noticias y ofertas exclusivas.
-                    </p>
-                    <form class="newsletter-form">
-                        <input
-                            type="email"
-                            class="newsletter-input"
-                            placeholder="Tu email"
-                            required>
-                        <button type="submit" class="newsletter-button">
-                            Suscribir
-                        </button>
-                    </form>
+                    <span class="footer-contact-text">Cl. 163a # 16A - 58, Bogotá</span>
                 </div>
             </div>
 

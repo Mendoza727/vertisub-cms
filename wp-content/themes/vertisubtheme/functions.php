@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Sancho Landing Theme Functions
+ * vertisub Landing Theme Functions
  */
 
 // Theme setup
@@ -44,33 +44,33 @@ function sancho_enqueue_assets()
 }
 add_action('wp_enqueue_scripts', 'sancho_enqueue_assets');
 
-// Custom post type for portfolio (optional)
-function sancho_create_portfolio_post_type()
+// Certification Post
+function vertisub_create_certification_post_type()
 {
     register_post_type(
-        'portfolio',
+        'certificaciones',
         array(
             'labels' => array(
-                'name' => 'Portfolio',
-                'singular_name' => 'Portfolio Item',
-                'add_new' => 'Add New Project',
-                'add_new_item' => 'Add New Portfolio Item',
-                'edit_item' => 'Edit Portfolio Item',
-                'new_item' => 'New Portfolio Item',
-                'view_item' => 'View Portfolio Item',
-                'search_items' => 'Search Portfolio',
-                'not_found' => 'No portfolio items found',
-                'not_found_in_trash' => 'No portfolio items found in trash'
+                'name'               => 'Certificaciones',
+                'singular_name'      => 'Certificación',
+                'add_new'            => 'Añadir Nueva',
+                'add_new_item'       => 'Añadir Nueva Certificación',
+                'edit_item'          => 'Editar Certificación',
+                'new_item'           => 'Nueva Certificación',
+                'view_item'          => 'Ver Certificación',
+                'search_items'       => 'Buscar Certificaciones',
+                'not_found'          => 'No se encontraron certificaciones',
+                'not_found_in_trash' => 'No hay certificaciones en la papelera',
             ),
-            'public' => true,
+            'public'      => true,
             'has_archive' => true,
-            'supports' => array('title', 'editor', 'thumbnail', 'excerpt'),
-            'menu_icon' => 'dashicons-portfolio',
-            'rewrite' => array('slug' => 'portfolio'),
+            'menu_icon'   => 'dashicons-awards', // icono de certificación
+            'supports'    => array('title', 'thumbnail'), // solo título e imagen
+            'rewrite'     => array('slug' => 'certificaciones'),
         )
     );
 }
-add_action('init', 'sancho_create_portfolio_post_type');
+add_action('init', 'vertisub_create_certification_post_type');
 
 // Custom fields for theme options
 function sancho_customize_register($wp_customize)
@@ -256,3 +256,186 @@ function vertisub_add_nav_link_class($atts, $item, $args)
     return $atts;
 }
 add_filter('nav_menu_link_attributes', 'vertisub_add_nav_link_class', 10, 3);
+
+
+// 1. Registrar Custom Post Type: Redes Sociales
+function vertisub_create_social_post_type()
+{
+    register_post_type(
+        'redes_sociales',
+        array(
+            'labels' => array(
+                'name'               => 'Redes Sociales',
+                'singular_name'      => 'Red Social',
+                'add_new'            => 'Añadir Nueva',
+                'add_new_item'       => 'Añadir Nueva Red Social',
+                'edit_item'          => 'Editar Red Social',
+                'new_item'           => 'Nueva Red Social',
+                'view_item'          => 'Ver Red Social',
+                'search_items'       => 'Buscar Redes Sociales',
+                'not_found'          => 'No se encontraron redes sociales',
+                'not_found_in_trash' => 'No hay redes sociales en la papelera',
+            ),
+            'public'      => true,
+            'has_archive' => false,
+            'menu_icon'   => 'dashicons-share', // icono de redes
+            'supports'    => array('title', 'thumbnail'), // nombre + ícono
+            'rewrite'     => array('slug' => 'redes-sociales'),
+        )
+    );
+}
+add_action('init', 'vertisub_create_social_post_type');
+
+
+// 2. Añadir Metabox para URL de la Red Social
+function vertisub_add_social_url_metabox()
+{
+    add_meta_box(
+        'social_url_box',
+        'Enlace de la Red Social',
+        'vertisub_render_social_url_box',
+        'redes_sociales',
+        'normal',
+        'high'
+    );
+}
+add_action('add_meta_boxes', 'vertisub_add_social_url_metabox');
+
+// Render del Metabox
+function vertisub_render_social_url_box($post)
+{
+    $value = get_post_meta($post->ID, '_social_url', true);
+?>
+    <label for="social_url">URL de la red social:</label>
+    <input type="url" id="social_url" name="social_url"
+        value="<?php echo esc_attr($value); ?>"
+        placeholder="https://turedsocial.com" style="width:100%;">
+<?php
+}
+
+// Guardar el campo URL
+function vertisub_save_social_url($post_id)
+{
+    if (array_key_exists('social_url', $_POST)) {
+        update_post_meta(
+            $post_id,
+            '_social_url',
+            esc_url_raw($_POST['social_url'])
+        );
+    }
+}
+add_action('save_post', 'vertisub_save_social_url');
+
+
+// 1. Registrar CPT "Nosotros"
+function vertisub_create_about_post_type()
+{
+    register_post_type(
+        'nosotros',
+        array(
+            'labels' => array(
+                'name'               => 'Nosotros',
+                'singular_name'      => 'Nosotros',
+                'add_new'            => 'Añadir nuevo',
+                'add_new_item'       => 'Añadir apartado',
+                'edit_item'          => 'Editar apartado',
+                'new_item'           => 'Nuevo apartado',
+                'view_item'          => 'Ver apartado',
+                'search_items'       => 'Buscar en Nosotros',
+                'not_found'          => 'No se encontraron apartados',
+                'not_found_in_trash' => 'No hay apartados en la papelera',
+            ),
+            'public'      => true,
+            'has_archive' => false,
+            'menu_icon'   => 'dashicons-groups',
+            'supports'    => array('title', 'editor', 'thumbnail'), // título, descripción, imagen
+            'rewrite'     => array('slug' => 'nosotros'),
+        )
+    );
+}
+add_action('init', 'vertisub_create_about_post_type');
+
+
+// 2. Metabox para media extra (video o ninguno)
+function vertisub_add_about_media_metabox()
+{
+    add_meta_box(
+        'about_media_box',
+        'Media (Imagen, Video o Ninguno)',
+        'vertisub_render_about_media_box',
+        'nosotros',
+        'normal',
+        'high'
+    );
+}
+add_action('add_meta_boxes', 'vertisub_add_about_media_metabox');
+
+// Render del Metabox
+function vertisub_render_about_media_box($post)
+{
+    $video_url = get_post_meta($post->ID, '_about_video_url', true);
+?>
+    <p>
+        <label for="about_video_url">URL del Video (YouTube, Vimeo, etc.):</label><br>
+        <input type="url" id="about_video_url" name="about_video_url"
+            value="<?php echo esc_attr($video_url); ?>"
+            placeholder="https://youtube.com/..." style="width:100%;">
+    </p>
+    <p><em>Si no quieres usar video, deja el campo vacío. Puedes usar la <strong>Imagen Destacada</strong> para subir una imagen.</em></p>
+<?php
+}
+
+// Guardar el campo video
+function vertisub_save_about_media($post_id)
+{
+    if (array_key_exists('about_video_url', $_POST)) {
+        update_post_meta(
+            $post_id,
+            '_about_video_url',
+            esc_url_raw($_POST['about_video_url'])
+        );
+    }
+}
+add_action('save_post', 'vertisub_save_about_media');
+
+// Registrar logo dinámico para Header
+function vertisub_custom_logos()
+{
+    add_theme_support('custom-logo', array(
+        'header-text' => array('site-title'),
+    ));
+}
+add_action('after_setup_theme', 'vertisub_custom_logos');
+
+// Agregar opción en el personalizador para el logo del Footer
+function vertisub_customize_register($wp_customize)
+{
+    $wp_customize->add_section('vertisub_footer_logo_section', array(
+        'title'       => __('Logo Footer', 'vertisub'),
+        'priority'    => 30,
+        'description' => 'Logo que se muestra en el footer',
+    ));
+
+    $wp_customize->add_setting('vertisub_footer_logo', array(
+        'default' => '',
+        'sanitize_callback' => 'esc_url_raw',
+    ));
+
+    $wp_customize->add_control(new WP_Customize_Image_Control($wp_customize, 'vertisub_footer_logo', array(
+        'label'    => __('Subir Logo Footer', 'vertisub'),
+        'section'  => 'vertisub_footer_logo_section',
+        'settings' => 'vertisub_footer_logo',
+    )));
+}
+add_action('customize_register', 'vertisub_customize_register');
+
+// Función para mostrar el logo del footer
+function vertisub_footer_logo()
+{
+    $logo = get_theme_mod('vertisub_footer_logo');
+    if ($logo) {
+        echo '<img src="' . esc_url($logo) . '" alt="' . get_bloginfo('name') . '">';
+    } else {
+        echo get_bloginfo('name');
+    }
+}

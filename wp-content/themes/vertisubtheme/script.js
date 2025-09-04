@@ -112,9 +112,29 @@ document.addEventListener("DOMContentLoaded", () => {
   const initAboutSection = () => {
     // Inicializar carrusel de certificaciones
     const initCertificationsCarousel = () => {
-      // Placeholder for carousel initialization logic
-      console.log("Certifications carousel initialized");
+      const track = document.getElementById("certificationsTrack");
+      if (!track) return;
+
+      // Duplicar elementos para scroll infinito
+      const items = track.children;
+      const itemsArray = Array.from(items);
+
+      // Clonar elementos para efecto infinito
+      itemsArray.forEach((item) => {
+        const clone = item.cloneNode(true);
+        track.appendChild(clone);
+      });
+
+      // Pausar animación al hacer hover
+      track.addEventListener("mouseenter", () => {
+        track.style.animationPlayState = "paused";
+      });
+
+      track.addEventListener("mouseleave", () => {
+        track.style.animationPlayState = "running";
+      });
     };
+
     initCertificationsCarousel();
 
     initScrollEntranceAnimations();
@@ -359,7 +379,14 @@ document.addEventListener("DOMContentLoaded", () => {
       hamburger.classList.add("active");
       offcanvas.classList.add("active");
       overlay.classList.add("active");
+
+      const bot = document.getElementById("chat-bot-launcher-button");
+      const bot2 = document.getElementById("chat-bot-launcher"); // sin #
+
       document.body.style.overflow = "hidden";
+      if (bot) bot.style.visibility = "hidden"; // ocultar bot
+      if (bot2)
+        bot2.style.setProperty("background-color", "transparent", "important"); // transparente
 
       if (desktopNavLinks) {
         desktopNavLinks.style.opacity = "0";
@@ -383,6 +410,13 @@ document.addEventListener("DOMContentLoaded", () => {
       offcanvas.classList.remove("active");
       overlay.classList.remove("active");
       document.body.style.overflow = "auto";
+
+      const bot = document.getElementById("chat-bot-launcher-button");
+      const bot2 = document.getElementById("chat-bot-launcher");
+
+      if (bot) bot.style.visibility = "visible"; // volver a mostrar
+      if (bot2)
+        bot2.style.setProperty("background-color", "#bb0c2b", "important"); // color original
 
       if (desktopNavLinks) {
         desktopNavLinks.style.opacity = "1";
