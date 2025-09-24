@@ -6,14 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php bloginfo('name'); ?> - <?php bloginfo('description'); ?></title>
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&family=Oswald:wght@200..700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-
     <!-- Custom CSS -->
     <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/style.css">
 
@@ -22,11 +14,12 @@
 
 <body <?php body_class(); ?>>
 
+
     <!-- Navigation -->
     <nav id="navbar" class="navbar-modern">
         <div class="nav-container">
             <div class="nav-logo">
-                <!-- Logo dinámico -->
+                <!-- Tu logo igual que antes -->
                 <a href="<?php echo esc_url(home_url('/')); ?>" class="logo-text">
                     <?php
                     if (function_exists('the_custom_logo') && has_custom_logo()) {
@@ -40,12 +33,13 @@
                 </a>
             </div>
 
-            <!-- Menú principal -->
+            <!-- Menú principal CON WALKER DESKTOP -->
             <?php
             wp_nav_menu(array(
                 'theme_location' => 'primary_menu',
                 'container'      => false,
-                'menu_class'     => 'nav-links', // misma clase que tu HTML original
+                'menu_class'     => 'nav-links',
+                'walker'         => new Vertisub_Walker_Desktop(), // NUEVO WALKER
                 'fallback_cb'    => false
             ));
             ?>
@@ -75,8 +69,8 @@
                     wp_nav_menu(array(
                         'theme_location' => 'primary_menu',
                         'container'      => false,
-                        'menu_class'     => 'nav-list', // igual que tu HTML estático
-                        'walker'         => new Vertisub_Walker_Offcanvas(),
+                        'menu_class'     => 'nav-list',
+                        'walker'         => new Vertisub_Walker_Offcanvas(), // TU WALKER ACTUALIZADO
                         'fallback_cb'    => false
                     ));
                     ?>
@@ -115,3 +109,51 @@
 
     <!-- Overlay -->
     <div id="overlay" class="offcanvas-overlay"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropdowns = document.querySelectorAll('.has-dropdown');
+
+            const hamburger = document.getElementById('hamburger');
+            const offcanvas = document.getElementById('offcanvas');
+            const overlay = document.getElementById('overlay');
+            const closeOffcanvasBtn = document.getElementById('closeOffcanvas');
+
+            function closeOffcanvasMenu() {
+                if (hamburger) hamburger.classList.remove('active');
+                if (offcanvas) offcanvas.classList.remove('active');
+                if (overlay) overlay.classList.remove('active');
+                document.body.style.overflow = '';
+                dropdowns.forEach(d => d.classList.remove('active'));
+            }
+
+            dropdowns.forEach(dropdown => {
+                dropdown.addEventListener('click', function(e) {
+                    const clickedAnchor = e.target.closest('a');
+                    const topAnchor = dropdown.querySelector(':scope > a, :scope > .nav-link');
+
+                    // Si fue un link interno (submenu), dejar navegar
+                    if (clickedAnchor && topAnchor && clickedAnchor !== topAnchor) {
+                        if (offcanvas && offcanvas.classList.contains('active')) closeOffcanvasMenu();
+                        return;
+                    }
+
+                    // Solo abrir, nunca cerrar con el mismo click
+                    e.preventDefault();
+                    e.stopPropagation();
+                    dropdowns.forEach(d => d.classList.remove('active')); // cerrar otros
+                    dropdown.classList.add('active'); // abrir este
+                });
+            });
+
+            // Cerrar todos al hacer click fuera
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.has-dropdown')) {
+                    dropdowns.forEach(d => d.classList.remove('active'));
+                }
+            });
+
+            if (closeOffcanvasBtn) closeOffcanvasBtn.addEventListener('click', closeOffcanvasMenu);
+            if (overlay) overlay.addEventListener('click', closeOffcanvasMenu);
+        });
+    </script>

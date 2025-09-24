@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lottie con imágenes</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.0/lottie.min.js"></script>
+  <style>
+    #animContainer {
+      margin: auto;
+    }
+  </style>
+</head>
+<body>
+  <div id="animContainer"></div>
+
+  <script>
+    lottie.loadAnimation({
+      container: document.getElementById('animContainer'),
+      renderer: 'svg',
+      loop: true,
+      autoplay: true,
+      path: '9ffea08a-285f-4684-8d79-95c7cf4b8594.json' // tu archivo JSON
+    });
+  </script>
+</body>
+</html>

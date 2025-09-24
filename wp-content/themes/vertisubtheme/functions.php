@@ -27,22 +27,198 @@ add_action('after_setup_theme', 'sancho_theme_setup');
 // Enqueue styles and scripts
 function sancho_enqueue_assets()
 {
-    // Enqueue styles
-    wp_enqueue_style('bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css');
-    wp_enqueue_style('google-fonts', 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap');
-    wp_enqueue_style('sancho-style', get_stylesheet_uri(), array('bootstrap'), '1.0.0');
+    // === ESTILOS ===
+    // Bootstrap CSS
+    wp_enqueue_style(
+        'bootstrap-css',
+        'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css',
+        array(),
+        '5.3.0'
+    );
 
-    // Enqueue scripts
-    wp_enqueue_script('bootstrap-js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js', array(), '5.3.0', true);
-    wp_enqueue_script('sancho-script', get_template_directory_uri() . '/script.js', array('bootstrap-js'), '1.0.0', true);
+    // AOS CSS (solo una vez, unpkg)
+    wp_enqueue_style(
+        'aos',
+        'https://unpkg.com/aos@2.3.4/dist/aos.css',
+        array(),
+        '2.3.4'
+    );
 
-    // Localize script for AJAX
+    // Google Fonts
+    wp_enqueue_style(
+        'google-fonts',
+        'https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;600;700;900&display=swap',
+        array(),
+        null
+    );
+
+    // Font Awesome
+    wp_enqueue_style(
+        'font-awesome',
+        'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
+        array(),
+        '6.4.0'
+    );
+
+    // Estilo principal del tema
+    wp_enqueue_style(
+        'sancho-style',
+        get_stylesheet_uri(),
+        array('bootstrap-css'),
+        wp_get_theme()->get('Version')
+    );
+
+    // === SCRIPTS ===
+    // jQuery + dependencias
+    wp_enqueue_script(
+        'jquery',
+        'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js',
+        array(),
+        '3.3.1',
+        true
+    );
+
+    wp_enqueue_script(
+        'jquery-migrate',
+        'https://cdnjs.cloudflare.com/ajax/libs/jquery-migrate/3.0.1/jquery-migrate.min.js',
+        array('jquery'),
+        '3.0.1',
+        true
+    );
+
+    // Plugins
+    wp_enqueue_script('jquery-easing', 'https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js', array('jquery'), '1.3', true);
+    wp_enqueue_script('jquery-waypoints', 'https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js', array('jquery'), '4.0.1', true);
+    wp_enqueue_script('jquery-stellar', 'https://cdnjs.cloudflare.com/ajax/libs/stellar.js/0.6.2/jquery.stellar.min.js', array('jquery'), '0.6.2', true);
+    wp_enqueue_script('owl-carousel', 'https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js', array('jquery'), '2.3.4', true);
+    wp_enqueue_script('magnific-popup', 'https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js', array('jquery'), '1.1.0', true);
+    wp_enqueue_script('jquery-animate-number', 'https://cdnjs.cloudflare.com/ajax/libs/jquery-animateNumber/0.0.14/jquery.animateNumber.min.js', array('jquery'), '0.0.14', true);
+    wp_enqueue_script('bootstrap-datepicker', 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js', array('jquery'), '1.9.0', true);
+    wp_enqueue_script('jquery-timepicker', 'https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.14.1/jquery.timepicker.min.js', array('jquery'), '1.14.1', true);
+
+    // Bootstrap 5 (bundle incluye Popper)
+    wp_enqueue_script(
+        'bootstrap',
+        'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js',
+        array('jquery'),
+        '5.3.0',
+        true
+    );
+
+    // Scrollax
+    wp_enqueue_script('scrollax', 'https://cdn.jsdelivr.net/npm/scrollax@1.0.0/scrollax.min.js', array('jquery'), '1.0.0', true);
+
+    // AOS JS (solo una vez, unpkg)
+    wp_enqueue_script('aos', 'https://unpkg.com/aos@2.3.4/dist/aos.js', array(), '2.3.4', true);
+
+    // Script principal del tema
+    wp_enqueue_script(
+        'sancho-script',
+        get_template_directory_uri() . '/script.js',
+        array('jquery', 'bootstrap'),
+        wp_get_theme()->get('Version'),
+        true
+    );
+
+    // Detecta si estoy en la plantilla "about-us-page.php"
+    wp_enqueue_script(
+        'aos-about',
+        get_template_directory_uri() . '/assets/js/aos-about.js',
+        array('aos'),
+        null,
+        true
+    );
+
+    // Localize script para AJAX
     wp_localize_script('sancho-script', 'sancho_ajax', array(
         'ajax_url' => admin_url('admin-ajax.php'),
-        'nonce' => wp_create_nonce('sancho_nonce')
+        'nonce'    => wp_create_nonce('sancho_nonce'),
     ));
+
+    // === amCharts 5 ===
+    wp_enqueue_script('amcharts-core', 'https://cdn.amcharts.com/lib/5/index.js', array(), null, true);
+    wp_enqueue_script('amcharts-map', 'https://cdn.amcharts.com/lib/5/map.js', array('amcharts-core'), null, true);
+    wp_enqueue_script('amcharts-world', 'https://cdn.amcharts.com/lib/5/geodata/worldLow.js', array('amcharts-core', 'amcharts-map'), null, true);
+    wp_enqueue_script('amcharts-animated', 'https://cdn.amcharts.com/lib/5/themes/Animated.js', array('amcharts-core'), null, true);
+
+    if (is_page('ubicacion')) {
+        wp_enqueue_script('maps-js', get_template_directory_uri() . '/assets/js/map.js', array('amcharts-core', 'amcharts-map', 'amcharts-world', 'amcharts-animated'), '1.0', true);
+
+        // === Pasar datos de países a JS ===
+        $args = array(
+            'post_type'      => 'paises',
+            'posts_per_page' => -1,
+        );
+        $query = new WP_Query($args);
+
+        $data = array();
+
+        if ($query->have_posts()) {
+            while ($query->have_posts()) {
+                $query->the_post();
+
+                $slug      = strtolower(get_post_meta(get_the_ID(), '_pais_slug', true));
+                $contacto  = get_post_meta(get_the_ID(), '_contacto', true);
+                $direccion = get_post_meta(get_the_ID(), '_direccion', true);
+                $correos   = get_post_meta(get_the_ID(), '_correos', true);
+                $telefonos = get_post_meta(get_the_ID(), '_telefonos', true);
+                $whatsapps = get_post_meta(get_the_ID(), '_whatsapps', true);
+
+                $flag_url = "https://flagcdn.com/w80/{$slug}.png";
+
+                $data[$slug] = array(
+                    'name'   => get_the_title(),
+                    'flag'   => $flag_url,
+                    'type'   => 'Oficina Regional',
+                    'status' => 'regional',
+                    'contacts' => array(
+                        'address' => array(
+                            'label' => 'Dirección',
+                            'value' => wpautop($direccion),
+                            'icon'  => 'map-marker-alt',
+                        ),
+                        'phones' => array(
+                            'label'    => 'Teléfonos',
+                            'icon'     => 'phone',
+                            'multiple' => true,
+                            'values'   => array_map(function ($tel) {
+                                return array(
+                                    'label'  => 'Número',
+                                    'number' => $tel,
+                                    'link'   => 'tel:' . preg_replace('/\D/', '', $tel),
+                                );
+                            }, $telefonos ?: []),
+                        ),
+                        'whatsapp' => array(
+                            'label'    => 'WhatsApp',
+                            'icon'     => 'comment',
+                            'multiple' => true,
+                            'values'   => array_map(function ($wa) {
+                                return array(
+                                    'label'  => 'Número',
+                                    'number' => $wa,
+                                    'link'   => 'https://wa.me/' . preg_replace('/\D/', '', $wa),
+                                );
+                            }, $whatsapps ?: []),
+                        ),
+                        'email' => array(
+                            'label' => 'Correo Electrónico',
+                            'icon'  => 'envelope',
+                            'value' => implode(', ', array_map(function ($mail) {
+                                return '<a href="mailto:' . $mail . '">' . $mail . '</a>';
+                            }, $correos ?: [])),
+                        ),
+                    ),
+                );
+            }
+            wp_reset_postdata();
+        }
+
+        wp_localize_script('maps-js', 'contactData', $data);
+    }
 }
 add_action('wp_enqueue_scripts', 'sancho_enqueue_assets');
+
 
 // Certification Post
 function vertisub_create_certification_post_type()
@@ -112,26 +288,142 @@ function sancho_customize_register($wp_customize)
         'priority' => 31,
     ));
 
-    $wp_customize->add_setting('slogan_title', array(
-        'default' => 'Transformamos ideas en experiencias extraordinarias',
+    // Slogan Section
+    $wp_customize->add_section('sancho_slogan', array(
+        'title' => 'Slogan Section',
+        'priority' => 31,
+    ));
+
+    $wp_customize->add_setting('slogan_line1', array(
+        'default' => 'Soluciones singulares a problemas',
         'sanitize_callback' => 'sanitize_text_field',
     ));
 
-    $wp_customize->add_control('slogan_title', array(
-        'label' => 'Slogan Title',
+    $wp_customize->add_control('slogan_line1', array(
+        'label' => 'Slogan Line 1',
         'section' => 'sancho_slogan',
         'type' => 'text',
     ));
 
-    $wp_customize->add_setting('slogan_subtitle', array(
-        'default' => 'Somos una agencia creativa que combina estrategia, diseño y tecnología para crear marcas memorables y campañas que conectan con las personas.',
-        'sanitize_callback' => 'sanitize_textarea_field',
+    $wp_customize->add_setting('slogan_line2', array(
+        'default' => 'complejos en entornos de riesgo',
+        'sanitize_callback' => 'sanitize_text_field',
     ));
 
-    $wp_customize->add_control('slogan_subtitle', array(
-        'label' => 'Slogan Subtitle',
+    $wp_customize->add_control('slogan_line2', array(
+        'label' => 'Slogan Line 2',
         'section' => 'sancho_slogan',
-        'type' => 'textarea',
+        'type' => 'text',
+    ));
+
+    // Sección Misión y Visión
+    $wp_customize->add_section('sancho_mision_vision', array(
+        'title'    => 'Misión y Visión',
+        'priority' => 40,
+    ));
+
+    // Misión
+    $wp_customize->add_setting('mision_text', array(
+        'default'           => 'Desarrollamos soluciones integrales de comunicación que transforman desafíos complejos en oportunidades de crecimiento para nuestros clientes.',
+        'sanitize_callback' => 'sanitize_textarea_field',
+    ));
+    $wp_customize->add_control('mision_text', array(
+        'label'   => 'Texto de Misión',
+        'section' => 'sancho_mision_vision',
+        'type'    => 'textarea',
+    ));
+
+    // Visión
+    $wp_customize->add_setting('vision_text', array(
+        'default'           => 'Ser la agencia líder en innovación estratégica, reconocida por crear experiencias memorables que conectan marcas con sus audiencias.',
+        'sanitize_callback' => 'sanitize_textarea_field',
+    ));
+    $wp_customize->add_control('vision_text', array(
+        'label'   => 'Texto de Visión',
+        'section' => 'sancho_mision_vision',
+        'type'    => 'textarea',
+    ));
+
+    // Sección Contacto
+    $wp_customize->add_section('sancho_contacto', array(
+        'title'    => 'Contacto',
+        'priority' => 41,
+    ));
+
+    $wp_customize->add_setting('contacto_email', array(
+        'default'           => 'info@vertisub.com',
+        'sanitize_callback' => 'sanitize_text_field',
+    ));
+    $wp_customize->add_control('contacto_email', array(
+        'label'   => 'Email de Contacto',
+        'section' => 'sancho_contacto',
+        'type'    => 'text',
+    ));
+
+    $wp_customize->add_setting('contacto_telefono', array(
+        'default'           => '+57 (4) 123-4567',
+        'sanitize_callback' => 'sanitize_text_field',
+    ));
+    $wp_customize->add_control('contacto_telefono', array(
+        'label'   => 'Teléfono',
+        'section' => 'sancho_contacto',
+        'type'    => 'text',
+    ));
+
+    $wp_customize->add_setting('contacto_direccion', array(
+        'default'           => 'Bogota, Colombia',
+        'sanitize_callback' => 'sanitize_text_field',
+    ));
+    $wp_customize->add_control('contacto_direccion', array(
+        'label'   => 'Dirección',
+        'section' => 'sancho_contacto',
+        'type'    => 'text',
+    ));
+
+    // Sección Legal
+    $wp_customize->add_section('sancho_legal', array(
+        'title'    => 'Información Legal',
+        'priority' => 42,
+    ));
+
+    $wp_customize->add_setting('legal_nit', array(
+        'default'           => '900.123.456-7',
+        'sanitize_callback' => 'sanitize_text_field',
+    ));
+    $wp_customize->add_control('legal_nit', array(
+        'label'   => 'NIT',
+        'section' => 'sancho_legal',
+        'type'    => 'text',
+    ));
+
+    $wp_customize->add_setting('legal_razon', array(
+        'default'           => 'Vertisub S.A.S.',
+        'sanitize_callback' => 'sanitize_text_field',
+    ));
+    $wp_customize->add_control('legal_razon', array(
+        'label'   => 'Razón Social',
+        'section' => 'sancho_legal',
+        'type'    => 'text',
+    ));
+
+    $wp_customize->add_setting('legal_registro', array(
+        'default'           => '12345678',
+        'sanitize_callback' => 'sanitize_text_field',
+    ));
+    $wp_customize->add_control('legal_registro', array(
+        'label'   => 'Registro Mercantil',
+        'section' => 'sancho_legal',
+        'type'    => 'text',
+    ));
+
+    $wp_customize->add_setting('legal_camara', array(
+        'default'           => 'Bogota',
+        'sanitize_callback' => 'sanitize_text_field',
+    ));
+    $wp_customize->add_control('legal_camara', array(
+        'label'   => 'Cámara de Comercio',
+        'section' => 'sancho_legal',
+        'type'    => 'text',
     ));
 }
 add_action('customize_register', 'sancho_customize_register');
@@ -208,29 +500,154 @@ add_action('init', 'sancho_optimize_performance');
 
 
 // walker personalizado 
-class Vertisub_Walker_Offcanvas extends Walker_Nav_Menu
+class Vertisub_Walker_Desktop extends Walker_Nav_Menu
 {
+
+    // Detectar si el item tiene hijos
+    private function has_children($item_id, $items)
+    {
+        foreach ($items as $item) {
+            if ($item->menu_item_parent == $item_id) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     function start_lvl(&$output, $depth = 0, $args = null)
     {
         $indent = str_repeat("\t", $depth);
-        $output .= "\n$indent<ul class=\"nav-list\">\n"; // usa tu clase
+        $output .= "\n$indent<ul class=\"dropdown-menu\">\n"; // 🔹 antes tenías <div>
+    }
+
+    function end_lvl(&$output, $depth = 0, $args = null)
+    {
+        $indent = str_repeat("\t", $depth);
+        $output .= "$indent</ul>\n"; // 🔹 cerrar con </ul>
     }
 
     function start_el(&$output, $item, $depth = 0, $args = null, $id = 0)
     {
         $indent = ($depth) ? str_repeat("\t", $depth) : '';
 
-        // tus clases personalizadas
-        $output .= $indent . '<li class="nav-item">';
-        $output .= '<a href="' . esc_attr($item->url) . '" class="nav-link">';
-        $output .= esc_html($item->title);
-        $output .= '</a>';
+        global $wp_query;
+        $all_items = wp_get_nav_menu_items($args->menu ?? '');
+        $has_children = $this->has_children($item->ID, $all_items);
+
+        if ($depth == 0) {
+            $li_class = $has_children ? 'nav-item has-dropdown' : 'nav-item';
+            $output .= $indent . '<li class="' . $li_class . '">';
+
+            $href = $has_children ? '#' : esc_attr($item->url);
+            $output .= '<a href="' . $href . '" class="nav-link">';
+
+            $icon = get_post_meta($item->ID, '_menu_item_icon', true);
+            if (!empty($icon)) {
+                $output .= '<i class="' . esc_attr($icon) . '"></i>';
+            }
+
+            $output .= esc_html($item->title);
+
+            if ($has_children) {
+                $output .= '<i class="fas fa-chevron-down dropdown-arrow"></i>';
+            }
+
+            $output .= '</a>';
+        } else {
+            // 🔹 ahora los subitems van dentro de <li>
+            $output .= $indent . '<li class="dropdown-item">';
+
+            $output .= '<a href="' . esc_attr($item->url) . '">';
+
+            $icon = get_post_meta($item->ID, '_menu_item_icon', true);
+            if (!empty($icon)) {
+                $output .= '<i class="' . esc_attr($icon) . '"></i>';
+            } else {
+                $output .= '<i class="fas fa-angle-right"></i>';
+            }
+
+            $output .= esc_html($item->title);
+            $output .= '</a>';
+        }
     }
 
     function end_el(&$output, $item, $depth = 0, $args = null)
     {
-        $output .= "</li>\n";
+        $output .= "</li>\n"; // 🔹 ahora cerramos <li> en todos los casos
+    }
+}
+
+// ========== WALKER PARA OFFCANVAS (MOBILE) ==========
+class Vertisub_Walker_Offcanvas extends Walker_Nav_Menu
+{
+
+    function start_lvl(&$output, $depth = 0, $args = null)
+    {
+        $indent = str_repeat("\t", $depth);
+        $output .= "\n$indent<div class=\"mobile-dropdown\">\n";
+    }
+
+    function end_lvl(&$output, $depth = 0, $args = null)
+    {
+        $indent = str_repeat("\t", $depth);
+        $output .= "$indent</div>\n";
+    }
+
+    function start_el(&$output, $item, $depth = 0, $args = null, $id = 0)
+    {
+        $indent = ($depth) ? str_repeat("\t", $depth) : '';
+
+        $classes = empty($item->classes) ? array() : (array) $item->classes;
+        $classes[] = 'menu-item-' . $item->ID;
+
+        // Verificar si tiene hijos
+        $has_children = in_array('menu-item-has-children', $classes);
+
+        if ($depth == 0) {
+            // Item principal
+            $li_class = $has_children ? 'nav-item has-dropdown' : 'nav-item';
+            $output .= $indent . '<li class="' . $li_class . '">';
+
+            $output .= '<a href="' . esc_attr($item->url) . '" class="nav-link">';
+            $output .= '<div class="link-content">';
+
+            // Agregar icono
+            $icon = get_post_meta($item->ID, '_menu_item_icon', true);
+            if (!empty($icon)) {
+                $output .= '<i class="' . esc_attr($icon) . '"></i>';
+            }
+
+            $output .= '<span>' . esc_html($item->title) . '</span>';
+            $output .= '</div>';
+
+            // Agregar flecha si tiene hijos
+            if ($has_children) {
+                $output .= '<i class="fas fa-chevron-down dropdown-arrow"></i>';
+            }
+
+            $output .= '</a>';
+        } else {
+            // Submenu item
+            $output .= $indent . '<a href="' . esc_attr($item->url) . '" class="dropdown-item">';
+
+            // Icono para submenu
+            $icon = get_post_meta($item->ID, '_menu_item_icon', true);
+            if (!empty($icon)) {
+                $output .= '<i class="' . esc_attr($icon) . '"></i>';
+            } else {
+                $output .= '<i class="fas fa-angle-right"></i>';
+            }
+
+            $output .= '<span>' . esc_html($item->title) . '</span>';
+            $output .= '</a>';
+        }
+    }
+
+    function end_el(&$output, $item, $depth = 0, $args = null)
+    {
+        if ($depth == 0) {
+            $output .= "</li>\n";
+        }
     }
 }
 
@@ -241,7 +658,7 @@ function vertisub_register_menus()
     ));
 
     register_nav_menus(array(
-        'footer_servicios' => __('Footer Servicios', 'vertisub'),
+        'footer_menu' => __('Footer', 'vertisub'),
         'footer_empresa'   => __('Footer Empresa', 'vertisub'),
         'footer_legal'     => __('Footer Legal', 'vertisub'),
     ));
@@ -251,11 +668,27 @@ add_action('after_setup_theme', 'vertisub_register_menus');
 function vertisub_add_nav_link_class($atts, $item, $args)
 {
     if ($args->theme_location === 'primary_menu') {
-        $atts['class'] = 'nav-link'; // tu clase personalizada
+        $atts['class'] = 'nav-link'; // clase para el header
     }
+
+    if ($args->theme_location === 'footer_menu' || $args->theme_location === 'footer_empresa' || $args->theme_location === 'footer_legal') {
+        $atts['class'] = 'footer-link'; // clase para el footer
+    }
+
     return $atts;
 }
 add_filter('nav_menu_link_attributes', 'vertisub_add_nav_link_class', 10, 3);
+
+// Para <li> del FOOTER
+function vertisub_add_footer_li_class($classes, $item, $args)
+{
+    if ($args->theme_location === 'footer_menu' || $args->theme_location === 'footer_empresa' || $args->theme_location === 'footer_legal') {
+        $classes[] = 'footer-link-item';
+    }
+    return $classes;
+}
+add_filter('nav_menu_css_class', 'vertisub_add_footer_li_class', 10, 3);
+
 
 
 // 1. Registrar Custom Post Type: Redes Sociales
@@ -380,7 +813,7 @@ function vertisub_render_about_media_box($post)
 
     // Añadir nonce para seguridad
     wp_nonce_field('vertisub_save_about_media', 'vertisub_about_media_nonce');
-    ?>
+?>
 
     <div id="about-videos-container">
         <?php foreach ($videos as $index => $url) : ?>
@@ -401,18 +834,18 @@ function vertisub_render_about_media_box($post)
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const container = document.getElementById('about-videos-container');
-            document.getElementById('add-video').addEventListener('click', function(e){
+            document.getElementById('add-video').addEventListener('click', function(e) {
                 e.preventDefault();
                 const index = container.children.length;
                 const p = document.createElement('p');
-                p.innerHTML = '<label>Video ' + (index+1) + ' URL:</label><br>' +
-                              '<input type="url" name="about_video_urls[]" style="width:100%;"> ' +
-                              '<button class="button remove-video">Eliminar</button>';
+                p.innerHTML = '<label>Video ' + (index + 1) + ' URL:</label><br>' +
+                    '<input type="url" name="about_video_urls[]" style="width:100%;"> ' +
+                    '<button class="button remove-video">Eliminar</button>';
                 container.appendChild(p);
             });
 
-            container.addEventListener('click', function(e){
-                if(e.target.classList.contains('remove-video')){
+            container.addEventListener('click', function(e) {
+                if (e.target.classList.contains('remove-video')) {
                     e.preventDefault();
                     e.target.parentElement.remove();
                 }
@@ -484,3 +917,972 @@ function vertisub_footer_logo()
         echo get_bloginfo('name');
     }
 }
+
+// 1. Crear CPT Equipo
+function vertisub_create_team_post_type()
+{
+    register_post_type(
+        'equipo',
+        array(
+            'labels' => array(
+                'name'               => 'Equipo',
+                'singular_name'      => 'Miembro del Equipo',
+                'add_new'            => 'Añadir nuevo',
+                'add_new_item'       => 'Añadir miembro',
+                'edit_item'          => 'Editar miembro',
+                'new_item'           => 'Nuevo miembro',
+                'view_item'          => 'Ver miembro',
+                'search_items'       => 'Buscar miembro',
+                'not_found'          => 'No se encontraron miembros',
+                'not_found_in_trash' => 'No hay miembros en la papelera',
+            ),
+            'public'      => true,
+            'has_archive' => false,
+            'menu_icon'   => 'dashicons-businessperson',
+            'supports'    => array('title', 'thumbnail'), // solo nombre y foto destacada
+            'rewrite'     => array('slug' => 'equipo'),
+        )
+    );
+}
+add_action('init', 'vertisub_create_team_post_type');
+
+
+// 2. Agregar Meta Box para Cargo y Mensaje
+function vertisub_team_meta_boxes()
+{
+    add_meta_box(
+        'equipo_detalles',
+        'Detalles del Miembro',
+        'vertisub_team_meta_callback',
+        'equipo',
+        'normal',
+        'high'
+    );
+}
+add_action('add_meta_boxes', 'vertisub_team_meta_boxes');
+
+function vertisub_team_meta_callback($post)
+{
+    // Obtener valores guardados
+    $cargo   = get_post_meta($post->ID, '_cargo', true);
+    $mensaje = get_post_meta($post->ID, '_mensaje', true);
+?>
+    <p>
+        <label for="cargo"><strong>Cargo:</strong></label><br>
+        <input type="text" name="cargo" id="cargo" value="<?php echo esc_attr($cargo); ?>" style="width:100%;">
+    </p>
+    <p>
+        <label for="mensaje"><strong>Mensaje alusivo:</strong></label><br>
+        <textarea name="mensaje" id="mensaje" rows="4" style="width:100%;"><?php echo esc_textarea($mensaje); ?></textarea>
+    </p>
+<?php
+}
+
+
+// 3. Guardar los campos
+function vertisub_save_team_meta($post_id)
+{
+    if (array_key_exists('cargo', $_POST)) {
+        update_post_meta($post_id, '_cargo', sanitize_text_field($_POST['cargo']));
+    }
+    if (array_key_exists('mensaje', $_POST)) {
+        update_post_meta($post_id, '_mensaje', sanitize_textarea_field($_POST['mensaje']));
+    }
+}
+add_action('save_post', 'vertisub_save_team_meta');
+
+// 1. Crear CPT Reseñas
+function vertisub_create_reviews_post_type()
+{
+    register_post_type(
+        'reseñas',
+        array(
+            'labels' => array(
+                'name'               => 'Reseñas',
+                'singular_name'      => 'Reseña',
+                'add_new'            => 'Añadir nueva',
+                'add_new_item'       => 'Añadir reseña',
+                'edit_item'          => 'Editar reseña',
+                'new_item'           => 'Nueva reseña',
+                'view_item'          => 'Ver reseña',
+                'search_items'       => 'Buscar reseñas',
+                'not_found'          => 'No se encontraron reseñas',
+                'not_found_in_trash' => 'No hay reseñas en la papelera',
+            ),
+            'public'      => true,
+            'has_archive' => false,
+            'menu_icon'   => 'dashicons-testimonial',
+            'supports'    => array('thumbnail'), // solo foto
+            'rewrite'     => array('slug' => 'reseñas'),
+        )
+    );
+}
+add_action('init', 'vertisub_create_reviews_post_type');
+
+
+// 2. Agregar Meta Box para Nombre y Reseña
+function vertisub_reviews_meta_boxes()
+{
+    add_meta_box(
+        'reseñas_detalles',
+        'Detalles de la Reseña',
+        'vertisub_reviews_meta_callback',
+        'reseñas',
+        'normal',
+        'high'
+    );
+}
+add_action('add_meta_boxes', 'vertisub_reviews_meta_boxes');
+
+function vertisub_reviews_meta_callback($post)
+{
+    $nombre  = get_post_meta($post->ID, '_nombre_reseña', true);
+    $reseña  = get_post_meta($post->ID, '_texto_reseña', true);
+?>
+    <p>
+        <label for="nombre_reseña"><strong>Nombre:</strong></label><br>
+        <input type="text" name="nombre_reseña" id="nombre_reseña" value="<?php echo esc_attr($nombre); ?>" style="width:100%;">
+    </p>
+    <p>
+        <label for="texto_reseña"><strong>Reseña:</strong></label><br>
+        <textarea name="texto_reseña" id="texto_reseña" rows="4" style="width:100%;"><?php echo esc_textarea($reseña); ?></textarea>
+    </p>
+<?php
+}
+
+
+// 3. Guardar los campos
+function vertisub_save_reviews_meta($post_id)
+{
+    if (array_key_exists('nombre_reseña', $_POST)) {
+        update_post_meta($post_id, '_nombre_reseña', sanitize_text_field($_POST['nombre_reseña']));
+    }
+    if (array_key_exists('texto_reseña', $_POST)) {
+        update_post_meta($post_id, '_texto_reseña', sanitize_textarea_field($_POST['texto_reseña']));
+    }
+}
+add_action('save_post', 'vertisub_save_reviews_meta');
+
+// ========== CPT Países ==========
+function vertisub_create_paises_post_type()
+{
+    register_post_type(
+        'paises',
+        array(
+            'labels' => array(
+                'name'               => 'Países',
+                'singular_name'      => 'País',
+                'add_new'            => 'Añadir país',
+                'add_new_item'       => 'Añadir país',
+                'edit_item'          => 'Editar país',
+                'new_item'           => 'Nuevo país',
+                'view_item'          => 'Ver país',
+                'search_items'       => 'Buscar países',
+                'not_found'          => 'No se encontraron países',
+                'not_found_in_trash' => 'No hay países en la papelera',
+            ),
+            'public'      => true,
+            'has_archive' => false,
+            'menu_icon'   => 'dashicons-location-alt',
+            'supports'    => array('title', 'editor'),
+            'rewrite'     => array('slug' => 'paises'),
+        )
+    );
+}
+add_action('init', 'vertisub_create_paises_post_type');
+
+// ========== Metabox ==========
+function vertisub_add_paises_metaboxes()
+{
+    add_meta_box(
+        'paises_info',
+        'Información del País',
+        'vertisub_render_paises_metabox',
+        'paises',
+        'normal',
+        'default'
+    );
+}
+add_action('add_meta_boxes', 'vertisub_add_paises_metaboxes');
+
+function vertisub_render_paises_metabox($post)
+{
+    $contacto  = get_post_meta($post->ID, '_contacto', true);
+    $direccion = get_post_meta($post->ID, '_direccion', true);
+
+    $correos   = get_post_meta($post->ID, '_correos', true);
+    $correos   = is_array($correos) ? $correos : [];
+
+    $telefonos = get_post_meta($post->ID, '_telefonos', true);
+    $telefonos = is_array($telefonos) ? $telefonos : [];
+
+    $whatsapps = get_post_meta($post->ID, '_whatsapps', true);
+    $whatsapps = is_array($whatsapps) ? $whatsapps : [];
+
+    wp_nonce_field('paises_save_meta', 'paises_meta_nonce');
+
+    // Recuperar valor actual del slug/código
+    $slug = get_post_meta($post->ID, '_pais_slug', true);
+
+    wp_nonce_field('guardar_pais_slug', 'pais_slug_nonce');
+?>
+    <p>
+        <label for="pais_slug"><strong>Código/Slug del País (ej: ESP, COL, MEX):</strong></label><br>
+        <input type="text" name="pais_slug" id="pais_slug" value="<?php echo esc_attr($slug); ?>" style="width: 150px; text-transform: uppercase;">
+    </p>
+    <?php
+    ?>
+    <p><label><strong>Contacto:</strong></label><br>
+        <input type="text" name="contacto" value="<?= esc_attr($contacto) ?>" class="widefat">
+    </p>
+
+    <p><label><strong>Dirección:</strong></label><br>
+        <textarea name="direccion" class="widefat"><?= esc_textarea($direccion) ?></textarea>
+    </p>
+
+    <!-- Correos -->
+    <p><strong>Correos:</strong></p>
+    <div id="correos-wrapper">
+        <?php if (!empty($correos)) : ?>
+            <?php foreach ($correos as $mail) : ?>
+                <div class="field-row">
+                    <input type="email" name="correos[]" value="<?= esc_attr($mail) ?>" class="widefat">
+                    <button type="button" class="button remove-field">❌</button>
+                </div>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </div>
+    <button type="button" class="button" onclick="addField('correos-wrapper','correos[]','email')">+ Agregar correo</button>
+
+    <!-- Teléfonos -->
+    <p><strong>Teléfonos:</strong></p>
+    <div id="telefonos-wrapper">
+        <?php if (!empty($telefonos)) : ?>
+            <?php foreach ($telefonos as $tel) : ?>
+                <div class="field-row">
+                    <input type="text" name="telefonos[]" value="<?= esc_attr($tel) ?>" class="widefat">
+                    <button type="button" class="button remove-field">❌</button>
+                </div>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </div>
+    <button type="button" class="button" onclick="addField('telefonos-wrapper','telefonos[]','text')">+ Agregar teléfono</button>
+
+    <!-- Whatsapps -->
+    <p><strong>Whatsapps:</strong></p>
+    <div id="whatsapps-wrapper">
+        <?php if (!empty($whatsapps)) : ?>
+            <?php foreach ($whatsapps as $wa) : ?>
+                <div class="field-row">
+                    <input type="text" name="whatsapps[]" value="<?= esc_attr($wa) ?>" class="widefat">
+                    <button type="button" class="button remove-field">❌</button>
+                </div>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </div>
+    <button type="button" class="button" onclick="addField('whatsapps-wrapper','whatsapps[]','text')">+ Agregar WhatsApp</button>
+
+    <style>
+        .field-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 5px;
+        }
+
+        .field-row input {
+            flex: 1;
+        }
+    </style>
+
+    <script>
+        function addField(wrapperId, fieldName, type = "text") {
+            const wrapper = document.getElementById(wrapperId);
+            const div = document.createElement("div");
+            div.className = "field-row";
+
+            const input = document.createElement("input");
+            input.type = type;
+            input.name = fieldName;
+            input.className = "widefat";
+
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "button remove-field";
+            btn.innerText = "❌";
+            btn.onclick = function() {
+                div.remove();
+            };
+
+            div.appendChild(input);
+            div.appendChild(btn);
+            wrapper.appendChild(div);
+        }
+
+        // Activar eliminar en campos ya cargados
+        document.querySelectorAll(".remove-field").forEach(btn => {
+            btn.addEventListener("click", function() {
+                this.parentElement.remove();
+            });
+        });
+    </script>
+<?php
+}
+
+// ========== Guardar ==========
+function vertisub_save_paises_meta($post_id)
+{
+    // Verificar nonce
+    if (!isset($_POST['pais_slug_nonce']) || !wp_verify_nonce($_POST['pais_slug_nonce'], 'guardar_pais_slug')) {
+        return;
+    }
+
+    // Evitar autoguardados
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+
+    // Guardar si existe
+    if (isset($_POST['pais_slug'])) {
+        $slug = sanitize_text_field($_POST['pais_slug']);
+        update_post_meta($post_id, '_pais_slug', strtoupper($slug));
+    }
+
+    if (!isset($_POST['paises_meta_nonce']) || !wp_verify_nonce($_POST['paises_meta_nonce'], 'paises_save_meta')) return;
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+
+    update_post_meta($post_id, '_contacto', sanitize_text_field($_POST['contacto'] ?? ''));
+    update_post_meta($post_id, '_direccion', sanitize_textarea_field($_POST['direccion'] ?? ''));
+
+    // Correos
+    $correos = array_filter(array_map('sanitize_email', $_POST['correos'] ?? []));
+    update_post_meta($post_id, '_correos', $correos);
+
+    // Teléfonos
+    $telefonos = array_filter(array_map('sanitize_text_field', $_POST['telefonos'] ?? []));
+    update_post_meta($post_id, '_telefonos', $telefonos);
+
+    // Whatsapps
+    $whatsapps = array_filter(array_map('sanitize_text_field', $_POST['whatsapps'] ?? []));
+    update_post_meta($post_id, '_whatsapps', $whatsapps);
+}
+add_action('save_post', 'vertisub_save_paises_meta');
+
+
+// ========== CPT Servicios ==========
+function vertisub_create_servicios_post_type()
+{
+    register_post_type(
+        'servicios',
+        array(
+            'labels' => array(
+                'name'               => 'Servicios',
+                'singular_name'      => 'Servicio',
+                'add_new'            => 'Añadir servicio',
+                'add_new_item'       => 'Añadir servicio',
+                'edit_item'          => 'Editar servicio',
+                'new_item'           => 'Nuevo servicio',
+                'view_item'          => 'Ver servicio',
+                'search_items'       => 'Buscar servicios',
+                'not_found'          => 'No se encontraron servicios',
+                'not_found_in_trash' => 'No hay servicios en la papelera',
+            ),
+            'public'      => true,
+            'has_archive' => false,
+            'menu_icon'   => 'dashicons-hammer',
+            'supports'    => array('title', 'thumbnail', 'editor'),
+            // título, imagen destacada, descripción
+            'rewrite'     => array('slug' => 'servicios'),
+        )
+    );
+}
+add_action('init', 'vertisub_create_servicios_post_type');
+
+
+// ========== Relación Servicios <-> Países ==========
+function vertisub_register_servicios_meta_boxes()
+{
+    add_meta_box(
+        'servicios_multimedia',
+        'Multimedia',
+        'vertisub_servicios_multimedia_callback',
+        'servicios',
+        'normal',
+        'default'
+    );
+
+    add_meta_box(
+        'servicios_paises',
+        'Países',
+        'vertisub_servicios_paises_callback',
+        'servicios',
+        'side',
+        'default'
+    );
+}
+add_action('add_meta_boxes', 'vertisub_register_servicios_meta_boxes');
+
+
+// ========== Callback para Multimedia ==========
+// ========== Callback para Multimedia ==========
+function vertisub_servicios_multimedia_callback($post)
+{
+    $imagenes    = get_post_meta($post->ID, '_imagenes_reseña', true);
+    $videos      = get_post_meta($post->ID, '_videos_reseña', true);
+    $video_urls  = get_post_meta($post->ID, '_video_urls_reseña', true);
+
+    if (!is_array($imagenes)) $imagenes = [];
+    if (!is_array($videos)) $videos = [];
+    if (!is_array($video_urls)) $video_urls = [];
+?>
+
+    <h4>📷 Imágenes</h4>
+    <div id="imagenes-wrapper">
+        <?php foreach ($imagenes as $i => $img): ?>
+            <p>
+                <input type="text" name="imagenes_reseña[]" value="<?php echo esc_attr($img); ?>" style="width:80%;">
+                <button class="button upload_image_button">Subir</button>
+                <button class="button remove-field">Eliminar</button>
+            </p>
+        <?php endforeach; ?>
+    </div>
+    <button class="button add-image">+ Agregar Imagen</button>
+
+    <hr>
+    <h4>🎥 Videos (archivos)</h4>
+    <div id="videos-wrapper">
+        <?php foreach ($videos as $v): ?>
+            <p>
+                <input type="text" name="videos_reseña[]" value="<?php echo esc_attr($v); ?>" style="width:80%;">
+                <button class="button upload_video_button">Subir</button>
+                <button class="button remove-field">Eliminar</button>
+            </p>
+        <?php endforeach; ?>
+    </div>
+    <button class="button add-video">+ Agregar Video</button>
+
+    <hr>
+    <h4>🌐 Links de Video (YouTube/Vimeo)</h4>
+    <div id="urls-wrapper">
+        <?php foreach ($video_urls as $url): ?>
+            <p>
+                <input type="url" name="video_urls_reseña[]" value="<?php echo esc_attr($url); ?>" style="width:80%;">
+                <button class="button remove-field">Eliminar</button>
+            </p>
+        <?php endforeach; ?>
+    </div>
+    <button class="button add-url">+ Agregar Link</button>
+
+    <script>
+        jQuery(document).ready(function($) {
+            // ========== Duplicar campos ==========
+            $('.add-image').click(function(e) {
+                e.preventDefault();
+                $('#imagenes-wrapper').append(
+                    '<p><input type="text" name="imagenes_reseña[]" style="width:80%;"> <button class="button upload_image_button">Subir</button> <button class="button remove-field">Eliminar</button></p>'
+                );
+            });
+
+            $('.add-video').click(function(e) {
+                e.preventDefault();
+                $('#videos-wrapper').append(
+                    '<p><input type="text" name="videos_reseña[]" style="width:80%;"> <button class="button upload_video_button">Subir</button> <button class="button remove-field">Eliminar</button></p>'
+                );
+            });
+
+            $('.add-url').click(function(e) {
+                e.preventDefault();
+                $('#urls-wrapper').append(
+                    '<p><input type="url" name="video_urls_reseña[]" style="width:80%;"> <button class="button remove-field">Eliminar</button></p>'
+                );
+            });
+
+            // Eliminar campo
+            $(document).on('click', '.remove-field', function(e) {
+                e.preventDefault();
+                $(this).parent('p').remove();
+            });
+
+            // Subida de Imagen
+            $(document).on('click', '.upload_image_button', function(e) {
+                e.preventDefault();
+                var button = $(this);
+                var uploader = wp.media({
+                    title: 'Selecciona una imagen',
+                    button: {
+                        text: 'Usar esta imagen'
+                    },
+                    library: {
+                        type: 'image'
+                    },
+                    multiple: false
+                }).on('select', function() {
+                    var attachment = uploader.state().get('selection').first().toJSON();
+                    button.prev('input').val(attachment.url);
+                }).open();
+            });
+
+            // Subida de Video
+            $(document).on('click', '.upload_video_button', function(e) {
+                e.preventDefault();
+                var button = $(this);
+                var uploader = wp.media({
+                    title: 'Selecciona un video',
+                    button: {
+                        text: 'Usar este video'
+                    },
+                    library: {
+                        type: 'video'
+                    },
+                    multiple: false
+                }).on('select', function() {
+                    var attachment = uploader.state().get('selection').first().toJSON();
+                    button.prev('input').val(attachment.url);
+                }).open();
+            });
+        });
+    </script>
+<?php
+}
+
+// Registrar metabox
+function vertisub_add_multimedia_metabox()
+{
+    add_meta_box(
+        'reseñas_multimedia',
+        'Multimedia',
+        'vertisub_servicios_multimedia_callback',
+        'reseñas',
+        'normal',
+        'default'
+    );
+}
+add_action('add_meta_boxes', 'vertisub_add_multimedia_metabox');
+
+// Guardar los datos
+function vertisub_save_multimedia_meta($post_id)
+{
+    // Evitar autoguardado
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+
+    // Imágenes
+    $imagenes = isset($_POST['imagenes_reseña']) ? array_filter(array_map('esc_url_raw', $_POST['imagenes_reseña'])) : [];
+    update_post_meta($post_id, '_imagenes_reseña', $imagenes);
+
+    // Videos
+    $videos = isset($_POST['videos_reseña']) ? array_filter(array_map('esc_url_raw', $_POST['videos_reseña'])) : [];
+    update_post_meta($post_id, '_videos_reseña', $videos);
+
+    // URLs de videos
+    $urls = isset($_POST['video_urls_reseña']) ? array_filter(array_map('esc_url_raw', $_POST['video_urls_reseña'])) : [];
+    update_post_meta($post_id, '_video_urls_reseña', $urls);
+}
+add_action('save_post', 'vertisub_save_multimedia_meta');
+
+// ========== Callback para selector de Países ==========
+function vertisub_servicios_paises_callback($post)
+{
+    $paises = get_posts(array(
+        'post_type'      => 'paises',
+        'posts_per_page' => -1,
+        'orderby'        => 'title',
+        'order'          => 'ASC'
+    ));
+
+    $selected = get_post_meta($post->ID, '_servicio_paises', true);
+    if (!is_array($selected)) $selected = array();
+
+    echo '<select name="servicio_paises[]" multiple style="width:100%;height:150px;">';
+    foreach ($paises as $pais) {
+        $is_selected = in_array($pais->ID, $selected) ? 'selected' : '';
+        echo '<option value="' . $pais->ID . '" ' . $is_selected . '>' . esc_html($pais->post_title) . '</option>';
+    }
+    echo '</select>';
+}
+
+
+// ========== Guardar selector múltiple ==========
+function vertisub_save_servicios_meta($post_id)
+{
+    if (array_key_exists('servicio_paises', $_POST)) {
+        update_post_meta($post_id, '_servicio_paises', $_POST['servicio_paises']);
+    }
+}
+add_action('save_post_servicios', 'vertisub_save_servicios_meta');
+
+// Add pais_slug to query vars
+// 1. Permitir query var "pais_slug"
+function vertisub_add_query_vars($vars)
+{
+    $vars[] = 'pais_slug';
+    return $vars;
+}
+add_filter('query_vars', 'vertisub_add_query_vars');
+
+// 2. Crear regla de reescritura para /servicios-vertisub/{pais}/
+function vertisub_rewrite_rules()
+{
+    add_rewrite_rule(
+        '^servicios-vertisub/([^/]+)/?$',
+        'index.php?pagename=servicios-vertisub&pais_slug=$matches[1]',
+        'top'
+    );
+}
+add_action('init', 'vertisub_rewrite_rules');
+
+// 1. Registrar Custom Post Type: Instructores
+function vertisub_create_instructor_post_type()
+{
+    register_post_type(
+        'instructores',
+        array(
+            'labels' => array(
+                'name'               => 'Instructores',
+                'singular_name'      => 'Instructor',
+                'add_new'            => 'Añadir Nuevo',
+                'add_new_item'       => 'Añadir Nuevo Instructor',
+                'edit_item'          => 'Editar Instructor',
+                'new_item'           => 'Nuevo Instructor',
+                'view_item'          => 'Ver Instructor',
+                'search_items'       => 'Buscar Instructores',
+                'not_found'          => 'No se encontraron instructores',
+                'not_found_in_trash' => 'No hay instructores en la papelera',
+            ),
+            'public'      => true,
+            'has_archive' => false,
+            'menu_icon'   => 'dashicons-welcome-learn-more', // icono de instructor
+            'supports'    => array('title', 'thumbnail'), // Nombre + Imagen
+            'rewrite'     => array('slug' => 'instructores'),
+        )
+    );
+}
+add_action('init', 'vertisub_create_instructor_post_type');
+
+
+// 2. Agregar Metaboxes (Años de experiencia, Cargo, Video)
+function vertisub_instructor_metaboxes()
+{
+    add_meta_box(
+        'instructor_info',
+        'Información del Instructor',
+        'vertisub_instructor_metabox_callback',
+        'instructores',
+        'normal',
+        'high'
+    );
+}
+add_action('add_meta_boxes', 'vertisub_instructor_metaboxes');
+
+function vertisub_instructor_metabox_callback($post)
+{
+    wp_nonce_field(basename(__FILE__), 'instructor_nonce');
+
+    $experiencia = get_post_meta($post->ID, '_instructor_experiencia', true);
+    $cargo       = get_post_meta($post->ID, '_instructor_cargo', true);
+    $video       = get_post_meta($post->ID, '_instructor_video', true);
+    ?>
+    <p>
+        <label for="instructor_experiencia"><strong>Años de Experiencia:</strong></label><br>
+        <input type="number" id="instructor_experiencia" name="instructor_experiencia" 
+               value="<?php echo esc_attr($experiencia); ?>" style="width:100px;">
+    </p>
+    <p>
+        <label for="instructor_cargo"><strong>Cargo:</strong></label><br>
+        <input type="text" id="instructor_cargo" name="instructor_cargo" 
+               value="<?php echo esc_attr($cargo); ?>" style="width:100%;">
+    </p>
+    <p>
+        <label for="instructor_video"><strong>URL de Video de Presentación:</strong></label><br>
+        <input type="url" id="instructor_video" name="instructor_video" 
+               value="<?php echo esc_attr($video); ?>" style="width:100%;">
+    </p>
+    <?php
+}
+
+
+// 3. Guardar datos de los Metaboxes
+function vertisub_save_instructor_metabox($post_id)
+{
+    if (!isset($_POST['instructor_nonce']) || !wp_verify_nonce($_POST['instructor_nonce'], basename(__FILE__))) {
+        return $post_id;
+    }
+
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return $post_id;
+
+    if ('instructores' === $_POST['post_type']) {
+        if (isset($_POST['instructor_experiencia'])) {
+            update_post_meta($post_id, '_instructor_experiencia', sanitize_text_field($_POST['instructor_experiencia']));
+        }
+        if (isset($_POST['instructor_cargo'])) {
+            update_post_meta($post_id, '_instructor_cargo', sanitize_text_field($_POST['instructor_cargo']));
+        }
+        if (isset($_POST['instructor_video'])) {
+            update_post_meta($post_id, '_instructor_video', esc_url_raw($_POST['instructor_video']));
+        }
+    }
+}
+add_action('save_post', 'vertisub_save_instructor_metabox');
+
+// 1. Registrar Custom Post Type: Cursos
+function vertisub_create_cursos_post_type()
+{
+    register_post_type(
+        'cursos',
+        array(
+            'labels' => array(
+                'name'               => 'Cursos',
+                'singular_name'      => 'Curso',
+                'add_new'            => 'Añadir Nuevo',
+                'add_new_item'       => 'Añadir Nuevo Curso',
+                'edit_item'          => 'Editar Curso',
+                'new_item'           => 'Nuevo Curso',
+                'view_item'          => 'Ver Curso',
+                'search_items'       => 'Buscar Cursos',
+                'not_found'          => 'No se encontraron cursos',
+                'not_found_in_trash' => 'No hay cursos en la papelera',
+            ),
+            'public'      => true,
+            'has_archive' => false,
+            'menu_icon'   => 'dashicons-awards',
+            'supports'    => array('title', 'editor', 'thumbnail'),
+            'rewrite'     => array('slug' => 'cursos'),
+        )
+    );
+}
+add_action('init', 'vertisub_create_cursos_post_type');
+
+
+// 2. Metabox
+function vertisub_cursos_metaboxes()
+{
+    add_meta_box(
+        'curso_info',
+        'Detalles del Curso',
+        'vertisub_cursos_callback',
+        'cursos',
+        'normal',
+        'high'
+    );
+}
+add_action('add_meta_boxes', 'vertisub_cursos_metaboxes');
+
+
+// 3. Callback con campos
+function vertisub_cursos_callback($post)
+{
+    wp_nonce_field(basename(__FILE__), 'cursos_nonce');
+
+    // Recuperar valores
+    $imagenes      = get_post_meta($post->ID, '_curso_imagenes', true) ?: [];
+    $modalidades   = get_post_meta($post->ID, '_curso_modalidades', true) ?: [];
+    $intro_video   = get_post_meta($post->ID, '_curso_intro_video', true);
+    $testimonios   = get_post_meta($post->ID, '_curso_testimonios', true) ?: [];
+    $temario       = get_post_meta($post->ID, '_curso_temario', true) ?: [];
+    $url_inscribir = get_post_meta($post->ID, '_curso_url_inscribir', true);
+    $url_info      = get_post_meta($post->ID, '_curso_url_info', true);
+    $url_plataforma= get_post_meta($post->ID, '_curso_url_plataforma', true);
+    $url_oficial   = get_post_meta($post->ID, '_curso_url_oficial', true);
+    $paises        = get_post_meta($post->ID, '_curso_paises', true) ?: [];
+    $paises_urls   = get_post_meta($post->ID, '_curso_paises_urls', true) ?: [];
+    $instructores  = get_post_meta($post->ID, '_curso_instructores', true) ?: [];
+    $convenios     = get_post_meta($post->ID, '_curso_convenios', true) ?: []; // NUEVO
+
+    // Obtener CPT relacionados
+    $paises_list       = get_posts(['post_type' => 'paises', 'numberposts' => -1]);
+    $instructores_list = get_posts(['post_type' => 'instructores', 'numberposts' => -1]);
+
+    ?>
+    <h3>Imágenes del Curso</h3>
+    <div id="imagenes-wrapper">
+        <?php if (!empty($imagenes)) : 
+            foreach ($imagenes as $img_id) : 
+                $img_url = wp_get_attachment_url($img_id); ?>
+                <div style="margin-bottom:10px;">
+                    <img src="<?php echo esc_url($img_url); ?>" style="max-width:150px; display:block; margin-bottom:5px;">
+                    <input type="hidden" name="curso_imagenes[]" value="<?php echo esc_attr($img_id); ?>">
+                    <button class="remove-field button">Eliminar</button>
+                </div>
+            <?php endforeach;
+        endif; ?>
+    </div>
+    <button type="button" class="button add-image">+ Añadir Imagen</button>
+
+    <hr>
+    <h3>Modalidades</h3>
+    <div id="modalidades-wrapper">
+        <?php if (!empty($modalidades)) : 
+            foreach ($modalidades as $m) : ?>
+                <p><input type="text" name="curso_modalidades[]" value="<?php echo esc_attr($m); ?>" style="width:80%;">
+                <button class="remove-field button">Eliminar</button></p>
+            <?php endforeach;
+        endif; ?>
+    </div>
+    <button type="button" class="add-field button">+ Añadir Modalidad</button>
+
+    <hr>
+    <h3>Video de Introducción</h3>
+    <input type="url" name="curso_intro_video" value="<?php echo esc_attr($intro_video); ?>" style="width:100%;">
+
+    <hr>
+    <h3>Videos de Testimonios</h3>
+    <div id="testimonios-wrapper">
+        <?php if (!empty($testimonios)) :
+            foreach ($testimonios as $t) : ?>
+                <p><input type="url" name="curso_testimonios[]" value="<?php echo esc_attr($t); ?>" style="width:80%;">
+                <button class="remove-field button">Eliminar</button></p>
+            <?php endforeach;
+        endif; ?>
+    </div>
+    <button type="button" class="add-field button" data-target="testimonios-wrapper" data-name="curso_testimonios[]">+ Añadir Testimonio</button>
+
+    <hr>
+    <h3>Temario</h3>
+    <div id="temario-wrapper">
+        <?php if (!empty($temario)) :
+            foreach ($temario as $t) : ?>
+                <p><input type="text" name="curso_temario[]" value="<?php echo esc_attr($t); ?>" style="width:80%;">
+                <button class="remove-field button">Eliminar</button></p>
+            <?php endforeach;
+        endif; ?>
+    </div>
+    <button type="button" class="add-field button" data-target="temario-wrapper" data-name="curso_temario[]">+ Añadir Tema</button>
+
+    <hr>
+    <h3>Relación con Instructores</h3>
+    <?php foreach ($instructores_list as $inst) : ?>
+        <label>
+            <input type="checkbox" name="curso_instructores[]" value="<?php echo $inst->ID; ?>" 
+            <?php checked(in_array($inst->ID, $instructores)); ?>>
+            <?php echo esc_html($inst->post_title); ?>
+        </label><br>
+    <?php endforeach; ?>
+
+    <hr>
+    <h3>Convenios con Países</h3>
+    <?php foreach ($paises_list as $pais) : 
+        $url_contacto = isset($paises_urls[$pais->ID]) ? $paises_urls[$pais->ID] : ''; ?>
+        <p>
+            <label>
+                <input type="checkbox" name="curso_paises[]" value="<?php echo $pais->ID; ?>" 
+                <?php checked(in_array($pais->ID, $paises)); ?>>
+                <?php echo esc_html($pais->post_title); ?>
+            </label><br>
+            URL de contacto:<br>
+            <input type="url" name="curso_paises_urls[<?php echo $pais->ID; ?>]" value="<?php echo esc_attr($url_contacto); ?>" style="width:80%;">
+        </p>
+    <?php endforeach; ?>
+
+    <hr>
+    <h3>Convenios Personalizados</h3>
+    <div id="convenios-wrapper">
+        <?php if (!empty($convenios)) :
+            foreach ($convenios as $c) : ?>
+                <p>
+                    <input type="text" name="curso_convenios[titulo][]" value="<?php echo esc_attr($c['titulo']); ?>" placeholder="Nombre del convenio" style="width:35%;">
+                    <input type="url" name="curso_convenios[url][]" value="<?php echo esc_attr($c['url']); ?>" placeholder="URL del convenio" style="width:40%;">
+                    <button class="remove-field button">Eliminar</button>
+                </p>
+            <?php endforeach;
+        endif; ?>
+    </div>
+    <button type="button" class="add-field button" data-target="convenios-wrapper" data-name="curso_convenios">+ Añadir Convenio</button>
+
+    <hr>
+    <h3>Enlaces</h3>
+    <p><label><strong>URL Inscripción:</strong></label><br>
+    <input type="url" name="curso_url_inscribir" value="<?php echo esc_attr($url_inscribir); ?>" style="width:100%;"></p>
+
+    <p><label><strong>URL Más Información:</strong></label><br>
+    <input type="url" name="curso_url_info" value="<?php echo esc_attr($url_info); ?>" style="width:100%;"></p>
+
+    <p><label><strong>URL Plataforma de Aprendizaje:</strong></label><br>
+    <input type="url" name="curso_url_plataforma" value="<?php echo esc_attr($url_plataforma); ?>" style="width:100%;"></p>
+
+    <p><label><strong>URL Página Oficial:</strong></label><br>
+    <input type="url" name="curso_url_oficial" value="<?php echo esc_attr($url_oficial); ?>" style="width:100%;"></p>
+
+    <script>
+        jQuery(document).ready(function($){
+            // Añadir campos dinámicos
+            $(document).on('click', '.add-field', function(e){
+                e.preventDefault();
+                const target = $(this).data('target') || $(this).prev().attr('id');
+                const name = $(this).data('name') || "curso_modalidades[]";
+
+                if(name === "curso_convenios"){
+                    $("#" + target).append(
+                        '<p><input type="text" name="curso_convenios[titulo][]" placeholder="Nombre del convenio" style="width:35%;"> ' +
+                        '<input type="url" name="curso_convenios[url][]" placeholder="URL del convenio" style="width:40%;"> ' +
+                        '<button class="remove-field button">Eliminar</button></p>'
+                    );
+                } else {
+                    $("#" + target).append('<p><input type="text" name="'+name+'" style="width:80%;"> <button class="remove-field button">Eliminar</button></p>');
+                }
+            });
+            $(document).on('click', '.remove-field', function(e){
+                e.preventDefault();
+                $(this).parent().remove();
+            });
+
+            // Añadir imágenes
+            var frame;
+            $('.add-image').on('click', function(e){
+                e.preventDefault();
+                if(frame) frame.close();
+                frame = wp.media({
+                    title: 'Seleccionar Imagen',
+                    button: { text: 'Usar Imagen' },
+                    multiple: false
+                });
+                frame.on('select', function(){
+                    var attachment = frame.state().get('selection').first().toJSON();
+                    var html = '<div style="margin-bottom:10px;">' +
+                               '<img src="'+attachment.url+'" style="max-width:150px; display:block; margin-bottom:5px;">' +
+                               '<input type="hidden" name="curso_imagenes[]" value="'+attachment.id+'">' +
+                               '<button class="remove-field button">Eliminar</button></div>';
+                    $('#imagenes-wrapper').append(html);
+                });
+                frame.open();
+            });
+        });
+    </script>
+    <?php
+}
+
+
+// 4. Guardar datos
+function vertisub_save_cursos_metabox($post_id)
+{
+    if (!isset($_POST['cursos_nonce']) || !wp_verify_nonce($_POST['cursos_nonce'], basename(__FILE__))) return $post_id;
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return $post_id;
+    if ('cursos' !== $_POST['post_type']) return $post_id;
+
+    update_post_meta($post_id, '_curso_imagenes', array_map('intval', (array) $_POST['curso_imagenes']));
+    update_post_meta($post_id, '_curso_modalidades', array_filter((array) $_POST['curso_modalidades']));
+    update_post_meta($post_id, '_curso_intro_video', sanitize_text_field($_POST['curso_intro_video']));
+    update_post_meta($post_id, '_curso_testimonios', array_filter((array) $_POST['curso_testimonios']));
+    update_post_meta($post_id, '_curso_temario', array_filter((array) $_POST['curso_temario']));
+    update_post_meta($post_id, '_curso_url_inscribir', esc_url_raw($_POST['curso_url_inscribir']));
+    update_post_meta($post_id, '_curso_url_info', esc_url_raw($_POST['curso_url_info']));
+    update_post_meta($post_id, '_curso_url_plataforma', esc_url_raw($_POST['curso_url_plataforma']));
+    update_post_meta($post_id, '_curso_url_oficial', esc_url_raw($_POST['curso_url_oficial']));
+    update_post_meta($post_id, '_curso_instructores', array_map('intval', (array) $_POST['curso_instructores']));
+    update_post_meta($post_id, '_curso_paises', array_map('intval', (array) $_POST['curso_paises']));
+    update_post_meta($post_id, '_curso_paises_urls', $_POST['curso_paises_urls']);
+
+    // Guardar convenios personalizados
+    if (isset($_POST['curso_convenios'])) {
+        $convenios = [];
+        $titulos = $_POST['curso_convenios']['titulo'];
+        $urls    = $_POST['curso_convenios']['url'];
+        foreach ($titulos as $i => $titulo) {
+            if (!empty($titulo) || !empty($urls[$i])) {
+                $convenios[] = [
+                    'titulo' => sanitize_text_field($titulo),
+                    'url'    => esc_url_raw($urls[$i])
+                ];
+            }
+        }
+        update_post_meta($post_id, '_curso_convenios', $convenios);
+    }
+}
+add_action('save_post', 'vertisub_save_cursos_metabox');

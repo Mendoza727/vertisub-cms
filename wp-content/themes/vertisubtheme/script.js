@@ -1,3 +1,4 @@
+
 document.addEventListener("visibilitychange", () => {
   if (document.visibilityState === "visible") {
     const chatBot = document.getElementById("chat-bot-launcher-container");
@@ -12,6 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const letters = document.querySelectorAll(".letter");
 
   document.body.style.overflow = "hidden";
+   document.documentElement.style.overflow = "hidden";
 
   // Animación de progreso con porcentaje
   let progress = 0;
@@ -25,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // Esperar un poco más antes de ocultar el loader
       setTimeout(() => {
         hideLoader();
-      }, 800);
+      }, 2500);
     }
 
     // Actualizar barra de progreso y porcentaje
@@ -55,6 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
         loader.style.display = "none";
         document.body.classList.add("loaded");
         document.body.style.overflowY = "auto";
+         document.documentElement.style.overflow = "visible";
         showMainContent();
         initNavbar();
         initVideoHero();
@@ -77,30 +80,39 @@ document.addEventListener("DOMContentLoaded", () => {
     const heroVideo = document.getElementById("hero-video");
 
     if (heroVideo) {
-      // Asegurar que el video se reproduzca
+      // Intentar autoplay seguro
       heroVideo.play().catch((error) => {
-        console.log("Video autoplay failed:", error);
-        // Mostrar imagen fallback si el video no puede reproducirse
-        const videoContainer = document.querySelector(".hero-video-container");
-        const fallback = document.querySelector(".video-fallback");
-        if (fallback) {
-          fallback.style.display = "block";
-          heroVideo.style.display = "none";
+        if (error.name !== "AbortError") {
+          console.warn("Video autoplay failed:", error);
+          // Mostrar fallback si autoplay no funciona
+          const fallback = document.querySelector(".video-fallback");
+          if (fallback) {
+            fallback.style.display = "block";
+            heroVideo.style.display = "none";
+          }
         }
       });
 
-      // Optimizar rendimiento del video
+      // Mostrar video suavemente cuando está listo
       heroVideo.addEventListener("loadeddata", () => {
         heroVideo.style.opacity = "1";
       });
 
-      // Pausar video cuando no esté visible (optimización)
+      // Optimizar con IntersectionObserver
       const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            heroVideo.play();
+            if (heroVideo.paused) {
+              heroVideo.play().catch((err) => {
+                if (err.name !== "AbortError") {
+                  console.warn("Play failed:", err);
+                }
+              });
+            }
           } else {
-            heroVideo.pause();
+            if (!heroVideo.paused) {
+              heroVideo.pause();
+            }
           }
         });
       });
@@ -433,6 +445,16 @@ document.addEventListener("DOMContentLoaded", () => {
     // Cerrar offcanvas al hacer click en un link
     navLinks.forEach((link) => {
       link.addEventListener("click", (e) => {
+        const parentItem = link.closest(".nav-item");
+
+        // Si el item tiene sublinks (has-dropdown), no cierres el offcanvas
+        if (parentItem && parentItem.classList.contains("has-dropdown")) {
+          e.preventDefault(); // Evita navegar inmediatamente
+          parentItem.classList.toggle("active"); // Abre/cierra submenu
+          return; // ⛔ salimos sin cerrar
+        }
+
+        // Si NO tiene sublinks => sí cerramos
         const href = link.getAttribute("href");
 
         if (href.startsWith("#")) {
@@ -448,7 +470,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
           }
         } else {
-          // Links externos o páginas completas: dejamos que navegue
+          // Links externos o páginas completas
           closeOffcanvasMenu();
         }
       });

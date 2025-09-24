@@ -1,0 +1,112 @@
+{
+  "version": 2,
+  "settings": {
+    "color": {
+      "custom": true,
+      "customGradient": true,
+      "palette": [
+        {
+          "name": "Primary",
+          "slug": "primary",
+          "color": "#0f1319"
+        },
+        {
+          "name": "Secondary",
+          "slug": "secondary",
+          "color": "#e3c5ca"
+        },
+        {
+          "name": "Accent",
+          "slug": "accent",
+          "color": "#bb0c2b"
+        },
+        {
+          "name": "Accent Secondary",
+          "slug": "accent-secondary",
+          "color": "#bb1447"
+        },
+        {
+          "name": "Accent Tertiary",
+          "slug": "accent-tertiary",
+          "color": "#bc7ece"
+        },
+        {
+          "name": "Text Dark",
+          "slug": "text-dark",
+          "color": "#544949"
+        },
+        {
+          "name": "Text Light",
+          "slug": "text-light",
+          "color": "#ffffff"
+        },
+        {
+          "name": "Text Gray",
+          "slug": "text-gray",
+          "color": "#7b7b7b"
+        },
+        {
+          "name": "Text Secondary",
+          "slug": "text-secondary",
+          "color": "#aaa8a9"
+        },
+        {
+          "name": "Gray Light",
+          "slug": "gray-light",
+          "color": "#aaa8a9"
+        },
+        {
+          "name": "Gray Medium",
+          "slug": "gray-medium",
+          "color": "#9c9c9c"
+        },
+        {
+          "name": "Silver",
+          "slug": "silver",
+          "color": "#bcbcbc"
+        }
+      ]
+    },
+    "typography": {
+      "customFontSize": true,
+      "dropCap": true,
+      "fontFamilies": [
+        {
+          "fontFamily": "Oswald, sans-serif",
+          "slug": "oswald",
+          "name": "Oswald"
+        },
+        {
+          "fontFamily": "Exo 2, sans-serif",
+          "slug": "exo-2",
+          "name": "Exo 2"
+        },
+        {
+          "fontFamily": "Roboto, sans-serif",
+          "slug": "roboto",
+          "name": "Roboto"
+        }
+      ]
+    }
+  },
+  "styles": {
+    "color": {
+      "background": "#0f1319",
+      "text": "#544949"
+    },
+    "typography": {
+      "fontFamily": "Oswald, sans-serif"
+    },
+    "elements": {
+      "h1,h2,h3,h4,h5,h6": {
+        "color": "#0f1319"
+      },
+      "p": {
+        "color": "#544949"
+      },
+      "a": {
+        "color": "#bb0c2b"
+      }
+    }
+  }
+}

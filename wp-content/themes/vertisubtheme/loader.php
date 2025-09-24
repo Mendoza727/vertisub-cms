@@ -1,25 +1,26 @@
+
 <!-- Loader mejorado con animaciones de letras que crecen -->
-    <div id="loader" class="loader-container">
-        <div class="loader-content">
-            <div class="loader-logo">
-                <h1 class="loader-text">
-                    <!-- Cambiando letras de SANCHO a VERTISUB -->
-                    <span class="letter" data-delay="0">V</span>
-                    <span class="letter" data-delay="200">E</span>
-                    <span class="letter" data-delay="400">R</span>
-                    <span class="letter" data-delay="600">T</span>
-                    <span class="letter" data-delay="800">I</span>
-                    <span class="letter" data-delay="1000">S</span>
-                    <span class="letter" data-delay="1200">U</span>
-                    <span class="letter" data-delay="1400">B</span>
-                </h1>
-            </div>
-            <div class="loader-progress">
-                <div class="progress-bar"></div>
-                <div class="progress-percentage">0%</div>
-            </div>
-            <div class="loader-subtitle">
-                <span class="subtitle-text">Cargando experiencia...</span>
-            </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.0/lottie.min.js"></script>
+
+<div id="loader" class="loader-container">
+    <div class="loader-content">
+        <div class="loader-logo" id="logo"></div>
+        <div class="loader-progress">
+            <div class="progress-bar"></div>
+            <div class="progress-percentage">0%</div>
+        </div>
+        <div class="loader-subtitle">
+            <span class="subtitle-text">Cargando experiencia...</span>
         </div>
     </div>
+</div>
+
+<script>
+    lottie.loadAnimation({
+        container: document.getElementById('logo'),
+        renderer: 'svg',
+        loop: false,
+        autoplay: true,
+        path: "<?php echo get_template_directory_uri(); ?>/assets/animations/9ffea08a-285f-4684-8d79-95c7cf4b8594.json"
+    });
+</script>

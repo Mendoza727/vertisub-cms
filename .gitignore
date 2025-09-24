@@ -9,9 +9,9 @@ wp-content/languages/
 # WordPress uploads
 wp-content/uploads/
 
-# WordPress plugins (ignorar plugins descargados, salvo los desarrollados)
-wp-content/plugins/akismet/
-wp-content/plugins/hello.php
+# Ignorar todos los plugins
+wp-content/plugins/*
+
 
 # WordPress themes (ignorar themes predeterminados)
 wp-content/themes/twenty*/
