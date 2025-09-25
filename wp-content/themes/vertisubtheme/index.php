@@ -59,7 +59,7 @@ Template Name: Sancho Landing Page
 
         /* About Section - VERDE para revelarse */
         .nosotros-section {
-            height: 80vh;
+            height: 140vh;
             padding: 100px 0;
             position: relative;
             z-index: 5;
@@ -123,6 +123,63 @@ Template Name: Sancho Landing Page
                 bottom: -180vh;
             }
         }
+
+        #carousel-certi {
+            width: 100%;
+            /* Ocupa todo el ancho disponible */
+            max-width: 100vw;
+            /* Nunca más ancho que la pantalla */
+            margin: 0 auto;
+            box-sizing: border-box;
+            overflow: hidden;
+            /* Oculta cualquier desbordamiento */
+        }
+
+        /* Contenedor interno del carrusel */
+        #carousel-certi .carousel-track {
+            display: flex;
+            gap: 1rem;
+            /* Ajusta el espacio entre elementos */
+            flex-wrap: nowrap;
+            /* No se debe romper línea */
+            overflow-x: auto;
+            /* Scroll horizontal si excede */
+            scroll-behavior: smooth;
+            /* Movimiento suave */
+            padding-bottom: 1rem;
+            /* Para que no toque el borde */
+        }
+
+        /* Cada elemento del carrusel */
+        #carousel-certi .carousel-item {
+            flex: 0 0 auto;
+            /* Mantiene tamaño del item, no crece ni se encoge */
+            width: 90%;
+            /* Ajusta según lo que quieras mostrar */
+            max-width: 300px;
+            /* Limita tamaño máximo */
+            box-sizing: border-box;
+        }
+
+        /* Para pantallas más pequeñas */
+        @media (max-width: 768px) {
+            #carousel-certi .carousel-item {
+                width: 80%;
+                max-width: 250px;
+            }
+        }
+
+        /* Solo en móvil */
+        @media (max-width: 767px) {
+            .nosotros-section {
+                height: 130vh;
+                /* asegúrate que tape lo de abajo */
+            }
+
+            .certifications-carousel {
+                margin-bottom: 10px;
+            }
+        }
     </style>
 </head>
 
@@ -166,7 +223,7 @@ Template Name: Sancho Landing Page
     <div class="circle-shape"></div>
 
     <!-- About Section - VERDE (se revelará) -->
-    <section id="nosotros" class="nosotros-section">
+    <section id="nosotros" class="nosotros-section section-1">
         <div class="about-content">
 
             <!-- About Content Grid -->
@@ -216,19 +273,6 @@ Template Name: Sancho Landing Page
                                         </div>
                                         <div class="work-content">
                                             <p class="work-description"><?php the_content(); ?></p>
-
-                                            <?php if ($video_url) : ?>
-                                                <div class="work-video">
-                                                    <iframe width="560" height="315"
-                                                        src="<?php echo esc_url($video_url); ?>"
-                                                        frameborder="0" allowfullscreen>
-                                                    </iframe>
-                                                </div>
-                                            <?php elseif ($has_image) : ?>
-                                                <div class="work-image">
-                                                    <?php the_post_thumbnail('medium'); ?>
-                                                </div>
-                                            <?php endif; ?>
                                         </div>
                                     </div>
 
@@ -244,14 +288,51 @@ Template Name: Sancho Landing Page
                 </div>
             </div>
 
+            <div id="carousel-certi">
+                <div class="certifications-carousel">
+                    <div class="carousel-container">
+                        <div class="carousel-track" id="certificationsTrack">
+                            <?php
+                            $certificaciones = new WP_Query(array(
+                                'post_type'      => 'certificaciones',
+                                'posts_per_page' => -1, // todas las certificaciones
+                                'orderby'        => 'date',
+                                'order'          => 'DESC'
+                            ));
+
+                            if ($certificaciones->have_posts()) :
+                                while ($certificaciones->have_posts()) : $certificaciones->the_post();
+                            ?>
+                                    <div class="certification-item">
+                                        <?php if (has_post_thumbnail()) : ?>
+                                            <img src="<?php the_post_thumbnail_url('medium'); ?>"
+                                                alt="<?php the_title(); ?>"
+                                                class="cert-logo">
+                                        <?php else : ?>
+                                            <img src="/placeholder.svg?height=80&width=120"
+                                                alt="<?php the_title(); ?>"
+                                                class="cert-logo">
+                                        <?php endif; ?>
+                                    </div>
+                                <?php
+                                endwhile;
+                                wp_reset_postdata();
+                            else :
+                                ?>
+                                <p>No hay certificaciones registradas.</p>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
     <!-- Mission & Vision Section -->
-    <section ction id="mision-vision" class="mission-vision-section mt-5">
+    <section ction id="mision-vision" class="mission-vision-section mt-5 section-2">
         <div class="container">
             <!-- Mission & Vision Headers -->
-            <div class="row mb-5 position-relative">
+            <div class="row mb-5 mt-5 position-relative">
                 <!-- Adding divider line between mission and vision -->
                 <div class="mission-vision-divider"></div>
 
@@ -274,7 +355,7 @@ Template Name: Sancho Landing Page
             </div>
 
             <!-- Information Cards -->
-            <div class="row g-4">
+            <div class="row g-4 mb-5">
                 <div class="col-lg-4 col-md-6">
                     <div class="info-card" data-card="contacto">
                         <div class="card-icon">
@@ -331,10 +412,10 @@ Template Name: Sancho Landing Page
                         <div class="card-content">
                             <p class="card-description">Información legal y datos corporativos de nuestra empresa.</p>
                             <div class="legal-info">
-                                <p><strong>NIT:</strong> <?php echo esc_html( get_theme_mod('legal_nit') ); ?></p>
-                                <p><strong>Razón Social:</strong> <?php echo esc_html( get_theme_mod('legal_razon') ); ?></p>
-                                <p><strong>Registro Mercantil:</strong> <?php echo esc_html( get_theme_mod('legal_registro') ); ?></p>
-                                <p><strong>Cámara de Comercio:</strong> <?php echo esc_html( get_theme_mod('legal_camara') ); ?></p>
+                                <p><strong>NIT:</strong> <?php echo esc_html(get_theme_mod('legal_nit')); ?></p>
+                                <p><strong>Razón Social:</strong> <?php echo esc_html(get_theme_mod('legal_razon')); ?></p>
+                                <p><strong>Registro Mercantil:</strong> <?php echo esc_html(get_theme_mod('legal_registro')); ?></p>
+                                <p><strong>Cámara de Comercio:</strong> <?php echo esc_html(get_theme_mod('legal_camara')); ?></p>
                             </div>
                         </div>
                     </div>
@@ -387,7 +468,7 @@ Template Name: Sancho Landing Page
                 left: 0;
                 width: 100vw;
                 height: 100vh;
-                background: #000000ff;
+                background: var(--accent-color);
                 z-index: 1;
                 clip-path: circle(50vh at 50% 150vh);
                 pointer-events: none;
@@ -395,25 +476,58 @@ Template Name: Sancho Landing Page
             document.body.appendChild(maskDiv);
 
             // Animación del clip-path - cobertura progresiva suave
-            gsap.timeline({
-                scrollTrigger: {
-                    trigger: aboutSection,
-                    start: "top bottom+=-6",
-                    end: "top 10%",
-                    scrub: 3, // Cambiar de 1.5 a 3
-                    ease: "power2.out",
-                    onUpdate: (self) => {
-                        const progress = self.progress;
+            let mm = gsap.matchMedia();
 
-                        // Círculo crece progresivamente desde abajo
-                        const radius = 50 + (progress * 120);
-                        const centerY = 150 - (progress * 80);
+            mm.add({
+                // Celulares pequeños y normales
+                isMobile: "(max-width: 767px)",
 
-                        maskDiv.style.clipPath = `circle(${radius}vh at 50% ${centerY}vh)`;
-                        maskDiv.style.opacity = 1;
+                // Tablets en vertical y horizontal
+                isTablet: "(min-width: 768px) and (max-width: 1023px)",
+
+                // Laptops pequeñas (ej. MacBook Air de 13", algunas Windows chicas)
+                isLaptop: "(min-width: 1024px) and (max-width: 1439px)",
+
+                // Desktops grandes y pantallas retina (MacBook Pro 14/16, monitores externos, etc.)
+                isDesktop: "(min-width: 1440px)"
+            }, (context) => {
+                let {
+                    isMobile,
+                    isTablet,
+                    isLaptop,
+                    isDesktop
+                } = context.conditions;
+
+                gsap.timeline({
+                    scrollTrigger: {
+                        trigger: aboutSection,
+                        start: isMobile ?
+                            "top 80%" // empieza más tarde en móviles
+                            :
+                            isTablet ?
+                            "top bottom+=-35" // arranca antes en tablets
+                            :
+                            isLaptop ?
+                            "top bottom+=-8" // laptops → ajustado
+                            :
+                            "top bottom+=-100", // desktop ancho
+                        end: "top 10%",
+                        scrub: 3,
+                        ease: "power2.out",
+                        onUpdate: (self) => {
+                            const progress = self.progress;
+
+                            // Radio y centro igual que antes
+                            const radius = 50 + (progress * 120);
+                            const centerY = 150 - (progress * 80);
+
+                            maskDiv.style.clipPath = `circle(${radius}vh at 50% ${centerY}vh)`;
+                            maskDiv.style.opacity = 1;
+                        }
                     }
-                }
+                });
             });
+
 
             // Remover el círculo original ya que usamos mask
             shape.style.display = 'none';
@@ -439,6 +553,34 @@ Template Name: Sancho Landing Page
 
             updateCircleSize();
             window.addEventListener('resize', updateCircleSize);
+        });
+
+        // configuramos pocisiones iniciales
+        gsap.set('.section-2', {
+            y: '100%'
+        });
+        // Animaciones de overlay
+        gsap.to('.section-2', {
+            y: '0%',
+            ease: "none",
+            scrollTrigger: {
+                trigger: 'body',
+                start: '0% top',
+                end: '25% top',
+                scrub: true,
+            }
+        });
+
+        // Animación inicial
+        gsap.fromTo('.section-1', {
+            y: 50,
+            opacity: 0
+        }, {
+            y: 0,
+            opacity: 1,
+            duration: 1.5,
+            ease: "power2.out",
+            delay: 0.5
         });
 
         AOS.init();
