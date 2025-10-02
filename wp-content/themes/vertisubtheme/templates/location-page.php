@@ -25,7 +25,31 @@ Template Name: Ubicacion
                                 <a href="<?php echo esc_url(home_url('/')); ?>" class="me-2">Inicio <i class="fas fa-chevron-right ms-1"></i></a>
                                 <span class="text-white">Ubicacion</span>
                             </div>
-                            <h1 class="display-3 fw-bold text-white">¿Dónde nos ubicamos?</h1>
+                            <?php
+                            // Obtener la primera ubicación publicada
+                            $ubicaciones = get_posts(array(
+                                'post_type'      => 'ubicaciones',
+                                'posts_per_page' => 1
+                            ));
+
+                            if (!empty($ubicaciones)) {
+                                $ubicacion = $ubicaciones[0];
+                            ?>
+                                <h1 class="display-3 fw-bold text-white">
+                                    <?php echo esc_html($ubicacion->post_title); ?>
+                                </h1>
+                                <div class="intro-description text-white mt-3">
+                                    <?php echo esc_html($ubicacion->post_content); ?>
+                                </div>
+                            <?php
+                            } else {
+                                // Texto por defecto si no hay ubicaciones
+                            ?>
+                                <h1 class="display-3 fw-bold text-white">¿Dónde nos ubicamos?</h1>
+                                <div class="intro-description text-white mt-3"></div>
+                            <?php
+                            }
+                            ?>
                         </div>
                     </div>
                 </div>
@@ -47,8 +71,8 @@ Template Name: Ubicacion
                         <span style="margin-left: 10px;">Cargando mapa...</span>
                     </div>
                     <div id="chartdiv"></div>
-                    </div>
                 </div>
+            </div>
             </div>
         </section>
 

@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // Esperar un poco más antes de ocultar el loader
       setTimeout(() => {
         hideLoader();
-      }, 2500);
+      }, 150);
     }
 
     // Actualizar barra de progreso y porcentaje

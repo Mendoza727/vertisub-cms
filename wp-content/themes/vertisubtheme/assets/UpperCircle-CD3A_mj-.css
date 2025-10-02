@@ -1,0 +1,15 @@
+.upper-circle {
+  width: 200%;
+  height: 850px;
+  border-radius: 100%;
+  margin-bottom: -720px;
+  margin-left: -50%;
+}
+@media screen and (min-width: 640px) {
+  .upper-circle {
+    width: 120%;
+    margin-left: -10%;
+    margin-bottom: -700px;
+    height: 1000px;
+  }
+}

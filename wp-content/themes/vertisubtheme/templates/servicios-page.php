@@ -25,7 +25,25 @@ Template Name: Servicios
                                 <a href="<?php echo esc_url(home_url('/')); ?>" class="me-2">Inicio <i class="fas fa-chevron-right ms-1"></i></a>
                                 <span class="text-white">Servicios</span>
                             </div>
+                            <?php
+                            // Obtener todos los servicios de introducción publicados
+                            $servicios = get_posts(array(
+                                'post_type'      => 'servicios_intro',
+                                'posts_per_page' => -1 // todos los servicios
+                            ));
+
+                            ?>
                             <h1 class="display-3 fw-bold text-white">Nuestros Servicios</h1>
+                            <div class="intro-description text-white mt-3">
+                                <?php if (!empty($servicios)) : ?>
+                                    <?php foreach ($servicios as $servicio) : ?>
+                                        <?php echo esc_html($servicio->post_content); ?>
+                                    <?php endforeach; ?>
+                                <?php else : ?>
+                                    <p>Próximamente agregaremos nuestros servicios.</p>
+                                <?php endif; ?>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -178,7 +196,7 @@ Template Name: Servicios
         </section>
 
         <!-- Contact Section -->
-        <section class="sancho-contact-section">
+        <section class="sancho-contact-section d-none">
             <div class="container">
                 <!-- Contact Info -->
                 <div class="row mb-5">

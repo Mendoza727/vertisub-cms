@@ -53,12 +53,15 @@ function initializeMap() {
       panX: "translateX",
       panY: "translateY",
       projection: am5map.geoMercator(),
-      homeZoomLevel: 1.2,
-      homeGeoPoint: { longitude: -20, latitude: 20 },
+      homeZoomLevel: 2.5, // 👈 más zoom
+      homeGeoPoint: { longitude: -60, latitude: 0 },
     })
   );
 
-  globalChart = chart;
+  // Esperar a que el mapa esté listo y aplicar zoom inicial
+  chart.events.on("datavalidated", function () {
+    chart.goHome();
+  });
 
   var polygonSeries = chart.series.push(
     am5map.MapPolygonSeries.new(root, {
@@ -75,6 +78,36 @@ function initializeMap() {
     stroke: am5.color("#ffffff"),
     strokeWidth: 1,
   });
+
+  // Deshabilitar países que no estén en contactData
+  polygonSeries.mapPolygons.template.adapters.add(
+    "interactive",
+    function (interactive, target) {
+      const countryCode = target.dataItem?.dataContext?.id?.toLowerCase();
+      return !!(countryCode && contactData[countryCode]); // solo true si existe en contactData
+    }
+  );
+
+  // Quitar tooltip para países sin contacto
+  polygonSeries.mapPolygons.template.adapters.add(
+    "tooltipText",
+    function (text, target) {
+      const countryCode = target.dataItem?.dataContext?.id?.toLowerCase();
+      return countryCode && contactData[countryCode] ? "{name}" : null;
+    }
+  );
+
+  // Colorear: países habilitados con su color, deshabilitados gris claro
+  polygonSeries.mapPolygons.template.adapters.add(
+    "fill",
+    function (fill, target) {
+      const countryCode = target.dataItem?.dataContext?.id?.toLowerCase();
+      if (countryCode && contactData[countryCode]) {
+        return am5.color(getPaletteColor(countryCode));
+      }
+      return am5.color("#e0e0e0"); // color gris para deshabilitados
+    }
+  );
 
   polygonSeries.mapPolygons.template.adapters.add(
     "fill",

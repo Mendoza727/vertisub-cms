@@ -21,6 +21,6 @@
         renderer: 'svg',
         loop: false,
         autoplay: true,
-        path: "<?php echo get_template_directory_uri(); ?>/assets/animations/9ffea08a-285f-4684-8d79-95c7cf4b8594.json"
+        path: "<?php echo get_template_directory_uri(); ?>/assets/animations/15c1e9c0-ae91-4fae-bf0d-0de2e0c56dd8.json"
     });
 </script>

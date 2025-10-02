@@ -1,0 +1,275 @@
+{
+    "id": 163,
+    "date": "2024-01-05T17:28:11",
+    "date_gmt": "2024-01-05T22:28:11",
+    "guid": {
+        "rendered": "https:\/\/cms.ny.quadi.io\/?page_id=163"
+    },
+    "modified": "2024-11-27T14:46:56",
+    "modified_gmt": "2024-11-27T19:46:56",
+    "slug": "about-us",
+    "status": "publish",
+    "type": "page",
+    "link": "https:\/\/backoffice.sanchobbdo.site\/about-us\/",
+    "title": {
+        "rendered": "About Us"
+    },
+    "content": {
+        "rendered": "",
+        "protected": false
+    },
+    "excerpt": {
+        "rendered": "",
+        "protected": false
+    },
+    "author": 1,
+    "featured_media": 0,
+    "parent": 0,
+    "menu_order": 0,
+    "comment_status": "closed",
+    "ping_status": "closed",
+    "template": "",
+    "meta": {
+        "_acf_changed": false,
+        "footnotes": ""
+    },
+    "class_list": [
+        "post-163",
+        "page",
+        "type-page",
+        "status-publish",
+        "hentry"
+    ],
+    "acf": {
+        "titles": [
+            {
+                "title": "THE WORK",
+                "type_of_video": "media",
+                "media_video": "https:\/\/backoffice.sanchobbdo.site\/wp-content\/uploads\/2024\/10\/ALL_THE_LIGHT.mp4",
+                "url_video": "https:\/\/casabbdo.s3.us-east-1.amazonaws.com\/BBDO%20NY\/VW%2070%20anos.webm"
+            },
+            {
+                "title": "THE WORK",
+                "type_of_video": "media",
+                "media_video": "https:\/\/backoffice.sanchobbdo.site\/wp-content\/uploads\/2024\/10\/CASA_TRANS.mp4",
+                "url_video": "https:\/\/casabbdo.s3.us-east-1.amazonaws.com\/BBDO%20NY\/New%20Recruits.webm"
+            },
+            {
+                "title": "THE WORK",
+                "type_of_video": "media",
+                "media_video": "https:\/\/backoffice.sanchobbdo.site\/wp-content\/uploads\/2024\/10\/NATUMALTA.mp4",
+                "url_video": "https:\/\/casabbdo.s3.us-east-1.amazonaws.com\/BBDO%20NY\/Just%20Joking%20%281%29.webm"
+            }
+        ],
+        "information_section": {
+            "title": "RECONOCIMIENTOS:",
+            "information": [
+                {
+                    "content": {
+                        "location": "",
+                        "information": [
+                            {
+                                "label": "Agencia independiente m\u00e1s efectiva del mundo en 6 ocasiones. "
+                            },
+                            {
+                                "label": "Agencia m\u00e1s efectiva de Colombia en 15 oportunidades. "
+                            },
+                            {
+                                "label": "Agencia del a\u00f1o en Latam por 3 a\u00f1os consecutivos. "
+                            },
+                            {
+                                "label": "20 leones en Cannes. "
+                            },
+                            {
+                                "label": "Agencia #1 seg\u00fan anunciantes e industria."
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        "title": "RECOGNITIONS:",
+        "closing_section": {
+            "isShow": false,
+            "title": "LEARN MORE:",
+            "buttons": [
+                {
+                    "label": "Sustainanility",
+                    "url": "https:\/\/backoffice.sanchobbdo.site\/wp-content\/uploads\/2024\/01\/Placeholder-PDF.pdf"
+                },
+                {
+                    "label": "Innovation",
+                    "url": "https:\/\/backoffice.sanchobbdo.site\/wp-content\/uploads\/2024\/01\/Placeholder-PDF.pdf"
+                },
+                {
+                    "label": "DE&1",
+                    "url": "https:\/\/backoffice.sanchobbdo.site\/wp-content\/uploads\/2024\/01\/Placeholder-PDF.pdf"
+                }
+            ]
+        },
+        "seo": {
+            "title": "About Us",
+            "description": "",
+            "thumbnail": {
+                "ID": 295,
+                "id": 295,
+                "title": "thumbnail",
+                "filename": "thumbnail.jpg",
+                "filesize": 10203,
+                "url": "https:\/\/backoffice.sanchobbdo.site\/wp-content\/uploads\/2024\/02\/thumbnail.jpg",
+                "link": "https:\/\/backoffice.sanchobbdo.site\/about-us\/thumbnail\/",
+                "alt": "",
+                "author": "1",
+                "description": "",
+                "caption": "",
+                "name": "thumbnail",
+                "status": "inherit",
+                "uploaded_to": 163,
+                "date": "2024-02-02 15:36:55",
+                "modified": "2024-02-02 15:55:36",
+                "menu_order": 0,
+                "mime_type": "image\/jpeg",
+                "type": "image",
+                "subtype": "jpeg",
+                "icon": "https:\/\/backoffice.sanchobbdo.site\/wp-includes\/images\/media\/default.png",
+                "width": 1200,
+                "height": 630,
+                "sizes": {
+                    "thumbnail": "https:\/\/backoffice.sanchobbdo.site\/wp-content\/uploads\/2024\/02\/thumbnail.jpg",
+                    "thumbnail-width": 150,
+                    "thumbnail-height": 79,
+                    "medium": "https:\/\/backoffice.sanchobbdo.site\/wp-content\/uploads\/2024\/02\/thumbnail.jpg",
+                    "medium-width": 300,
+                    "medium-height": 158,
+                    "medium_large": "https:\/\/backoffice.sanchobbdo.site\/wp-content\/uploads\/2024\/02\/thumbnail.jpg",
+                    "medium_large-width": 768,
+                    "medium_large-height": 403,
+                    "large": "https:\/\/backoffice.sanchobbdo.site\/wp-content\/uploads\/2024\/02\/thumbnail.jpg",
+                    "large-width": 1024,
+                    "large-height": 538,
+                    "1536x1536": "https:\/\/backoffice.sanchobbdo.site\/wp-content\/uploads\/2024\/02\/thumbnail.jpg",
+                    "1536x1536-width": 1200,
+                    "1536x1536-height": 630,
+                    "2048x2048": "https:\/\/backoffice.sanchobbdo.site\/wp-content\/uploads\/2024\/02\/thumbnail.jpg",
+                    "2048x2048-width": 1200,
+                    "2048x2048-height": 630
+                }
+            }
+        },
+        "video_banner": {
+            "type_of_content": "image",
+            "url_videos": {
+                "desktop_video": "",
+                "mobile_video": ""
+            },
+            "media_videos": {
+                "desktop_video": "https:\/\/backoffice.sanchobbdo.site\/wp-content\/uploads\/2024\/10\/HORIZONTAL19.mp4",
+                "mobile_video": "https:\/\/backoffice.sanchobbdo.site\/wp-content\/uploads\/2024\/10\/VERTICAL10.mp4"
+            },
+            "image": {
+                "ID": 738,
+                "id": 738,
+                "title": "Nuevo GIF",
+                "filename": "Nuevo-GIF.gif",
+                "filesize": 846402,
+                "url": "https:\/\/backoffice.sanchobbdo.site\/wp-content\/uploads\/2024\/11\/Nuevo-GIF.gif",
+                "link": "https:\/\/backoffice.sanchobbdo.site\/about-us\/nuevo-gif\/",
+                "alt": "",
+                "author": "1",
+                "description": "",
+                "caption": "",
+                "name": "nuevo-gif",
+                "status": "inherit",
+                "uploaded_to": 163,
+                "date": "2024-11-27 19:46:20",
+                "modified": "2024-11-27 19:46:20",
+                "menu_order": 0,
+                "mime_type": "image\/gif",
+                "type": "image",
+                "subtype": "gif",
+                "icon": "https:\/\/backoffice.sanchobbdo.site\/wp-includes\/images\/media\/default.png",
+                "width": 1920,
+                "height": 1080,
+                "sizes": {
+                    "thumbnail": "https:\/\/backoffice.sanchobbdo.site\/wp-content\/uploads\/2024\/11\/Nuevo-GIF-150x150.gif",
+                    "thumbnail-width": 150,
+                    "thumbnail-height": 150,
+                    "medium": "https:\/\/backoffice.sanchobbdo.site\/wp-content\/uploads\/2024\/11\/Nuevo-GIF-300x169.gif",
+                    "medium-width": 300,
+                    "medium-height": 169,
+                    "medium_large": "https:\/\/backoffice.sanchobbdo.site\/wp-content\/uploads\/2024\/11\/Nuevo-GIF-768x432.gif",
+                    "medium_large-width": 768,
+                    "medium_large-height": 432,
+                    "large": "https:\/\/backoffice.sanchobbdo.site\/wp-content\/uploads\/2024\/11\/Nuevo-GIF-1024x576.gif",
+                    "large-width": 1024,
+                    "large-height": 576,
+                    "1536x1536": "https:\/\/backoffice.sanchobbdo.site\/wp-content\/uploads\/2024\/11\/Nuevo-GIF-1536x864.gif",
+                    "1536x1536-width": 1536,
+                    "1536x1536-height": 864,
+                    "2048x2048": "https:\/\/backoffice.sanchobbdo.site\/wp-content\/uploads\/2024\/11\/Nuevo-GIF.gif",
+                    "2048x2048-width": 1920,
+                    "2048x2048-height": 1080
+                }
+            },
+            "description": "<p><span class=\"TextRun SCXW265545892 BCX0\" lang=\"ES-ES\" xml:lang=\"ES-ES\" data-contrast=\"auto\"><span class=\"NormalTextRun SCXW265545892 BCX0\">En tiempos complejos, nuestros clientes sue\u00f1an en grande, a menudo con lo que parece imposible. Por eso son verdaderos Quijotes, enfrentando gigantes y batallas. Necesitan un fiel escudero que haga posible lo imposible, dispuesto a incomodarse y a conocerlos mejor que ellos mismos. Este escudero debe mover negocios con soluciones creativas y aut\u00e9nticas, y nunca desfallecer. Todo buen Quijote requiere un gran Sancho. Entender lo que mueve a la gente ha convertido a Sancho BBDO en un referente global de efectividad. Con 87 a\u00f1os de know-how estrat\u00e9gico, adaptamos nuestro portafolio a las necesidades de cada cliente.<\/span><\/span><span class=\"EOP SCXW265545892 BCX0\" data-ccp-props=\"{}\">\u00a0<\/span><\/p>\n"
+        }
+    },
+    "_links": {
+        "self": [
+            {
+                "href": "https:\/\/backoffice.sanchobbdo.site\/wp-json\/wp\/v2\/pages\/163",
+                "targetHints": {
+                    "allow": [
+                        "GET"
+                    ]
+                }
+            }
+        ],
+        "collection": [
+            {
+                "href": "https:\/\/backoffice.sanchobbdo.site\/wp-json\/wp\/v2\/pages"
+            }
+        ],
+        "about": [
+            {
+                "href": "https:\/\/backoffice.sanchobbdo.site\/wp-json\/wp\/v2\/types\/page"
+            }
+        ],
+        "author": [
+            {
+                "embeddable": true,
+                "href": "https:\/\/backoffice.sanchobbdo.site\/wp-json\/wp\/v2\/users\/1"
+            }
+        ],
+        "replies": [
+            {
+                "embeddable": true,
+                "href": "https:\/\/backoffice.sanchobbdo.site\/wp-json\/wp\/v2\/comments?post=163"
+            }
+        ],
+        "version-history": [
+            {
+                "count": 41,
+                "href": "https:\/\/backoffice.sanchobbdo.site\/wp-json\/wp\/v2\/pages\/163\/revisions"
+            }
+        ],
+        "predecessor-version": [
+            {
+                "id": 742,
+                "href": "https:\/\/backoffice.sanchobbdo.site\/wp-json\/wp\/v2\/pages\/163\/revisions\/742"
+            }
+        ],
+        "wp:attachment": [
+            {
+                "href": "https:\/\/backoffice.sanchobbdo.site\/wp-json\/wp\/v2\/media?parent=163"
+            }
+        ],
+        "curies": [
+            {
+                "name": "wp",
+                "href": "https:\/\/api.w.org\/{rel}",
+                "templated": true
+            }
+        ]
+    }
+}

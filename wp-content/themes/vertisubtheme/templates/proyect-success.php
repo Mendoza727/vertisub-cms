@@ -31,6 +31,61 @@ Template Name: Proyectos
                 </div>
             </div>
         </section>
+
+        <!-- Sección Proyectos Exitosos -->
+        <section class="proyectos-section">
+            <div class="container">
+                <div class="section-header" data-aos="fade-up">
+                    <span class="section-subtitle">Casos de Éxito</span>
+                    <h2 class="section-title">Proyectos Exitosos</h2>
+                    <p class="lead text-muted">Conoce algunos de los proyectos más destacados realizados por nuestro personal</p>
+                </div>
+
+                <div class="proyectos-stack-container">
+                    <?php
+                    $args = array(
+                        'post_type'      => 'proyectos_exitosos',
+                        'posts_per_page' => -1
+                    );
+                    $query = new WP_Query($args);
+
+                    if ($query->have_posts()):
+                        while ($query->have_posts()): $query->the_post();
+
+                            $galeria = get_post_meta(get_the_ID(), '_galeria_proyecto', true) ?: [];
+                    ?>
+
+                            <div class="proyecto-stack" data-aos="fade-up">
+                                <h3 class="stack-title"><?php the_title(); ?></h3>
+
+                                <?php if (!empty($galeria)): ?>
+                                    <div class="cards-stack">
+                                        <?php foreach ($galeria as $index => $img_id):
+                                            $img_url = wp_get_attachment_image_url($img_id, 'large');
+                                            $class   = 'stack-card card-' . ($index + 1);
+                                        ?>
+                                            <div class="<?php echo esc_attr($class); ?>" style="background-image: url('<?php echo esc_url($img_url); ?>');">
+                                                <div class="card-overlay">
+                                                    <span><?php echo get_the_title($img_id); ?></span>
+                                                </div>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    </div>
+                                <?php endif; ?>
+
+                                <button class="btn-proyecto-stack" onclick="abrirProyecto('puente-san-rafael')">
+                                    Conoce Más
+                                </button>
+                            </div>
+
+                    <?php
+                        endwhile;
+                        wp_reset_postdata();
+                    endif;
+                    ?>
+                </div>
+            </div>
+        </section>
     </main>
 
     <!-- Custom JS -->

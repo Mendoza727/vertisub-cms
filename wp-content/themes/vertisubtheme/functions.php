@@ -217,7 +217,24 @@ function sancho_enqueue_assets()
         wp_localize_script('maps-js', 'contactData', $data);
     }
 }
+
 add_action('wp_enqueue_scripts', 'sancho_enqueue_assets');
+
+// 🔑 Agregar type="module" SOLO a este bundle
+// Asegura que el bundle se cargo como <script type="module" ...>
+add_filter('script_loader_tag', function ($tag, $handle, $src) {
+    $modules = [
+        'vertisub-main',
+        'vertisub-cardnews-di3ywfu3-js',
+        'vertisub-home-dbjzf9m-js',
+        'vertisub-smootherlayout-dpjotzjc-js',
+        'vertisub-uppercircle-cxml2tqv-js'
+    ];
+    if (in_array($handle, $modules, true)) {
+        return '<script type="module" src="' . esc_url($src) . '" crossorigin></script>';
+    }
+    return $tag;
+}, 10, 3);
 
 
 // Certification Post
@@ -760,121 +777,242 @@ function vertisub_save_social_url($post_id)
 add_action('save_post', 'vertisub_save_social_url');
 
 
-// 1. Registrar CPT "Nosotros" (igual que antes)
+// 1) Registrar CPT "Nosotros"
 function vertisub_create_about_post_type()
 {
-    register_post_type(
-        'nosotros',
-        array(
-            'labels' => array(
-                'name'               => 'Nosotros',
-                'singular_name'      => 'Nosotros',
-                'add_new'            => 'Añadir nuevo',
-                'add_new_item'       => 'Añadir apartado',
-                'edit_item'          => 'Editar apartado',
-                'new_item'           => 'Nuevo apartado',
-                'view_item'          => 'Ver apartado',
-                'search_items'       => 'Buscar en Nosotros',
-                'not_found'          => 'No se encontraron apartados',
-                'not_found_in_trash' => 'No hay apartados en la papelera',
-            ),
-            'public'      => true,
-            'has_archive' => false,
-            'menu_icon'   => 'dashicons-groups',
-            'supports'    => array('title', 'editor', 'thumbnail'),
-            'rewrite'     => array('slug' => 'nosotros'),
-        )
-    );
+    register_post_type('nosotros', array(
+        'labels' => array(
+            'name'          => 'Nosotros',
+            'singular_name' => 'Nosotros',
+            'menu_name'     => 'Nosotros',
+        ),
+        'public'              => false,
+        'show_ui'             => true,
+        'show_in_menu'        => true,
+        'menu_position'       => 5,
+        'menu_icon'           => 'dashicons-groups',
+        'supports'            => false,
+        'show_in_rest'        => false,
+        'capability_type'     => 'post',
+    ));
 }
 add_action('init', 'vertisub_create_about_post_type');
 
 
-// 2. Metabox para videos repetibles
-function vertisub_add_about_media_metabox()
+// 2) Añadir metabox
+function vertisub_add_about_extra_metabox()
 {
     add_meta_box(
-        'about_media_box',
-        'Videos (puedes agregar varios)',
-        'vertisub_render_about_media_box',
+        'about_extra_box',
+        'Información de Nosotros',
+        'vertisub_render_about_extra_metabox',
         'nosotros',
         'normal',
         'high'
     );
 }
-add_action('add_meta_boxes', 'vertisub_add_about_media_metabox');
+add_action('add_meta_boxes', 'vertisub_add_about_extra_metabox');
 
 
-// Render del metabox
-function vertisub_render_about_media_box($post)
+// 3) Render del metabox (HTML + wp_editor)
+function vertisub_render_about_extra_metabox($post)
 {
-    // Recuperar los videos guardados (array)
-    $videos = get_post_meta($post->ID, '_about_video_urls', true);
-    if (!is_array($videos)) $videos = array();
+    $data = get_post_meta($post->ID, '_about_extra', true);
+    if (!is_array($data)) $data = [];
 
-    // Añadir nonce para seguridad
-    wp_nonce_field('vertisub_save_about_media', 'vertisub_about_media_nonce');
+    wp_nonce_field('vertisub_save_about_extra', 'vertisub_about_extra_nonce');
 ?>
 
-    <div id="about-videos-container">
-        <?php foreach ($videos as $index => $url) : ?>
-            <p>
-                <label>Video <?php echo $index + 1; ?> URL:</label><br>
-                <input type="url" name="about_video_urls[]" value="<?php echo esc_attr($url); ?>" style="width:100%;">
-                <button class="button remove-video">Eliminar</button>
-            </p>
-        <?php endforeach; ?>
-    </div>
-
-    <p>
-        <button id="add-video" class="button">Agregar Video</button>
+    <h3>Sección Introductoria</h3>
+    <p><label>Título:</label><br>
+        <input type="text" name="about_extra[intro_title]" value="<?php echo esc_attr($data['intro_title'] ?? ''); ?>" style="width:100%;">
     </p>
 
-    <p><em>Si no quieres usar video, deja los campos vacíos. También puedes usar la Imagen Destacada.</em></p>
+    <p><label>Descripción:</label><br>
+        <?php
+        wp_editor(
+            $data['intro_desc'] ?? '',
+            'about_extra_intro_desc',
+            array(
+                'textarea_name' => 'about_extra[intro_desc]',
+                'textarea_rows' => 6,
+                'media_buttons' => true,
+                'teeny'         => false,
+            )
+        );
+        ?>
+    </p>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const container = document.getElementById('about-videos-container');
-            document.getElementById('add-video').addEventListener('click', function(e) {
-                e.preventDefault();
-                const index = container.children.length;
-                const p = document.createElement('p');
-                p.innerHTML = '<label>Video ' + (index + 1) + ' URL:</label><br>' +
-                    '<input type="url" name="about_video_urls[]" style="width:100%;"> ' +
-                    '<button class="button remove-video">Eliminar</button>';
-                container.appendChild(p);
-            });
+    <hr>
 
-            container.addEventListener('click', function(e) {
-                if (e.target.classList.contains('remove-video')) {
-                    e.preventDefault();
-                    e.target.parentElement.remove();
-                }
-            });
-        });
-    </script>
+    <h3>Sección principal</h3>
+    <p><label>Título:</label><br>
+        <input type="text" name="about_extra[main_title]" value="<?php echo esc_attr($data['main_title'] ?? ''); ?>" style="width:100%;">
+    </p>
 
+    <p><label>Descripción:</label><br>
+        <?php
+        wp_editor(
+            $data['main_desc'] ?? '',
+            'about_extra_main_desc',
+            array(
+                'textarea_name' => 'about_extra[main_desc]',
+                'textarea_rows' => 6,
+                'media_buttons' => true,
+                'teeny'         => false,
+            )
+        );
+        ?>
+    </p>
+
+    <p><label>Imagen (URL o seleccionar):</label><br>
+        <input type="text" id="main_image" name="about_extra[main_image]" value="<?php echo esc_attr($data['main_image'] ?? ''); ?>" style="width:72%;">
+        <button type="button" class="button upload-media-button" data-target="#main_image">Seleccionar</button>
+        <button type="button" class="button remove-media-button" data-target="#main_image">Eliminar</button>
+    </p>
+
+    <p><label>Video (URL o seleccionar):</label><br>
+        <input type="text" id="main_video" name="about_extra[main_video]" value="<?php echo esc_attr($data['main_video'] ?? ''); ?>" style="width:72%;">
+        <button type="button" class="button upload-media-button" data-target="#main_video">Seleccionar</button>
+        <button type="button" class="button remove-media-button" data-target="#main_video">Eliminar</button>
+    </p>
+
+    <p><label>Años de experiencia:</label><br>
+        <input type="number" name="about_extra[years]" value="<?php echo esc_attr($data['years'] ?? ''); ?>" style="width:100px;">
+    </p>
+
+    <p><label>Descripción de los años de experiencia:</label><br>
+        <?php
+        wp_editor(
+            $data['years_desc'] ?? '',
+            'about_extra_years_desc',
+            array(
+                'textarea_name' => 'about_extra[years_desc]',
+                'textarea_rows' => 4,
+                'media_buttons' => true,
+                'teeny'         => false,
+            )
+        );
+        ?>
+    </p>
+
+    <hr>
+
+    <h3>Filosofía</h3>
+    <p><label>Título:</label><br>
+        <input type="text" name="about_extra[philosophy_title]" value="<?php echo esc_attr($data['philosophy_title'] ?? ''); ?>" style="width:100%;">
+    </p>
+
+    <p><label>Descripción:</label><br>
+        <?php
+        wp_editor(
+            $data['philosophy_desc'] ?? '',
+            'about_extra_philosophy_desc',
+            array(
+                'textarea_name' => 'about_extra[philosophy_desc]',
+                'textarea_rows' => 6,
+                'media_buttons' => true,
+                'teeny'         => false,
+            )
+        );
+        ?>
+    </p>
+
+    <hr>
+
+    <h3>Aliado Estratégico</h3>
+    <p><label>Descripción:</label><br>
+        <?php
+        wp_editor(
+            $data['partner_desc'] ?? '',
+            'about_extra_partner_desc',
+            array(
+                'textarea_name' => 'about_extra[partner_desc]',
+                'textarea_rows' => 6,
+                'media_buttons' => true,
+                'teeny'         => false,
+            )
+        );
+        ?>
+    </p>
+
+    <p><label>Proyectos completados:</label><br>
+        <input type="number" name="about_extra[projects]" value="<?php echo esc_attr($data['projects'] ?? ''); ?>" style="width:100px;">
+    </p>
+
+    <p><label>Clientes satisfechos:</label><br>
+        <input type="number" name="about_extra[clients]" value="<?php echo esc_attr($data['clients'] ?? ''); ?>" style="width:100px;">
+    </p>
 <?php
 }
 
-// Guardar los videos
-function vertisub_save_about_media($post_id)
+
+// 4) Encolar scripts del uploader
+function vertisub_admin_assets($hook)
 {
-    if (!isset($_POST['vertisub_about_media_nonce']) || !wp_verify_nonce($_POST['vertisub_about_media_nonce'], 'vertisub_save_about_media')) {
+    if (!is_admin()) return;
+    $screen = get_current_screen();
+    if (!$screen || $screen->post_type !== 'nosotros') return;
+
+    wp_enqueue_media();
+    wp_register_script('vertisub-inline', false, array('jquery'), null, true);
+    wp_enqueue_script('vertisub-inline');
+
+    $inline_js = <<<'JS'
+jQuery(document).ready(function ($) {
+    var mediaUploader;
+
+    $(document).on('click', '.upload-media-button', function (e) {
+        e.preventDefault();
+        var button = $(this);
+        var target = $(button.data('target'));
+
+        mediaUploader = wp.media({
+            title: 'Seleccionar archivo',
+            button: { text: 'Usar este archivo' },
+            multiple: false
+        }).on('select', function () {
+            var attachment = mediaUploader.state().get('selection').first().toJSON();
+            if (target.length) target.val(attachment.url);
+        }).open();
+    });
+
+    $(document).on('click', '.remove-media-button', function (e) {
+        e.preventDefault();
+        var target = $($(this).data('target'));
+        if (target.length) target.val('');
+    });
+});
+JS;
+    wp_add_inline_script('vertisub-inline', $inline_js);
+}
+add_action('admin_enqueue_scripts', 'vertisub_admin_assets');
+
+
+// 5) Guardar datos
+function vertisub_save_about_extra($post_id)
+{
+    if (!isset($_POST['vertisub_about_extra_nonce']) || !wp_verify_nonce($_POST['vertisub_about_extra_nonce'], 'vertisub_save_about_extra')) {
         return;
     }
-
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+    if (!current_user_can('edit_post', $post_id)) return;
 
-    if (isset($_POST['about_video_urls']) && is_array($_POST['about_video_urls'])) {
-        // Limpiar URLs vacías
-        $urls = array_filter(array_map('esc_url_raw', $_POST['about_video_urls']));
-        update_post_meta($post_id, '_about_video_urls', $urls);
-    } else {
-        delete_post_meta($post_id, '_about_video_urls');
+    if (isset($_POST['about_extra']) && is_array($_POST['about_extra'])) {
+        $clean = [];
+        foreach ($_POST['about_extra'] as $key => $value) {
+            if (in_array($key, array('main_image', 'main_video'))) {
+                $clean[$key] = esc_url_raw($value);
+            } elseif (in_array($key, array('years', 'projects', 'clients'))) {
+                $clean[$key] = $value === '' ? '' : intval($value);
+            } else {
+                $clean[$key] = wp_kses_post($value); // permite HTML seguro
+            }
+        }
+        update_post_meta($post_id, '_about_extra', $clean);
     }
 }
-add_action('save_post', 'vertisub_save_about_media');
-
+add_action('save_post', 'vertisub_save_about_extra');
 
 // Registrar logo dinámico para Header
 function vertisub_custom_logos()
@@ -922,39 +1060,39 @@ function vertisub_footer_logo()
 function vertisub_create_team_post_type()
 {
     register_post_type(
-        'equipo',
+        'clientes', // cambiar slug a 'clientes'
         array(
             'labels' => array(
-                'name'               => 'Equipo',
-                'singular_name'      => 'Miembro del Equipo',
+                'name'               => 'Clientes',
+                'singular_name'      => 'Cliente',
                 'add_new'            => 'Añadir nuevo',
-                'add_new_item'       => 'Añadir miembro',
-                'edit_item'          => 'Editar miembro',
-                'new_item'           => 'Nuevo miembro',
-                'view_item'          => 'Ver miembro',
-                'search_items'       => 'Buscar miembro',
-                'not_found'          => 'No se encontraron miembros',
-                'not_found_in_trash' => 'No hay miembros en la papelera',
+                'add_new_item'       => 'Añadir cliente',
+                'edit_item'          => 'Editar cliente',
+                'new_item'           => 'Nuevo cliente',
+                'view_item'          => 'Ver cliente',
+                'search_items'       => 'Buscar cliente',
+                'not_found'          => 'No se encontraron clientes',
+                'not_found_in_trash' => 'No hay clientes en la papelera',
             ),
             'public'      => true,
             'has_archive' => false,
             'menu_icon'   => 'dashicons-businessperson',
-            'supports'    => array('title', 'thumbnail'), // solo nombre y foto destacada
-            'rewrite'     => array('slug' => 'equipo'),
+            'supports'    => array('title', 'editor', 'thumbnail'), // ahora 'editor' para descripción
+            'rewrite'     => array('slug' => 'clientes'),
         )
     );
 }
 add_action('init', 'vertisub_create_team_post_type');
 
 
-// 2. Agregar Meta Box para Cargo y Mensaje
+// 2. Agregar Meta Box para Mensaje
 function vertisub_team_meta_boxes()
 {
     add_meta_box(
-        'equipo_detalles',
-        'Detalles del Miembro',
+        'clientes_detalles',
+        'Detalles del Cliente',
         'vertisub_team_meta_callback',
-        'equipo',
+        'clientes',
         'normal',
         'high'
     );
@@ -963,16 +1101,11 @@ add_action('add_meta_boxes', 'vertisub_team_meta_boxes');
 
 function vertisub_team_meta_callback($post)
 {
-    // Obtener valores guardados
-    $cargo   = get_post_meta($post->ID, '_cargo', true);
+    // Obtener valor guardado
     $mensaje = get_post_meta($post->ID, '_mensaje', true);
 ?>
     <p>
-        <label for="cargo"><strong>Cargo:</strong></label><br>
-        <input type="text" name="cargo" id="cargo" value="<?php echo esc_attr($cargo); ?>" style="width:100%;">
-    </p>
-    <p>
-        <label for="mensaje"><strong>Mensaje alusivo:</strong></label><br>
+        <label for="mensaje"><strong>Mensaje:</strong></label><br>
         <textarea name="mensaje" id="mensaje" rows="4" style="width:100%;"><?php echo esc_textarea($mensaje); ?></textarea>
     </p>
 <?php
@@ -982,9 +1115,6 @@ function vertisub_team_meta_callback($post)
 // 3. Guardar los campos
 function vertisub_save_team_meta($post_id)
 {
-    if (array_key_exists('cargo', $_POST)) {
-        update_post_meta($post_id, '_cargo', sanitize_text_field($_POST['cargo']));
-    }
     if (array_key_exists('mensaje', $_POST)) {
         update_post_meta($post_id, '_mensaje', sanitize_textarea_field($_POST['mensaje']));
     }
@@ -1054,7 +1184,7 @@ function vertisub_reviews_meta_callback($post)
 // 3. Guardar los campos
 function vertisub_save_reviews_meta($post_id)
 {
-    if (array_key_exists('nombre_reseña', $_POST)) {
+    if (array_key_exists('nombre_reseña', array: $_POST)) {
         update_post_meta($post_id, '_nombre_reseña', sanitize_text_field($_POST['nombre_reseña']));
     }
     if (array_key_exists('texto_reseña', $_POST)) {
@@ -1579,23 +1709,23 @@ function vertisub_instructor_metabox_callback($post)
     $experiencia = get_post_meta($post->ID, '_instructor_experiencia', true);
     $cargo       = get_post_meta($post->ID, '_instructor_cargo', true);
     $video       = get_post_meta($post->ID, '_instructor_video', true);
-    ?>
+?>
     <p>
         <label for="instructor_experiencia"><strong>Años de Experiencia:</strong></label><br>
-        <input type="number" id="instructor_experiencia" name="instructor_experiencia" 
-               value="<?php echo esc_attr($experiencia); ?>" style="width:100px;">
+        <input type="number" id="instructor_experiencia" name="instructor_experiencia"
+            value="<?php echo esc_attr($experiencia); ?>" style="width:100px;">
     </p>
     <p>
         <label for="instructor_cargo"><strong>Cargo:</strong></label><br>
-        <input type="text" id="instructor_cargo" name="instructor_cargo" 
-               value="<?php echo esc_attr($cargo); ?>" style="width:100%;">
+        <input type="text" id="instructor_cargo" name="instructor_cargo"
+            value="<?php echo esc_attr($cargo); ?>" style="width:100%;">
     </p>
     <p>
         <label for="instructor_video"><strong>URL de Video de Presentación:</strong></label><br>
-        <input type="url" id="instructor_video" name="instructor_video" 
-               value="<?php echo esc_attr($video); ?>" style="width:100%;">
+        <input type="url" id="instructor_video" name="instructor_video"
+            value="<?php echo esc_attr($video); ?>" style="width:100%;">
     </p>
-    <?php
+<?php
 }
 
 
@@ -1679,7 +1809,7 @@ function vertisub_cursos_callback($post)
     $temario       = get_post_meta($post->ID, '_curso_temario', true) ?: [];
     $url_inscribir = get_post_meta($post->ID, '_curso_url_inscribir', true);
     $url_info      = get_post_meta($post->ID, '_curso_url_info', true);
-    $url_plataforma= get_post_meta($post->ID, '_curso_url_plataforma', true);
+    $url_plataforma = get_post_meta($post->ID, '_curso_url_plataforma', true);
     $url_oficial   = get_post_meta($post->ID, '_curso_url_oficial', true);
     $paises        = get_post_meta($post->ID, '_curso_paises', true) ?: [];
     $paises_urls   = get_post_meta($post->ID, '_curso_paises_urls', true) ?: [];
@@ -1690,18 +1820,18 @@ function vertisub_cursos_callback($post)
     $paises_list       = get_posts(['post_type' => 'paises', 'numberposts' => -1]);
     $instructores_list = get_posts(['post_type' => 'instructores', 'numberposts' => -1]);
 
-    ?>
+?>
     <h3>Imágenes del Curso</h3>
     <div id="imagenes-wrapper">
-        <?php if (!empty($imagenes)) : 
-            foreach ($imagenes as $img_id) : 
+        <?php if (!empty($imagenes)) :
+            foreach ($imagenes as $img_id) :
                 $img_url = wp_get_attachment_url($img_id); ?>
                 <div style="margin-bottom:10px;">
                     <img src="<?php echo esc_url($img_url); ?>" style="max-width:150px; display:block; margin-bottom:5px;">
                     <input type="hidden" name="curso_imagenes[]" value="<?php echo esc_attr($img_id); ?>">
                     <button class="remove-field button">Eliminar</button>
                 </div>
-            <?php endforeach;
+        <?php endforeach;
         endif; ?>
     </div>
     <button type="button" class="button add-image">+ Añadir Imagen</button>
@@ -1709,11 +1839,12 @@ function vertisub_cursos_callback($post)
     <hr>
     <h3>Modalidades</h3>
     <div id="modalidades-wrapper">
-        <?php if (!empty($modalidades)) : 
+        <?php if (!empty($modalidades)) :
             foreach ($modalidades as $m) : ?>
                 <p><input type="text" name="curso_modalidades[]" value="<?php echo esc_attr($m); ?>" style="width:80%;">
-                <button class="remove-field button">Eliminar</button></p>
-            <?php endforeach;
+                    <button class="remove-field button">Eliminar</button>
+                </p>
+        <?php endforeach;
         endif; ?>
     </div>
     <button type="button" class="add-field button">+ Añadir Modalidad</button>
@@ -1728,8 +1859,9 @@ function vertisub_cursos_callback($post)
         <?php if (!empty($testimonios)) :
             foreach ($testimonios as $t) : ?>
                 <p><input type="url" name="curso_testimonios[]" value="<?php echo esc_attr($t); ?>" style="width:80%;">
-                <button class="remove-field button">Eliminar</button></p>
-            <?php endforeach;
+                    <button class="remove-field button">Eliminar</button>
+                </p>
+        <?php endforeach;
         endif; ?>
     </div>
     <button type="button" class="add-field button" data-target="testimonios-wrapper" data-name="curso_testimonios[]">+ Añadir Testimonio</button>
@@ -1740,8 +1872,9 @@ function vertisub_cursos_callback($post)
         <?php if (!empty($temario)) :
             foreach ($temario as $t) : ?>
                 <p><input type="text" name="curso_temario[]" value="<?php echo esc_attr($t); ?>" style="width:80%;">
-                <button class="remove-field button">Eliminar</button></p>
-            <?php endforeach;
+                    <button class="remove-field button">Eliminar</button>
+                </p>
+        <?php endforeach;
         endif; ?>
     </div>
     <button type="button" class="add-field button" data-target="temario-wrapper" data-name="curso_temario[]">+ Añadir Tema</button>
@@ -1750,20 +1883,20 @@ function vertisub_cursos_callback($post)
     <h3>Relación con Instructores</h3>
     <?php foreach ($instructores_list as $inst) : ?>
         <label>
-            <input type="checkbox" name="curso_instructores[]" value="<?php echo $inst->ID; ?>" 
-            <?php checked(in_array($inst->ID, $instructores)); ?>>
+            <input type="checkbox" name="curso_instructores[]" value="<?php echo $inst->ID; ?>"
+                <?php checked(in_array($inst->ID, $instructores)); ?>>
             <?php echo esc_html($inst->post_title); ?>
         </label><br>
     <?php endforeach; ?>
 
     <hr>
     <h3>Convenios con Países</h3>
-    <?php foreach ($paises_list as $pais) : 
+    <?php foreach ($paises_list as $pais) :
         $url_contacto = isset($paises_urls[$pais->ID]) ? $paises_urls[$pais->ID] : ''; ?>
         <p>
             <label>
-                <input type="checkbox" name="curso_paises[]" value="<?php echo $pais->ID; ?>" 
-                <?php checked(in_array($pais->ID, $paises)); ?>>
+                <input type="checkbox" name="curso_paises[]" value="<?php echo $pais->ID; ?>"
+                    <?php checked(in_array($pais->ID, $paises)); ?>>
                 <?php echo esc_html($pais->post_title); ?>
             </label><br>
             URL de contacto:<br>
@@ -1781,7 +1914,7 @@ function vertisub_cursos_callback($post)
                     <input type="url" name="curso_convenios[url][]" value="<?php echo esc_attr($c['url']); ?>" placeholder="URL del convenio" style="width:40%;">
                     <button class="remove-field button">Eliminar</button>
                 </p>
-            <?php endforeach;
+        <?php endforeach;
         endif; ?>
     </div>
     <button type="button" class="add-field button" data-target="convenios-wrapper" data-name="curso_convenios">+ Añadir Convenio</button>
@@ -1789,63 +1922,69 @@ function vertisub_cursos_callback($post)
     <hr>
     <h3>Enlaces</h3>
     <p><label><strong>URL Inscripción:</strong></label><br>
-    <input type="url" name="curso_url_inscribir" value="<?php echo esc_attr($url_inscribir); ?>" style="width:100%;"></p>
+        <input type="url" name="curso_url_inscribir" value="<?php echo esc_attr($url_inscribir); ?>" style="width:100%;">
+    </p>
 
     <p><label><strong>URL Más Información:</strong></label><br>
-    <input type="url" name="curso_url_info" value="<?php echo esc_attr($url_info); ?>" style="width:100%;"></p>
+        <input type="url" name="curso_url_info" value="<?php echo esc_attr($url_info); ?>" style="width:100%;">
+    </p>
 
     <p><label><strong>URL Plataforma de Aprendizaje:</strong></label><br>
-    <input type="url" name="curso_url_plataforma" value="<?php echo esc_attr($url_plataforma); ?>" style="width:100%;"></p>
+        <input type="url" name="curso_url_plataforma" value="<?php echo esc_attr($url_plataforma); ?>" style="width:100%;">
+    </p>
 
     <p><label><strong>URL Página Oficial:</strong></label><br>
-    <input type="url" name="curso_url_oficial" value="<?php echo esc_attr($url_oficial); ?>" style="width:100%;"></p>
+        <input type="url" name="curso_url_oficial" value="<?php echo esc_attr($url_oficial); ?>" style="width:100%;">
+    </p>
 
     <script>
-        jQuery(document).ready(function($){
+        jQuery(document).ready(function($) {
             // Añadir campos dinámicos
-            $(document).on('click', '.add-field', function(e){
+            $(document).on('click', '.add-field', function(e) {
                 e.preventDefault();
                 const target = $(this).data('target') || $(this).prev().attr('id');
                 const name = $(this).data('name') || "curso_modalidades[]";
 
-                if(name === "curso_convenios"){
+                if (name === "curso_convenios") {
                     $("#" + target).append(
                         '<p><input type="text" name="curso_convenios[titulo][]" placeholder="Nombre del convenio" style="width:35%;"> ' +
                         '<input type="url" name="curso_convenios[url][]" placeholder="URL del convenio" style="width:40%;"> ' +
                         '<button class="remove-field button">Eliminar</button></p>'
                     );
                 } else {
-                    $("#" + target).append('<p><input type="text" name="'+name+'" style="width:80%;"> <button class="remove-field button">Eliminar</button></p>');
+                    $("#" + target).append('<p><input type="text" name="' + name + '" style="width:80%;"> <button class="remove-field button">Eliminar</button></p>');
                 }
             });
-            $(document).on('click', '.remove-field', function(e){
+            $(document).on('click', '.remove-field', function(e) {
                 e.preventDefault();
                 $(this).parent().remove();
             });
 
             // Añadir imágenes
             var frame;
-            $('.add-image').on('click', function(e){
+            $('.add-image').on('click', function(e) {
                 e.preventDefault();
-                if(frame) frame.close();
+                if (frame) frame.close();
                 frame = wp.media({
                     title: 'Seleccionar Imagen',
-                    button: { text: 'Usar Imagen' },
+                    button: {
+                        text: 'Usar Imagen'
+                    },
                     multiple: false
                 });
-                frame.on('select', function(){
+                frame.on('select', function() {
                     var attachment = frame.state().get('selection').first().toJSON();
                     var html = '<div style="margin-bottom:10px;">' +
-                               '<img src="'+attachment.url+'" style="max-width:150px; display:block; margin-bottom:5px;">' +
-                               '<input type="hidden" name="curso_imagenes[]" value="'+attachment.id+'">' +
-                               '<button class="remove-field button">Eliminar</button></div>';
+                        '<img src="' + attachment.url + '" style="max-width:150px; display:block; margin-bottom:5px;">' +
+                        '<input type="hidden" name="curso_imagenes[]" value="' + attachment.id + '">' +
+                        '<button class="remove-field button">Eliminar</button></div>';
                     $('#imagenes-wrapper').append(html);
                 });
                 frame.open();
             });
         });
     </script>
-    <?php
+<?php
 }
 
 
@@ -1886,3 +2025,403 @@ function vertisub_save_cursos_metabox($post_id)
     }
 }
 add_action('save_post', 'vertisub_save_cursos_metabox');
+
+
+// 1. Crear CPT Proyectos Exitosos
+function vertisub_create_proyectos_post_type()
+{
+    register_post_type(
+        'proyectos_exitosos',
+        array(
+            'labels' => array(
+                'name'               => 'Proyectos Exitosos',
+                'singular_name'      => 'Proyecto Exitoso',
+                'add_new'            => 'Añadir nuevo',
+                'add_new_item'       => 'Añadir Proyecto',
+                'edit_item'          => 'Editar Proyecto',
+                'new_item'           => 'Nuevo Proyecto',
+                'view_item'          => 'Ver Proyecto',
+                'search_items'       => 'Buscar Proyectos',
+                'not_found'          => 'No se encontraron proyectos',
+                'not_found_in_trash' => 'No hay proyectos en la papelera',
+            ),
+            'public'      => true,
+            'has_archive' => true,
+            'menu_icon'   => 'dashicons-awards',
+            'supports'    => array('title', 'editor', 'thumbnail'),
+            'rewrite'     => array('slug' => 'proyectos-exitosos'),
+        )
+    );
+}
+add_action('init', 'vertisub_create_proyectos_post_type');
+
+
+// 2. Metaboxes personalizados
+function vertisub_proyectos_meta_boxes()
+{
+    add_meta_box(
+        'proyectos_detalles',
+        'Detalles del Proyecto',
+        'vertisub_proyectos_meta_callback',
+        'proyectos_exitosos',
+        'normal',
+        'high'
+    );
+}
+add_action('add_meta_boxes', 'vertisub_proyectos_meta_boxes');
+
+function vertisub_proyectos_meta_callback($post)
+{
+    $descripcion = get_post_meta($post->ID, '_descripcion_proyecto', true);
+    $anio        = get_post_meta($post->ID, '_anio_proyecto', true);
+    $ubicacion   = get_post_meta($post->ID, '_ubicacion_proyecto', true);
+
+    $galeria     = get_post_meta($post->ID, '_galeria_proyecto', true) ?: [];
+    $detalles    = get_post_meta($post->ID, '_detalles_proyecto', true) ?: [];
+    $timeline    = get_post_meta($post->ID, '_timeline_proyecto', true) ?: [];
+    $impacto     = get_post_meta($post->ID, '_impacto_proyecto', true) ?: [];
+?>
+    <style>
+        .custom-repeater-item {
+            background: #f9f9f9;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .custom-repeater-item button {
+            margin-top: 5px;
+        }
+
+        .galeria-item {
+            display: inline-block;
+            margin: 5px;
+            position: relative;
+        }
+
+        .galeria-item img {
+            max-width: 120px;
+            height: auto;
+            display: block;
+            border: 1px solid #ddd;
+        }
+
+        .galeria-item button {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            background: red;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+
+    <p>
+        <label><strong>Descripción:</strong></label><br>
+        <textarea name="descripcion_proyecto" rows="3" style="width:100%;"><?php echo esc_textarea($descripcion); ?></textarea>
+    </p>
+    <p>
+        <label><strong>Año:</strong></label><br>
+        <input type="text" name="anio_proyecto" value="<?php echo esc_attr($anio); ?>" style="width:100%;">
+    </p>
+    <p>
+        <label><strong>Ubicación:</strong></label><br>
+        <input type="text" name="ubicacion_proyecto" value="<?php echo esc_attr($ubicacion); ?>" style="width:100%;">
+    </p>
+
+    <hr>
+    <h4>Galería de Imágenes</h4>
+    <div id="galeria-wrapper">
+        <?php if (!empty($galeria)): ?>
+            <?php foreach ($galeria as $id):
+                $img_url = wp_get_attachment_image_url($id, 'thumbnail'); ?>
+                <div class="galeria-item">
+                    <img src="<?php echo esc_url($img_url); ?>">
+                    <input type="hidden" name="galeria_proyecto[]" value="<?php echo esc_attr($id); ?>">
+                    <button type="button" class="remove-galeria">x</button>
+                </div>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </div>
+    <button type="button" class="button add-galeria">Añadir Imágenes</button>
+
+    <hr>
+    <h4>Detalles del Proyecto</h4>
+    <div id="detalles-wrapper">
+        <?php foreach ($detalles as $item): ?>
+            <div class="custom-repeater-item">
+                <textarea name="detalles_proyecto[]" rows="2" style="width:100%;"><?php echo esc_textarea($item); ?></textarea>
+                <button type="button" class="remove-item button">Eliminar</button>
+            </div>
+        <?php endforeach; ?>
+    </div>
+    <button type="button" class="button add-detalle">Añadir Detalle</button>
+
+    <hr>
+    <h4>Línea de Tiempo</h4>
+    <div id="timeline-wrapper">
+        <?php foreach ($timeline as $item): ?>
+            <div class="custom-repeater-item">
+                <input type="text" name="timeline_titulo[]" placeholder="Título" value="<?php echo esc_attr($item['titulo']); ?>" style="width:100%;"><br>
+                <textarea name="timeline_descripcion[]" placeholder="Descripción" rows="2" style="width:100%;"><?php echo esc_textarea($item['descripcion']); ?></textarea><br>
+                <input type="text" name="timeline_anio[]" placeholder="Año" value="<?php echo esc_attr($item['anio']); ?>" style="width:100%;"><br>
+                <button type="button" class="remove-item button">Eliminar</button>
+            </div>
+        <?php endforeach; ?>
+    </div>
+    <button type="button" class="button add-timeline">Añadir Línea</button>
+
+    <hr>
+    <h4>Impacto del Proyecto</h4>
+    <div id="impacto-wrapper">
+        <?php foreach ($impacto as $item): ?>
+            <div class="custom-repeater-item">
+                <textarea name="impacto_proyecto[]" rows="2" style="width:100%;"><?php echo esc_textarea($item); ?></textarea>
+                <button type="button" class="remove-item button">Eliminar</button>
+            </div>
+        <?php endforeach; ?>
+    </div>
+    <button type="button" class="button add-impacto">Añadir Impacto</button>
+
+    <script>
+        jQuery(document).ready(function($) {
+            // --- Galería con Media Uploader ---
+            var frame;
+            $('.add-galeria').on('click', function(e) {
+                e.preventDefault();
+                if (frame) {
+                    frame.open();
+                    return;
+                }
+                frame = wp.media({
+                    title: 'Seleccionar imágenes',
+                    button: {
+                        text: 'Usar estas imágenes'
+                    },
+                    multiple: true
+                });
+                frame.on('select', function() {
+                    var attachments = frame.state().get('selection').toArray();
+                    attachments.forEach(function(attachment) {
+                        attachment = attachment.toJSON();
+                        var img = '<div class="galeria-item">' +
+                            '<img src="' + attachment.sizes.thumbnail.url + '">' +
+                            '<input type="hidden" name="galeria_proyecto[]" value="' + attachment.id + '">' +
+                            '<button type="button" class="remove-galeria">x</button>' +
+                            '</div>';
+                        $('#galeria-wrapper').append(img);
+                    });
+                });
+                frame.open();
+            });
+            $(document).on('click', '.remove-galeria', function() {
+                $(this).parent('.galeria-item').remove();
+            });
+
+            // --- Repeater para detalles, timeline e impacto ---
+            function addRepeater(btnClass, wrapperId, html) {
+                $(btnClass).on('click', function() {
+                    var wrapper = $(wrapperId);
+                    var div = $('<div class="custom-repeater-item">' + html + '</div>');
+                    wrapper.append(div);
+                });
+            }
+            $(document).on('click', '.remove-item', function() {
+                $(this).parent().remove();
+            });
+
+            addRepeater('.add-detalle', '#detalles-wrapper', '<textarea name="detalles_proyecto[]" rows="2" style="width:100%;" placeholder="Detalle"></textarea><button type="button" class="remove-item button">Eliminar</button>');
+            addRepeater('.add-timeline', '#timeline-wrapper', '<input type="text" name="timeline_titulo[]" placeholder="Título" style="width:100%;"><textarea name="timeline_descripcion[]" placeholder="Descripción" rows="2" style="width:100%;"></textarea><input type="text" name="timeline_anio[]" placeholder="Año" style="width:100%;"><button type="button" class="remove-item button">Eliminar</button>');
+            addRepeater('.add-impacto', '#impacto-wrapper', '<textarea name="impacto_proyecto[]" rows="2" style="width:100%;" placeholder="Impacto"></textarea><button type="button" class="remove-item button">Eliminar</button>');
+        });
+    </script>
+<?php
+}
+
+// 3. Guardar metadatos
+function vertisub_save_proyectos_meta($post_id)
+{
+    if (array_key_exists('descripcion_proyecto', $_POST)) {
+        update_post_meta($post_id, '_descripcion_proyecto', sanitize_textarea_field($_POST['descripcion_proyecto']));
+    }
+    if (array_key_exists('anio_proyecto', $_POST)) {
+        update_post_meta($post_id, '_anio_proyecto', sanitize_text_field($_POST['anio_proyecto']));
+    }
+    if (array_key_exists('ubicacion_proyecto', $_POST)) {
+        update_post_meta($post_id, '_ubicacion_proyecto', sanitize_text_field($_POST['ubicacion_proyecto']));
+    }
+    if (isset($_POST['galeria_proyecto'])) {
+        $ids = array_map('intval', $_POST['galeria_proyecto']);
+        update_post_meta($post_id, '_galeria_proyecto', $ids);
+    } else {
+        delete_post_meta($post_id, '_galeria_proyecto');
+    }
+    if (isset($_POST['detalles_proyecto'])) {
+        update_post_meta($post_id, '_detalles_proyecto', array_map('sanitize_textarea_field', $_POST['detalles_proyecto']));
+    }
+    if (isset($_POST['timeline_titulo'])) {
+        $timeline = [];
+        foreach ($_POST['timeline_titulo'] as $i => $titulo) {
+            if (!empty($titulo) || !empty($_POST['timeline_descripcion'][$i]) || !empty($_POST['timeline_anio'][$i])) {
+                $timeline[] = [
+                    'titulo'      => sanitize_text_field($titulo),
+                    'descripcion' => sanitize_textarea_field($_POST['timeline_descripcion'][$i]),
+                    'anio'        => sanitize_text_field($_POST['timeline_anio'][$i])
+                ];
+            }
+        }
+        update_post_meta($post_id, '_timeline_proyecto', $timeline);
+    }
+    if (isset($_POST['impacto_proyecto'])) {
+        update_post_meta($post_id, '_impacto_proyecto', array_map('sanitize_textarea_field', $_POST['impacto_proyecto']));
+    }
+}
+add_action('save_post', 'vertisub_save_proyectos_meta');
+
+// ===================== CPT Ubicaciones =====================
+function vertisub_create_ubicaciones_cpt() {
+    register_post_type('ubicaciones',
+        array(
+            'labels' => array(
+                'name'               => 'Ubicaciones',
+                'singular_name'      => 'Ubicación',
+                'add_new'            => 'Añadir nueva',
+                'add_new_item'       => 'Añadir ubicación',
+                'edit_item'          => 'Editar ubicación',
+                'new_item'           => 'Nueva ubicación',
+                'view_item'          => 'Ver ubicación',
+                'search_items'       => 'Buscar ubicaciones',
+                'not_found'          => 'No se encontraron ubicaciones',
+                'not_found_in_trash' => 'No hay ubicaciones en la papelera',
+            ),
+            'public'      => true,
+            'has_archive' => false,
+            'menu_icon'   => 'dashicons-location-alt',
+            'supports'    => array('title', 'editor'), // Título y descripción
+            'rewrite'     => array('slug' => 'ubicaciones'),
+        )
+    );
+}
+add_action('init', 'vertisub_create_ubicaciones_cpt');
+
+// ===================== CPT Servicios de Introducción =====================
+function vertisub_create_servicios_intro_cpt() {
+    $labels = array(
+        'name'               => 'Servicios de Introducción',
+        'singular_name'      => 'Servicio de Introducción',
+        'add_new'            => 'Añadir nuevo servicio',
+        'add_new_item'       => 'Añadir servicio',
+        'edit_item'          => 'Editar servicio',
+        'new_item'           => 'Nuevo servicio',
+        'view_item'          => 'Ver servicio',
+        'search_items'       => 'Buscar servicios',
+        'not_found'          => 'No se encontraron servicios',
+        'not_found_in_trash' => 'No hay servicios en la papelera',
+    );
+
+    $args = array(
+        'labels'             => $labels,
+        'public'             => true,
+        'show_ui'            => true,
+        'show_in_menu'       => true,           // Asegura que aparezca en el menú
+        'menu_position'      => 5,              // Posición en el menú
+        'menu_icon'          => 'dashicons-clipboard',
+        'capability_type'    => 'post',
+        'supports'           => array('title', 'editor'), // Título y descripción
+        'has_archive'        => false,
+        'rewrite'            => array('slug' => 'servicios-intro'), // nuevo slug
+        'exclude_from_search'=> false,
+    );
+
+    register_post_type('servicios_intro', $args); // nombre interno actualizado
+}
+add_action('init', 'vertisub_create_servicios_intro_cpt', 0);
+
+// Registrar CPT "WhatsApp Button"
+function register_whatsapp_cpt() {
+    $labels = array(
+        'name'               => 'WhatsApp Buttons',
+        'singular_name'      => 'WhatsApp Button',
+        'add_new'            => 'Agregar Nuevo',
+        'add_new_item'       => 'Agregar Nuevo WhatsApp Button',
+        'edit_item'          => 'Editar WhatsApp Button',
+        'new_item'           => 'Nuevo WhatsApp Button',
+        'view_item'          => 'Ver WhatsApp Button',
+        'search_items'       => 'Buscar WhatsApp Buttons',
+        'not_found'          => 'No se encontraron WhatsApp Buttons',
+        'not_found_in_trash' => 'No se encontraron WhatsApp Buttons en la papelera',
+        'menu_name'          => 'WhatsApp Buttons',
+    );
+
+    $args = array(
+        'labels'        => $labels,
+        'public'        => false,
+        'show_ui'       => true,
+        'show_in_menu'  => true,
+        'capability_type'=> 'post',
+        'supports'      => array('title'),
+        'menu_icon'     => 'dashicons-whatsapp',
+    );
+
+    register_post_type('whatsapp_button', $args);
+}
+add_action('init', 'register_whatsapp_cpt');
+
+// Registrar meta fields
+function whatsapp_register_meta() {
+    register_post_meta('whatsapp_button', 'whatsapp_number', array(
+        'show_in_rest' => true,
+        'single'       => true,
+        'type'         => 'string',
+    ));
+    register_post_meta('whatsapp_button', 'whatsapp_message', array(
+        'show_in_rest' => true,
+        'single'       => true,
+        'type'         => 'string',
+    ));
+}
+add_action('init', 'whatsapp_register_meta');
+
+// Meta box para ingresar número y mensaje
+function whatsapp_add_meta_boxes() {
+    add_meta_box(
+        'whatsapp_meta_box',
+        'WhatsApp Data',
+        'whatsapp_meta_box_callback',
+        'whatsapp_button',
+        'normal',
+        'high'
+    );
+}
+add_action('add_meta_boxes', 'whatsapp_add_meta_boxes');
+
+function whatsapp_meta_box_callback($post) {
+    wp_nonce_field('whatsapp_save_meta', 'whatsapp_meta_nonce');
+    $number = get_post_meta($post->ID, 'whatsapp_number', true);
+    $message = get_post_meta($post->ID, 'whatsapp_message', true);
+    ?>
+    <p>
+        <label for="whatsapp_number">Número WhatsApp:</label><br>
+        <input type="text" name="whatsapp_number" id="whatsapp_number" value="<?php echo esc_attr($number); ?>" style="width:100%;">
+    </p>
+    <p>
+        <label for="whatsapp_message">Mensaje (opcional):</label><br>
+        <input type="text" name="whatsapp_message" id="whatsapp_message" value="<?php echo esc_attr($message); ?>" style="width:100%;">
+    </p>
+    <?php
+}
+
+// Guardar meta fields
+add_action('save_post', 'whatsapp_save_meta');
+function whatsapp_save_meta($post_id) {
+    if (!isset($_POST['whatsapp_meta_nonce']) || !wp_verify_nonce($_POST['whatsapp_meta_nonce'], 'whatsapp_save_meta')) return;
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+
+    if (isset($_POST['whatsapp_number'])) {
+        update_post_meta($post_id, 'whatsapp_number', sanitize_text_field($_POST['whatsapp_number']));
+    }
+    if (isset($_POST['whatsapp_message'])) {
+        update_post_meta($post_id, 'whatsapp_message', sanitize_text_field($_POST['whatsapp_message']));
+    }
+}
