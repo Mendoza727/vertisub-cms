@@ -7,6 +7,11 @@ Template Name: Servicios
 <head>
     <?php wp_head(); ?>
     <title>Servicios</title>
+    <style>
+        .service-actions .whatsapp-btn {
+            display: none;
+        }
+    </style>
 </head>
 
 <body <?php body_class(); ?>>
@@ -73,6 +78,21 @@ Template Name: Servicios
                     $segments = explode('/', trim($url_path, '/'));
                     $pais_slug = strtolower(end($segments)); // último segmento
 
+                    $whatsapp_query = new WP_Query(array(
+                        'post_type'      => 'whatsapp_button',
+                        'posts_per_page' => 1,
+                        'orderby'        => 'date',
+                        'order'          => 'DESC'
+                    ));
+
+                    $whatsapp_number = '';
+                    if ($whatsapp_query->have_posts()) :
+                        while ($whatsapp_query->have_posts()) : $whatsapp_query->the_post();
+                            $whatsapp_number = get_post_meta(get_the_ID(), 'whatsapp_number', true);
+                        endwhile;
+                        wp_reset_postdata();
+                    endif;
+
                     // 2️⃣ Obtener el ID del país según el slug
                     $pais_id = $wpdb->get_var($wpdb->prepare(
                         "SELECT post_id 
@@ -111,6 +131,7 @@ Template Name: Servicios
                                 // Descripción
                                 $descripcion_corta = wp_trim_words(get_the_content(), 25, '...');
                                 $descripcion_full  = apply_filters('the_content', get_the_content());
+                                $service_name = get_the_title($servicio_id);
 
                                 // Multimedia
                                 $imagenes   = get_post_meta($servicio_id, '_imagenes_reseña', true);
@@ -135,7 +156,7 @@ Template Name: Servicios
                                     </div>
 
                                     <div class="service-content">
-                                        <h3 class="service-title"><?php the_title(); ?></h3>
+                                        <h3 class="service-title"><?php echo esc_html($service_name) ?></h3>
                                         <p class="service-description"><?php echo esc_html($descripcion_corta); ?></p>
 
                                         <div class="service-details">
@@ -174,6 +195,18 @@ Template Name: Servicios
                                                 <i class="fas fa-info-circle"></i> Ver Más Info
                                             </button>
                                         </div>
+
+                                        <?php if (!empty($whatsapp_number)) : ?>
+                                            <?php
+                                            $message = urlencode("Deseo conocer más información acerca del servicio $service_name");
+                                            $whatsapp_url = "https://wa.me/" . preg_replace('/\D/', '', $whatsapp_number) . "?text=$message";
+                                            ?>
+                                            <div class="service-actions">
+                                                <a href="<?php echo esc_url($whatsapp_url); ?>" target="_blank" class="btn btn-service whatsapp-btn">
+                                                    <i class="fab fa-whatsapp"></i> Contáctanos para conocer más
+                                                </a>
+                                            </div>
+                                        <?php endif; ?>
                                     </div>
 
                                     <button class="service-close">
@@ -403,6 +436,7 @@ Template Name: Servicios
             serviceCards.forEach(card => {
                 const expandBtn = card.querySelector('.expand-btn');
                 const closeBtn = card.querySelector('.service-close');
+                const whatsappBtn = card.querySelector('.whatsapp-btn');
 
                 // Expand service card
                 expandBtn.addEventListener('click', (e) => {
@@ -413,8 +447,9 @@ Template Name: Servicios
                         if (otherCard !== card) {
                             otherCard.classList.remove('expanded', 'expanding');
                             const otherExpandBtn = otherCard.querySelector('.expand-btn');
-                            otherExpandBtn.innerHTML = '<i class="fas fa-info-circle"></i> Ver Más Info';
-                            otherExpandBtn.classList.remove('btn-service-outline');
+                            const otherWhatsappBtn = otherCard.querySelector('.whatsapp-btn');
+                            if (otherExpandBtn) otherExpandBtn.style.display = "inline-block";
+                            if (otherWhatsappBtn) otherWhatsappBtn.style.display = "none";
                         }
                     });
 
@@ -431,9 +466,9 @@ Template Name: Servicios
                         });
                     }, 100);
 
-                    // Update button text and icon
-                    expandBtn.innerHTML = '<i class="fas fa-eye"></i> Ver Detalles';
-                    expandBtn.classList.add('btn-service-outline');
+                    // Toggle buttons
+                    expandBtn.style.display = "none";
+                    if (whatsappBtn) whatsappBtn.style.display = "inline-block";
                 });
 
                 // Close service card
@@ -441,17 +476,17 @@ Template Name: Servicios
                     e.stopPropagation();
                     card.classList.remove('expanded');
 
-                    // Reset button
-                    expandBtn.innerHTML = '<i class="fas fa-info-circle"></i> Ver Más Info';
-                    expandBtn.classList.remove('btn-service-outline');
+                    // Reset buttons
+                    expandBtn.style.display = "inline-block";
+                    if (whatsappBtn) whatsappBtn.style.display = "none";
                 });
 
                 // Close on outside click
                 document.addEventListener('click', (e) => {
                     if (card.classList.contains('expanded') && !card.contains(e.target)) {
                         card.classList.remove('expanded');
-                        expandBtn.innerHTML = '<i class="fas fa-info-circle"></i> Ver Más Info';
-                        expandBtn.classList.remove('btn-service-outline');
+                        expandBtn.style.display = "inline-block";
+                        if (whatsappBtn) whatsappBtn.style.display = "none";
                     }
                 });
             });

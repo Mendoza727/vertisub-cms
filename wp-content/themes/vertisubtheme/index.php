@@ -11,6 +11,9 @@ get_header();
     <meta charset="<?php bloginfo('charset'); ?>">
     <title><?php bloginfo('name'); ?> - <?php bloginfo('description'); ?></title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    
+    <?php wp_head(); ?>
+    </script>
 
     <script
         async=""
@@ -31,6 +34,38 @@ get_header();
         as="script"
         crossorigin=""
         href="<?php echo get_template_directory_uri(); ?>/assets/thumbnail-Dv4-UVAT.js" />
+
+    <!-- Ahora tu script para inyectar el footer -->
+    <script type="module">
+        // assets/inject-footer.js
+        function injectFooter() {
+            const container = document.getElementById("footer-wrapper");
+            if (!container) return false;
+
+            fetch("<?php echo get_template_directory_uri(); ?>/footer-endpoint.php")
+                .then((res) => res.text())
+                .then((html) => {
+                    container.innerHTML = html;
+
+                    // Solo ejecutar scripts con src
+                    container.querySelectorAll("script[src]").forEach((script) => {
+                        const newScript = document.createElement("script");
+                        newScript.src = script.src;
+                        newScript.async = false; // mantener orden
+                        document.body.appendChild(newScript);
+                    });
+                })
+                .catch((err) => console.error("Error cargando footer:", err));
+
+            return true;
+        }
+
+        // Espera hasta que el div exista
+        const interval = setInterval(() => {
+            if (injectFooter()) clearInterval(interval);
+        }, 50);
+    </script>
+
     <link
         rel="modulepreload"
         as="script"

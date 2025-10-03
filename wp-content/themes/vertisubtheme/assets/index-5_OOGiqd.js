@@ -3,6 +3,7 @@ const __vite__mapDeps = (
   m = __vite__mapDeps,
   d = m.f ||
     (m.f = [
+      "vertisub/wp-content/themes/vertisubtheme/assets/inject-footer.js",
       "vertisub/wp-content/themes/vertisubtheme/assets/Home-DBjZf9jM.js",
       "vertisub/wp-content/themes/vertisubtheme/assets/thumbnail-Dv4-UVAT.js",
       "vertisub/wp-content/themes/vertisubtheme/assets/SmootherLayout-DPjoTzjc.js",

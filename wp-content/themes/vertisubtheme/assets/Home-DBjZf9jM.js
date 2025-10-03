@@ -1441,9 +1441,7 @@ const Qt = ({ urls: t, type: e }) => {
               className: "short-description__info",
               children: a.jsxs("div", {
                 className: "description",
-                children: [
-                  a.jsx("h2", { children: e.description_title }),
-                ],
+                children: [a.jsx("h2", { children: e.description_title })],
               }),
             }),
             a.jsx("div", {
@@ -1550,7 +1548,7 @@ const Qt = ({ urls: t, type: e }) => {
         children: [
           a.jsx("div", {
             className:
-              "work-item__video lg:flex absolute top-0 -left-[35%] overflow-hidden-2 lg:overflow-auto lg:w-[30%] max-h-[214px] h-[214px] rounded-[16px]",
+              "work-item__video lg:flex absolute top-0 -left-[35%] overflow-hidden lg:overflow-auto lg:w-[30%] max-h-[214px] h-[214px] rounded-[16px]",
             children:
               i > 1024
                 ? t
@@ -1834,13 +1832,13 @@ const ri = ({ item: t, isOpen: e, onClose: i }) => {
   N.useLayoutEffect(() => {
     const u = y.context(() => {
       y.set(".modal-wrapper", { perspective: 1900 }),
-      y.set(".modal-flip", { transformStyle: "preserve-3d" }),
-      y.set(".modal-back", { rotationY: -180 }),
-      y.set([".modal-front", ".modal-back"], {
-        backfaceVisibility: "hidden",
-      }),
-    // Línea adicional para que el back aparezca primero
-    y.set(".modal-flip", { rotationY: 180 });
+        y.set(".modal-flip", { transformStyle: "preserve-3d" }),
+        y.set(".modal-back", { rotationY: -180 }),
+        y.set([".modal-front", ".modal-back"], {
+          backfaceVisibility: "hidden",
+        }),
+        // Línea adicional para que el back aparezca primero
+        y.set(".modal-flip", { rotationY: 180 });
       const k = y.timeline({ paused: !0, onComplete: () => r(!o) });
       k.to(".modal-flip", {
         duration: 1.2,
@@ -1974,17 +1972,17 @@ const ri = ({ item: t, isOpen: e, onClose: i }) => {
                   }),
                 }),
                 a.jsx("div", {
-  className:
-    "w-full lg:w-[50%] h-[276px] lg:h-full z-[12] pointer-events-none",
-  children: (t.images || [t.image]).map((img) =>
-    a.jsx("img", {
-      src: img.url,
-      alt: img.alt,
-      className:
-        "w-full h-full object-cover rounded-t-[24px] lg:rounded-l-[24px] lg:rounded-r-none carousel-img",
-    })
-  ),
-}),
+                  className:
+                    "w-full lg:w-[50%] h-[276px] lg:h-full z-[12] pointer-events-none",
+                  children: (t.images || [t.image]).map((img) =>
+                    a.jsx("img", {
+                      src: img.url,
+                      alt: img.alt,
+                      className:
+                        "w-full h-full object-cover rounded-t-[24px] lg:rounded-l-[24px] lg:rounded-r-none carousel-img",
+                    })
+                  ),
+                }),
                 a.jsx("div", {
                   className:
                     "h-[calc(82vh-286px)] h-[calc(82dvh-286px)] lg:w-[50%] lg:h-full px-[25px] pt-[16px] pb-[24px] lg:py-[42px] lg:pl-[52px] lg:pr-[10px] z-[14] pointer-events-auto",
@@ -2037,7 +2035,7 @@ const ri = ({ item: t, isOpen: e, onClose: i }) => {
   );
 };
 function ui() {
-  const [t, e, i] = Ot('json', 5), // anterior ->  Ot("pages", 5),
+  const [t, e, i] = Ot("json", 5), // anterior ->  Ot("pages", 5),
     [s, l] = N.useState({}),
     [n, c] = N.useState(!1),
     [o, r] = N.useState(!1),

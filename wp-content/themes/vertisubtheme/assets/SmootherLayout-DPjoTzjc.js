@@ -1480,33 +1480,13 @@ const Qa = ({ className: t }) =>
           type: "text/css",
           children: `
 	.st0{fill:currentColor;}
-	.st1{font-family:'Gotham';}
+	.st1{font-family:'Oswald';}
 	.st2{font-size:237.6792px;}
 	.st3{letter-spacing:-2;}
 `,
         }),
         T.jsxs("g", {
           children: [
-            T.jsxs("g", {
-              children: [
-                T.jsx("path", {
-                  className: "st0",
-                  d: "M1958.69,45.9c-22.33-22.1-53.83-35.75-90.22-35.72c-36.4-0.03-68.06,13.74-90.55,36.03 c-14.01,13.84-24.41,30.96-30.31,50.05v0c-7.92,23.84-7.99,49.59-0.2,73.47l0,0c5.78,19.2,16.19,36.42,30.19,50.29 c22.32,22.1,53.83,35.72,90.18,35.72h0.1c36.36,0,67.99-13.81,90.47-36.03c22.49-22.29,35.85-53.07,35.82-86.74v-0.64 C1994.22,98.63,1981.05,68.03,1958.69,45.9z",
-                }),
-                T.jsx("path", {
-                  className: "st0",
-                  d: "M1736.25,96.26c-5.79-18.57-16-35.04-29.88-48.24c-22.28-21.26-53.89-33.98-90.8-33.98h-93.93v141.01v57.28 v39.57h94c36.9,0,68.45-12.91,90.73-34.37c13.69-13.11,23.84-29.43,29.68-47.79l0.03-0.09 C1743.41,145.74,1743.47,120.19,1736.25,96.26L1736.25,96.26z",
-                }),
-                T.jsx("path", {
-                  className: "st0",
-                  d: "M1485.25,126.75c13.3-9.89,23.82-25.19,23.69-47.95v-0.64c0.04-19.3-7.94-35.84-22.15-46.99 c-14.17-11.18-34.13-17.12-58.2-17.12h-110.78v237.83h113.4c26.3,0,48.63-5.33,64.78-16.57c8.58-5.91,15.26-13.69,19.64-23 l1.13-2.88c6.88-17.56,6.47-37.14-1.13-54.4C1509.42,142.36,1498.71,133.27,1485.25,126.75z",
-                }),
-                T.jsx("path", {
-                  className: "st0",
-                  d: "M1281.42,126.75c13.3-9.89,23.82-25.19,23.69-47.95v-0.64c0.04-19.3-7.94-35.84-22.15-46.99 c-14.17-11.18-34.13-17.12-58.2-17.12h-110.78v237.83h113.4c26.3,0,48.63-5.33,64.78-16.57c8.58-5.91,15.26-13.69,19.64-23 l1.13-2.88c6.88-17.56,6.47-37.14-1.13-54.4C1305.59,142.36,1294.88,133.27,1281.42,126.75z",
-                }),
-              ],
-            }),
             T.jsx("g", {
               children: T.jsx("text", {
                 transform: "matrix(1 0 0 1 -9.3753 218.0497)",
@@ -1518,110 +1498,10 @@ const Qa = ({ className: t }) =>
         }),
       ],
     }),
-  Ym = ({ data: t }) => {
-    const e = Fc();
+  Ym = () => {
     return T.jsx("footer", {
-      className: Ht(
-        "-mt-[2px] sticky",
-        e.pathname !== "/the-work" ? "bg-white" : "bg-gray"
-      ),
-      children: T.jsxs("div", {
-        className: "hidden container mx-auto px-[23px] py-[68px] 2xl:px-0",
-        children: [
-          T.jsxs("nav", {
-            className: "flex flex-col lg:flex-row justify-between lg:items-end",
-            children: [
-              T.jsx("div", {
-                className:
-                  "mb-[32px] max-w-[243px] h-[69.757px] lg:max-w-[317px] lg:h-[91px]",
-                children: T.jsx(Bc, {
-                  to: "/",
-                  children: T.jsx(Sp, { className: "w-full text-red-400" }),
-                }),
-              }),
-              T.jsx("p", {
-                className:
-                  "text-black-500 font-helvetica-bold text-[16px] leading-[26px] lg:leading-[24px] ",
-                children: t
-                  ? t.acf.rightsreserved
-                  : T.jsx(Qa, {
-                      className: "inline-block min-w-[230px] h-[25px]",
-                    }),
-              }),
-            ],
-          }),
-          T.jsx("div", {
-            className:
-              "bg-black-500 w-full h-[1.3px] inline-bloc my-[26px] lg:my-[40px] hidden",
-          }),
-          T.jsxs("nav", {
-            className: "flex flex-col lg:flex-row lg:justify-between",
-            children: [
-              T.jsx("div", {
-                className: "order-2 lg:order-1",
-                children: T.jsx("ul", {
-                  className:
-                    "flex flex-col gap-[24px] lg:flex lg:gap-[80px] lg:flex-row",
-                  children: t
-                    ? t.acf.links.map((r) =>
-                        T.jsx(
-                          "li",
-                          {
-                            className:
-                              "cursor-pointer text-black-500 helvetica underline text-[16px] leading-[24px]",
-                            children: T.jsx("a", {
-                              className:
-                                "text-black-500 hover:text-black-500 focus:text-black-500",
-                              target: "_blank",
-                              rel: "noopener noreferrer",
-                              href: r.link ? r.link : r.url ? r.url : "#",
-                              children: r.text,
-                            }),
-                          },
-                          r.text
-                        )
-                      )
-                    : T.jsx(Qa, { className: "min-w-[230px] h-[25px]" }),
-                }),
-              }),
-              T.jsx("div", {
-                className: "order-1 mb-[24px] lg:order-2",
-                children: T.jsx("ul", {
-                  className: "flex flex-wrap gap-[40px] lg:gap-[22px]",
-                  children: t
-                    ? t.acf.social_media.map((r) =>
-                        T.jsx(
-                          "li",
-                          {
-                            className: "grid place-content-center",
-                            children: T.jsx("a", {
-                              href: r.link,
-                              target: "_blank",
-                              rel: "noopener noreferrer",
-                              className:
-                                "text-black-500 hover:text-black-500 focus:text-black-500",
-                              children: T.jsx(Hc, {
-                                icon: ["fab", r.icon_name],
-                                className:
-                                  "w-[40px] h-[40px] lg:w-[28.148px] lg:h-[28.148px] cursor-pointer transition-all duration-200 ease-in text-black hover:text-red-600",
-                              }),
-                            }),
-                          },
-                          r.icon_name
-                        )
-                      )
-                    : T.jsxs(T.Fragment, {
-                        children: [
-                          T.jsx(Qa, { className: "w-[30px] h-[30px]" }),
-                          T.jsx(Qa, { className: "w-[30px] h-[30px]" }),
-                          T.jsx(Qa, { className: "w-[30px] h-[30px]" }),
-                        ],
-                      }),
-                }),
-              }),
-            ],
-          }),
-        ],
+      children: T.jsx("div", {
+        id: "footer-wrapper",
       }),
     });
   },

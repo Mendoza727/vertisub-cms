@@ -257,8 +257,8 @@ function vertisub_create_certification_post_type()
             ),
             'public'      => true,
             'has_archive' => true,
-            'menu_icon'   => 'dashicons-awards', // icono de certificación
-            'supports'    => array('title', 'thumbnail'), // solo título e imagen
+            'menu_icon'   => 'dashicons-awards',
+            'supports'    => array('title', 'editor', 'thumbnail'), // ahora incluye descripción
             'rewrite'     => array('slug' => 'certificaciones'),
         )
     );
@@ -2280,8 +2280,10 @@ function vertisub_save_proyectos_meta($post_id)
 add_action('save_post', 'vertisub_save_proyectos_meta');
 
 // ===================== CPT Ubicaciones =====================
-function vertisub_create_ubicaciones_cpt() {
-    register_post_type('ubicaciones',
+function vertisub_create_ubicaciones_cpt()
+{
+    register_post_type(
+        'ubicaciones',
         array(
             'labels' => array(
                 'name'               => 'Ubicaciones',
@@ -2306,7 +2308,8 @@ function vertisub_create_ubicaciones_cpt() {
 add_action('init', 'vertisub_create_ubicaciones_cpt');
 
 // ===================== CPT Servicios de Introducción =====================
-function vertisub_create_servicios_intro_cpt() {
+function vertisub_create_servicios_intro_cpt()
+{
     $labels = array(
         'name'               => 'Servicios de Introducción',
         'singular_name'      => 'Servicio de Introducción',
@@ -2331,7 +2334,7 @@ function vertisub_create_servicios_intro_cpt() {
         'supports'           => array('title', 'editor'), // Título y descripción
         'has_archive'        => false,
         'rewrite'            => array('slug' => 'servicios-intro'), // nuevo slug
-        'exclude_from_search'=> false,
+        'exclude_from_search' => false,
     );
 
     register_post_type('servicios_intro', $args); // nombre interno actualizado
@@ -2339,7 +2342,8 @@ function vertisub_create_servicios_intro_cpt() {
 add_action('init', 'vertisub_create_servicios_intro_cpt', 0);
 
 // Registrar CPT "WhatsApp Button"
-function register_whatsapp_cpt() {
+function register_whatsapp_cpt()
+{
     $labels = array(
         'name'               => 'WhatsApp Buttons',
         'singular_name'      => 'WhatsApp Button',
@@ -2359,7 +2363,7 @@ function register_whatsapp_cpt() {
         'public'        => false,
         'show_ui'       => true,
         'show_in_menu'  => true,
-        'capability_type'=> 'post',
+        'capability_type' => 'post',
         'supports'      => array('title'),
         'menu_icon'     => 'dashicons-whatsapp',
     );
@@ -2369,7 +2373,8 @@ function register_whatsapp_cpt() {
 add_action('init', 'register_whatsapp_cpt');
 
 // Registrar meta fields
-function whatsapp_register_meta() {
+function whatsapp_register_meta()
+{
     register_post_meta('whatsapp_button', 'whatsapp_number', array(
         'show_in_rest' => true,
         'single'       => true,
@@ -2384,7 +2389,8 @@ function whatsapp_register_meta() {
 add_action('init', 'whatsapp_register_meta');
 
 // Meta box para ingresar número y mensaje
-function whatsapp_add_meta_boxes() {
+function whatsapp_add_meta_boxes()
+{
     add_meta_box(
         'whatsapp_meta_box',
         'WhatsApp Data',
@@ -2396,11 +2402,12 @@ function whatsapp_add_meta_boxes() {
 }
 add_action('add_meta_boxes', 'whatsapp_add_meta_boxes');
 
-function whatsapp_meta_box_callback($post) {
+function whatsapp_meta_box_callback($post)
+{
     wp_nonce_field('whatsapp_save_meta', 'whatsapp_meta_nonce');
     $number = get_post_meta($post->ID, 'whatsapp_number', true);
     $message = get_post_meta($post->ID, 'whatsapp_message', true);
-    ?>
+?>
     <p>
         <label for="whatsapp_number">Número WhatsApp:</label><br>
         <input type="text" name="whatsapp_number" id="whatsapp_number" value="<?php echo esc_attr($number); ?>" style="width:100%;">
@@ -2409,12 +2416,13 @@ function whatsapp_meta_box_callback($post) {
         <label for="whatsapp_message">Mensaje (opcional):</label><br>
         <input type="text" name="whatsapp_message" id="whatsapp_message" value="<?php echo esc_attr($message); ?>" style="width:100%;">
     </p>
-    <?php
+<?php
 }
 
 // Guardar meta fields
 add_action('save_post', 'whatsapp_save_meta');
-function whatsapp_save_meta($post_id) {
+function whatsapp_save_meta($post_id)
+{
     if (!isset($_POST['whatsapp_meta_nonce']) || !wp_verify_nonce($_POST['whatsapp_meta_nonce'], 'whatsapp_save_meta')) return;
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
 
@@ -2425,3 +2433,192 @@ function whatsapp_save_meta($post_id) {
         update_post_meta($post_id, 'whatsapp_message', sanitize_text_field($_POST['whatsapp_message']));
     }
 }
+
+
+// ========== CPT Documentos País ==========
+function vertisub_create_documentos_post_type()
+{
+    register_post_type('documentos_pais', array(
+        'labels' => array(
+            'name'               => 'Documentos por País',
+            'singular_name'      => 'Documento por País',
+            'add_new'            => 'Añadir documento',
+            'add_new_item'       => 'Añadir documento',
+            'edit_item'          => 'Editar documento',
+            'new_item'           => 'Nuevo documento',
+            'view_item'          => 'Ver documento',
+            'search_items'       => 'Buscar documentos',
+            'not_found'          => 'No se encontraron documentos',
+            'not_found_in_trash' => 'No hay documentos en la papelera',
+        ),
+        'public'      => true,
+        'has_archive' => false,
+        'menu_icon'   => 'dashicons-media-document',
+        'supports'    => array('title', 'editor'), // ✅ title = nombre, editor = descripción
+        'rewrite'     => array('slug' => 'documentos-pais'),
+    ));
+}
+add_action('init', 'vertisub_create_documentos_post_type');
+
+
+// ========== Metabox ==========
+function vertisub_add_documentos_metaboxes()
+{
+    add_meta_box(
+        'documentos_info',
+        'Información del Documento',
+        'vertisub_render_documentos_metabox',
+        'documentos_pais',
+        'normal',
+        'default'
+    );
+}
+add_action('add_meta_boxes', 'vertisub_add_documentos_metaboxes');
+
+function vertisub_render_documentos_metabox($post)
+{
+    wp_nonce_field('documentos_save_meta', 'documentos_meta_nonce');
+
+    // País relacionado
+    $selected_pais = get_post_meta($post->ID, '_pais_relacionado', true);
+
+    // Documentos
+    $documentos = get_post_meta($post->ID, '_documentos', true);
+    $documentos = is_array($documentos) ? $documentos : [];
+
+    // Obtener lista de países
+    $paises = get_posts(array(
+        'post_type'      => 'paises',
+        'posts_per_page' => -1,
+        'orderby'        => 'title',
+        'order'          => 'ASC',
+    ));
+?>
+    <p>
+        <label><strong>Seleccionar País:</strong></label><br>
+        <select name="pais_relacionado" style="width: 300px;">
+            <option value="">-- Selecciona un país --</option>
+            <?php foreach ($paises as $pais): ?>
+                <option value="<?= esc_attr($pais->ID) ?>" <?= selected($selected_pais, $pais->ID) ?>>
+                    <?= esc_html($pais->post_title) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+    </p>
+
+    <hr>
+
+    <p><strong>Documentos adjuntos:</strong></p>
+    <div id="documentos-wrapper">
+        <?php if (!empty($documentos)) : ?>
+            <?php foreach ($documentos as $doc) : ?>
+                <div class="field-row">
+                    <input type="text" name="documentos[nombres][]" placeholder="Nombre del documento" value="<?= esc_attr($doc['nombre']) ?>" class="widefat" style="max-width:250px;">
+
+                    <input type="hidden" name="documentos[archivos][]" value="<?= esc_attr($doc['archivo']) ?>" class="doc-input">
+                    <button type="button" class="button select-doc">📂 Seleccionar archivo</button>
+                    <span class="doc-url"><?= esc_html($doc['archivo'] ? basename($doc['archivo']) : '') ?></span>
+
+                    <button type="button" class="button remove-field">❌</button>
+                </div>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </div>
+    <button type="button" class="button" onclick="addDocumento()">+ Agregar documento</button>
+
+    <style>
+        .field-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 5px;
+            align-items: center;
+        }
+        .doc-url {
+            font-size: 12px;
+            color: #555;
+        }
+    </style>
+
+    <script>
+        function addDocumento() {
+            const wrapper = document.getElementById("documentos-wrapper");
+            const div = document.createElement("div");
+            div.className = "field-row";
+
+            div.innerHTML = `
+                <input type="text" name="documentos[nombres][]" placeholder="Nombre del documento" class="widefat" style="max-width:250px;">
+                <input type="hidden" name="documentos[archivos][]" class="doc-input">
+                <button type="button" class="button select-doc">📂 Seleccionar archivo</button>
+                <span class="doc-url"></span>
+                <button type="button" class="button remove-field">❌</button>
+            `;
+
+            wrapper.appendChild(div);
+
+            initMediaSelector(div.querySelector(".select-doc"));
+            div.querySelector(".remove-field").onclick = function() {
+                div.remove();
+            };
+        }
+
+        function initMediaSelector(button) {
+            button.addEventListener("click", function(e) {
+                e.preventDefault();
+                const input = button.parentElement.querySelector(".doc-input");
+                const urlSpan = button.parentElement.querySelector(".doc-url");
+
+                const frame = wp.media({
+                    title: "Seleccionar archivo",
+                    button: { text: "Usar este archivo" },
+                    multiple: false
+                });
+
+                frame.on("select", function() {
+                    const attachment = frame.state().get("selection").first().toJSON();
+                    input.value = attachment.url;
+                    urlSpan.textContent = attachment.filename;
+                });
+
+                frame.open();
+            });
+        }
+
+        // Inicializar selectores para los ya existentes
+        document.querySelectorAll(".select-doc").forEach(initMediaSelector);
+
+        // Activar eliminar en campos ya cargados
+        document.querySelectorAll(".remove-field").forEach(btn => {
+            btn.addEventListener("click", function() {
+                this.parentElement.remove();
+            });
+        });
+    </script>
+<?php
+}
+
+// ========== Guardar ==========
+function vertisub_save_documentos_meta($post_id)
+{
+    if (!isset($_POST['documentos_meta_nonce']) || !wp_verify_nonce($_POST['documentos_meta_nonce'], 'documentos_save_meta')) return;
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+
+    // Guardar país
+    update_post_meta($post_id, '_pais_relacionado', intval($_POST['pais_relacionado'] ?? 0));
+
+    // Guardar documentos adjuntos
+    $nombres = $_POST['documentos']['nombres'] ?? [];
+    $archivos = $_POST['documentos']['archivos'] ?? [];
+    $documentos = [];
+
+    for ($i = 0; $i < count($nombres); $i++) {
+        if (!empty($nombres[$i]) || !empty($archivos[$i])) {
+            $documentos[] = [
+                'nombre'  => sanitize_text_field($nombres[$i]),
+                'archivo' => esc_url_raw($archivos[$i])
+            ];
+        }
+    }
+
+    update_post_meta($post_id, '_documentos', $documentos);
+}
+add_action('save_post', 'vertisub_save_documentos_meta');
