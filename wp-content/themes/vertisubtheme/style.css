@@ -2814,7 +2814,7 @@ body.loaded {
 .cta-title {
   font-size: 3rem;
   font-weight: 700;
-  color: var(--text-light);
+  color: var(--text-dark);
   margin-bottom: 1.5rem;
 }
 

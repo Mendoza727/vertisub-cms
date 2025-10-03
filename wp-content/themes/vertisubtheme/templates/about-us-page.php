@@ -38,24 +38,36 @@ Template Name: Nosotros
                 <section class="hero-about-section">
                     <div class="container">
                         <div class="row">
-                            <div class="col-lg-12">
-                                <div class="hero-about-content" data-aos="fade-up">
-                                    <div class="breadcrumb-custom">
-                                        <a href="<?php echo esc_url(home_url('/')); ?>" class="me-2">
-                                            Inicio <i class="fas fa-chevron-right ms-1"></i>
-                                        </a>
-                                        <span class="text-white">Nosotros</span>
-                                    </div>
-
-                                    <h1 class="display-3 fw-bold text-white">
-                                        <?php echo esc_html($data['intro_title'] ?? 'Sobre Nosotros'); ?>
-                                    </h1>
-
-                                    <?php if (!empty($data['intro_desc'])): ?>
-                                        <div class="intro-description text-white mt-3">
-                                            <?php echo wp_kses_post(wpautop($data['intro_desc'])); ?>
+                            <div class="row align-items-center">
+                                <!-- Columna de texto existente -->
+                                <div class="col-lg-7">
+                                    <div class="hero-about-content" data-aos="fade-up">
+                                        <div class="breadcrumb-custom">
+                                            <a href="<?php echo esc_url(home_url('/')); ?>" class="me-2">
+                                                Inicio <i class="fas fa-chevron-right ms-1"></i>
+                                            </a>
+                                            <span class="text-white">Nosotros</span>
                                         </div>
-                                    <?php endif; ?>
+
+                                        <h1 class="display-3 fw-bold text-white">
+                                            <?php echo esc_html($data['intro_title'] ?? 'Sobre Nosotros'); ?>
+                                        </h1>
+
+                                        <?php if (!empty($data['intro_desc'])): ?>
+                                            <div class="intro-description text-white mt-3">
+                                                <?php echo wp_kses_post(wpautop($data['intro_desc'])); ?>
+                                            </div>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+
+                                <!-- Columna de imagen en un cuadro -->
+                                <div class="col-lg-5 d-flex justify-content-center" data-aos="fade-up">
+                                    <div class="image-box" style="max-width: 600px; height: 400px; border-radius: 8px; overflow: hidden; margin-left: 33px;">
+                                        <img src="http://localhost/vertisub/wp-content/uploads/2025/09/14a8aacb-725a-480b-b5ab-cdbbe099d0df.jpeg"
+                                            alt="Imagen Nosotros"
+                                            class="img-fluid">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -138,7 +150,8 @@ Template Name: Nosotros
 
         <!-- CTA Section -->
         <section class="cta-section">
-            <div class="container">
+            <!-- Stats Section -->
+            <div class="container stats-section p-3" style="background-color: white;">
                 <div class="cta-content" data-aos="fade-up">
                     <h2 class="cta-title">Nuestro compromiso siempre será el éxito</h2>
                     <p class="cta-subtitle">conocenos</p>
@@ -168,62 +181,12 @@ Template Name: Nosotros
                                     </div>
                                 </div>
                             </div>
-
-                            <!-- Information Cards -->
-                            <div class="row g-4 mb-5">
-                                <div class="col-lg-6 col-md-6">
-                                    <div class="info-card" data-card="contacto">
-                                        <div class="card-icon">
-                                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M22 12H18L15 21L9 3L6 12H2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                            </svg>
-                                        </div>
-                                        <h3 class="card-title">CONTÁCTENOS</h3>
-                                        <div class="card-content">
-                                            <p class="card-description">Estamos aquí para escucharte.</p>
-                                            <div class="contact-info">
-                                                <p><strong>Email:</strong> <?php echo esc_html(get_theme_mod('contacto_email')); ?></p>
-                                                <p><strong>Teléfono:</strong> <?php echo esc_html(get_theme_mod('contacto_telefono')); ?></p>
-                                                <p><strong>Dirección:</strong> <?php echo esc_html(get_theme_mod('contacto_direccion')); ?></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-6 col-md-6">
-                                    <div class="info-card" data-card="politicas">
-                                        <div class="card-icon">
-                                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                                <polyline points="14,2 14,8 20,8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                            </svg>
-                                        </div>
-                                        <h3 class="card-title">POLÍTICAS</h3>
-                                        <div class="card-content">
-                                            <p class="card-description">Conoce nuestras políticas de privacidad</p>
-                                            <div class="policies-info">
-                                                <p>
-                                                    <strong>
-                                                        <a href="<?php echo get_permalink(get_page_by_path('politica-datos-personales-vertisub')); ?>">
-                                                            Política de Privacidad:
-                                                        </a>
-                                                    </strong>
-                                                    Protegemos tu información personal
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </section>
                 </div>
-        </section>
+            </div>
 
-        <!-- Stats Section -->
-        <section class="stats-section">
-            <div class="stats-bg"></div>
-            <div class="container">
+            <div class="container stats-section p-3">
                 <div class="row">
                     <div class="col-lg-8 mx-auto text-center mb-5" data-aos="fade-up">
                         <span class="section-subtitle">Vertisub Internacional</span>
@@ -341,6 +304,66 @@ Template Name: Nosotros
                     </div>
                 </div>
             </div>
+        </section>
+
+        <section class="cta-section">
+            <div class="container">
+                <div class="cta-content" data-aos="fade-up">
+                    <h2 class="cta-subtitle">Escribenos</h2>
+
+                    <!-- Mission & Vision Section -->
+                    <section ction id="mision-vision" class="mission-vision-section mt-5">
+                        <div class="container">
+
+                            <!-- Information Cards -->
+                            <div class="row g-4 mb-5">
+                                <div class="col-lg-6 col-md-6">
+                                    <div class="info-card" data-card="contacto">
+                                        <div class="card-icon">
+                                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M22 12H18L15 21L9 3L6 12H2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                            </svg>
+                                        </div>
+                                        <h3 class="card-title">CONTÁCTENOS</h3>
+                                        <div class="card-content">
+                                            <p class="card-description">Estamos aquí para escucharte.</p>
+                                            <div class="contact-info">
+                                                <p><strong>Email:</strong> <?php echo esc_html(get_theme_mod('contacto_email')); ?></p>
+                                                <p><strong>Teléfono:</strong> <?php echo esc_html(get_theme_mod('contacto_telefono')); ?></p>
+                                                <p><strong>Dirección:</strong> <?php echo esc_html(get_theme_mod('contacto_direccion')); ?></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6">
+                                    <div class="info-card" data-card="politicas">
+                                        <div class="card-icon">
+                                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                                <polyline points="14,2 14,8 20,8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                            </svg>
+                                        </div>
+                                        <h3 class="card-title">POLÍTICAS</h3>
+                                        <div class="card-content">
+                                            <p class="card-description">Conoce nuestras políticas de privacidad</p>
+                                            <div class="policies-info">
+                                                <p>
+                                                    <strong>
+                                                        <a href="<?php echo get_permalink(get_page_by_path('politica-datos-personales-vertisub')); ?>">
+                                                            Política de Privacidad:
+                                                        </a>
+                                                    </strong>
+                                                    Protegemos tu información personal
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
         </section>
 
         <!-- Video Modal -->

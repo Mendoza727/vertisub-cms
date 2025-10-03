@@ -1410,7 +1410,7 @@ const Qt = ({ urls: t, type: e }) => {
             {
               scrollTrigger: {
                 trigger: "#short-description-section",
-                start: t ? "top top" : "30% top",
+                start: t ? "top+110px top" : "30% top+=100px",
                 end: t ? "top top" : "bottom 5%",
                 invalidateOnRefresh: !1,
                 pin: !0,

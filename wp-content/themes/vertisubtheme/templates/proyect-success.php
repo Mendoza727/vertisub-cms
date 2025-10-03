@@ -81,13 +81,22 @@ Template Name: Proyectos
         <section class="hero-about-section">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-8">
+                    <div class="col-lg-7">
                         <div class="hero-about-content" data-aos="fade-up">
                             <div class="breadcrumb-custom">
                                 <a href="<?php echo esc_url(home_url('/')); ?>" class="me-2">Inicio <i class="fas fa-chevron-right ms-1"></i></a>
                                 <span class="text-white">Certificaciones</span>
                             </div>
                             <h1 class="display-3 fw-bold text-white">Certificaciones Internacionales</h1>
+                        </div>
+                    </div>
+
+                    <!-- Columna de imagen en un cuadro -->
+                    <div class="col-lg-5 d-flex justify-content-center" data-aos="fade-up">
+                        <div class="image-box" style="max-width: 600px; height: 400px; border-radius: 8px; overflow: hidden; margin-left: 33px;">
+                            <img src="http://localhost/vertisub/wp-content/uploads/2025/09/14a8aacb-725a-480b-b5ab-cdbbe099d0df.jpeg"
+                                alt="Imagen Nosotros"
+                                class="img-fluid">
                         </div>
                     </div>
                 </div>
