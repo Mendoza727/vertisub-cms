@@ -1499,12 +1499,12 @@ const Qa = ({ className: t }) =>
       ],
     }),
   Ym = () => {
-    return T.jsx("footer", {
-      children: T.jsx("div", {
-        id: "footer-wrapper",
-      }),
-    });
-  },
+  return T.jsx("footer", {
+    children: T.jsx("div", {
+      id: "footer-wrapper",
+    }),
+  });
+},
   xp = ({ children: t, className: e, ...r }) =>
     T.jsx("button", {
       ...r,
