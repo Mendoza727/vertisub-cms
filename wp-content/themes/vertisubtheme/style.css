@@ -64,7 +64,7 @@ body {
 
 .loader-logo {
   max-width: 80vw; /* Se adapta al ancho de pantalla */
-  max-height: 50vh; /* Se adapta a la altura de la pantalla */
+  max-height: 60vh; /* Se adapta a la altura de la pantalla */
   width: auto;
   height: auto;
   margin-bottom: 1rem;
@@ -270,7 +270,7 @@ body {
 /* Agregando links visibles al nav principal */
 .nav-links {
   display: none;
-  gap: 1rem;
+  gap: 0rem;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -3097,6 +3097,60 @@ body.loaded {
   box-shadow: 0 0 0 0.2rem rgba(187, 12, 43, 0.1);
 }
 
+/* Mobile Small (hasta 480px) */
+@media (max-width: 480px) {
+  .hero-about-section {
+    height: 110vh;
+    min-height: 400px;
+    padding: 1rem;
+  }
+}
+
+/* Mobile Large (481px - 768px) */
+@media (min-width: 481px) and (max-width: 768px) {
+  .hero-about-section {
+    height: 90vh;
+    min-height: 500px;
+    padding: 1.5rem;
+  }
+}
+
+/* Tablet (769px - 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .hero-about-section {
+    height: 100vh;
+    min-height: 550px;
+    padding: 2rem;
+  }
+}
+
+/* Desktop (1025px - 1440px) */
+@media (min-width: 1025px) and (max-width: 1440px) {
+  .hero-about-section {
+    height: 85vh;
+    min-height: 600px;
+    padding: 2.5rem;
+  }
+}
+
+/* Large Desktop (más de 1440px) */
+@media (min-width: 1441px) {
+  .hero-about-section {
+    height: 90vh;
+    min-height: 700px;
+    padding: 3rem;
+  }
+}
+
+/* Landscape en móviles */
+@media (max-height: 500px) and (orientation: landscape) {
+  .hero-about-section {
+    height: auto;
+    min-height: 100vh;
+    padding: 1rem;
+  }
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .section-title-about {
@@ -3105,10 +3159,6 @@ body.loaded {
 
   .cta-title {
     font-size: 2.2rem;
-  }
-
-  .hero-about-section {
-    height: 70vh;
   }
 
   .stat-number {

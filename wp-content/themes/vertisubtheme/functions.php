@@ -2622,3 +2622,198 @@ function vertisub_save_documentos_meta($post_id)
     update_post_meta($post_id, '_documentos', $documentos);
 }
 add_action('save_post', 'vertisub_save_documentos_meta');
+
+
+// ========== CPT Novedades ==========
+function vertisub_create_novedades_post_type() {
+
+    $labels = array(
+        'name'                  => 'Novedades',
+        'singular_name'         => 'Novedad',
+        'menu_name'             => 'Novedades',
+        'name_admin_bar'        => 'Novedad',
+        'add_new'               => 'Añadir nueva',
+        'add_new_item'          => 'Añadir nueva novedad',
+        'edit_item'             => 'Editar novedad',
+        'new_item'              => 'Nueva novedad',
+        'view_item'             => 'Ver novedad',
+        'view_items'            => 'Ver novedades',
+        'search_items'          => 'Buscar novedades',
+        'not_found'             => 'No se encontraron novedades',
+        'not_found_in_trash'    => 'No se encontraron novedades en la papelera',
+        'all_items'             => 'Todas las novedades',
+    );
+
+    $args = array(
+        'labels'                => $labels,
+        'public'                => true,
+        'show_ui'               => true,
+        'show_in_menu'          => true,
+        'menu_position'         => 5,
+        'menu_icon'             => 'dashicons-megaphone',
+        'supports'              => array('title', 'editor', 'thumbnail'),
+        'has_archive'           => true,
+        'rewrite'               => array('slug' => 'novedades'),
+        'show_in_rest'          => true, // Para compatibilidad con Gutenberg y API REST
+    );
+
+    register_post_type('novedades', $args);
+}
+add_action('init', 'vertisub_create_novedades_post_type');
+
+// ========== CPT Trabajos ==========
+function vertisub_create_trabajos_post_type() {
+    register_post_type('trabajos', array(
+        'labels' => array(
+            'name' => 'Trabajos',
+            'singular_name' => 'Trabajo',
+            'add_new' => 'Añadir trabajo',
+            'add_new_item' => 'Añadir nuevo trabajo',
+            'edit_item' => 'Editar trabajo',
+            'new_item' => 'Nuevo trabajo',
+            'view_item' => 'Ver trabajo',
+            'search_items' => 'Buscar trabajos',
+            'not_found' => 'No se encontraron trabajos',
+        ),
+        'public' => true,
+        'menu_icon' => 'dashicons-portfolio',
+        'supports' => array('title', 'editor', 'thumbnail'),
+        'rewrite' => array('slug' => 'trabajos'),
+        'has_archive' => false,
+    ));
+}
+add_action('init', 'vertisub_create_trabajos_post_type');
+
+
+// ========== Metabox Vacante Única ==========
+function vertisub_add_trabajos_metaboxes() {
+    add_meta_box(
+        'trabajos_vacante',
+        'Información del Trabajo',
+        'vertisub_render_trabajos_metabox',
+        'trabajos',
+        'normal',
+        'default'
+    );
+}
+add_action('add_meta_boxes', 'vertisub_add_trabajos_metaboxes');
+
+function vertisub_render_trabajos_metabox($post) {
+    wp_nonce_field('vertisub_save_trabajos_meta', 'vertisub_trabajos_meta_nonce');
+
+    $vacante = get_post_meta($post->ID, '_vacante', true);
+    $vacante = is_array($vacante) ? $vacante : [];
+
+    // Obtener países
+    $paises = get_posts(array(
+        'post_type' => 'paises',
+        'posts_per_page' => -1,
+        'orderby' => 'title',
+        'order' => 'ASC'
+    ));
+    ?>
+
+    <div class="vacante-box" style="border:1px solid #ccc;padding:15px;background:#fafafa;border-radius:8px;">
+
+        <p><strong>Lugar (País):</strong><br>
+            <select name="vacante[lugar]" class="widefat">
+                <option value="">— Selecciona un país —</option>
+                <?php foreach ($paises as $pais):
+                    $slug = get_post_meta($pais->ID, '_pais_slug', true);
+                    $selected = ($vacante['lugar'] ?? '') === $slug ? 'selected' : '';
+                ?>
+                    <option value="<?= esc_attr($slug) ?>" <?= $selected ?>>
+                        <?= esc_html($pais->post_title) ?> (<?= esc_html($slug) ?>)
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </p>
+
+        <p><strong>Tipo de contrato:</strong><br>
+            <input type="text" name="vacante[tipo_contrato]" value="<?= esc_attr($vacante['tipo_contrato'] ?? '') ?>" class="widefat">
+        </p>
+
+        <p><strong>Experiencia:</strong><br>
+            <input type="text" name="vacante[experiencia]" value="<?= esc_attr($vacante['experiencia'] ?? '') ?>" class="widefat">
+        </p>
+
+        <p><strong>Responsabilidades:</strong></p>
+        <div class="field-group" data-name="responsabilidades">
+            <?php foreach (($vacante['responsabilidades'] ?? []) as $resp): ?>
+                <div class="field-row">
+                    <input type="text" name="vacante[responsabilidades][]" value="<?= esc_attr($resp) ?>" class="widefat">
+                    <button type="button" class="button remove-field">❌</button>
+                </div>
+            <?php endforeach; ?>
+        </div>
+        <button type="button" class="button add-field" data-target="responsabilidades">+ Añadir responsabilidad</button>
+
+        <p><strong>Requisitos:</strong></p>
+        <div class="field-group" data-name="requisitos">
+            <?php foreach (($vacante['requisitos'] ?? []) as $req): ?>
+                <div class="field-row">
+                    <input type="text" name="vacante[requisitos][]" value="<?= esc_attr($req) ?>" class="widefat">
+                    <button type="button" class="button remove-field">❌</button>
+                </div>
+            <?php endforeach; ?>
+        </div>
+        <button type="button" class="button add-field" data-target="requisitos">+ Añadir requisito</button>
+
+        <p><strong>Beneficios:</strong></p>
+        <div class="field-group" data-name="beneficios">
+            <?php foreach (($vacante['beneficios'] ?? []) as $ben): ?>
+                <div class="field-row">
+                    <input type="text" name="vacante[beneficios][]" value="<?= esc_attr($ben) ?>" class="widefat">
+                    <button type="button" class="button remove-field">❌</button>
+                </div>
+            <?php endforeach; ?>
+        </div>
+        <button type="button" class="button add-field" data-target="beneficios">+ Añadir beneficio</button>
+
+        <p><strong>Email para enviar hoja de vida:</strong><br>
+            <input type="email" name="vacante[email]" value="<?= esc_attr($vacante['email'] ?? '') ?>" class="widefat">
+        </p>
+    </div>
+
+    <style>
+        .field-row { display:flex; gap:8px; margin-bottom:5px; }
+        .field-row input { flex:1; }
+    </style>
+
+    <script>
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('remove-field')) e.target.closest('.field-row').remove();
+            if (e.target.classList.contains('add-field')) {
+                const group = e.target.previousElementSibling;
+                const name = group.dataset.name;
+                group.insertAdjacentHTML('beforeend',
+                    `<div class="field-row"><input type="text" name="vacante[${name}][]" class="widefat"><button type="button" class="button remove-field">❌</button></div>`
+                );
+            }
+        });
+    </script>
+
+    <?php
+}
+
+
+// ========== Guardar ==========
+function vertisub_save_trabajos_meta($post_id) {
+    if (!isset($_POST['vertisub_trabajos_meta_nonce']) || !wp_verify_nonce($_POST['vertisub_trabajos_meta_nonce'], 'vertisub_save_trabajos_meta')) return;
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+
+    $vacante = $_POST['vacante'] ?? [];
+
+    $clean_vacante = array(
+        'lugar' => sanitize_text_field($vacante['lugar'] ?? ''),
+        'tipo_contrato' => sanitize_text_field($vacante['tipo_contrato'] ?? ''),
+        'experiencia' => sanitize_text_field($vacante['experiencia'] ?? ''),
+        'responsabilidades' => array_filter(array_map('sanitize_text_field', $vacante['responsabilidades'] ?? [])),
+        'requisitos' => array_filter(array_map('sanitize_text_field', $vacante['requisitos'] ?? [])),
+        'beneficios' => array_filter(array_map('sanitize_text_field', $vacante['beneficios'] ?? [])),
+        'email' => sanitize_email($vacante['email'] ?? '')
+    );
+
+    update_post_meta($post_id, '_vacante', $clean_vacante);
+}
+add_action('save_post', 'vertisub_save_trabajos_meta');
