@@ -69,3 +69,25 @@ function vertisub_save_about_extra($post_id)
     }
 }
 add_action('save_post', 'vertisub_save_about_extra');
+
+
+/**
+ * Returns the value of an ACF field.
+ *
+ * If the get_field() function exists (it's part of the Advanced Custom Fields plugin),
+ * it will be used to retrieve the field value. Otherwise, an empty string will be returned.
+ *
+ * @param string $field_name The name of the ACF field to retrieve.
+ * @param bool $option_page Optional. Whether to retrieve the field value from the 'option' page. Default is false.
+ * @return string The value of the ACF field, or an empty string if the field does not exist or the get_field() function does not exist.
+ */
+function vertisub_get_acf_field(string $field_name, bool $option_page = false)
+{
+    if (function_exists('get_field')) {
+        if ($option_page) {
+            return get_field($field_name, 'option');
+        }
+        return get_field($field_name);
+    }
+    return '';
+}
