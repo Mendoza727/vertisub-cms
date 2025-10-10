@@ -12,8 +12,6 @@ Template Name: Ubicacion
 <body <?php body_class(); ?>>
     <?php get_header(); ?>
 
-    <?php get_template_part('loader'); ?>
-
     <main class="mt-5">
 
 
