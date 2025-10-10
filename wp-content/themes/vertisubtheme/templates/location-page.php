@@ -15,54 +15,18 @@ Template Name: Ubicacion
     <?php get_template_part('loader'); ?>
 
     <main class="mt-5">
-        <!-- Hero Section -->
-        <section class="hero-about-section">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-7">
-                        <div class="hero-about-content" data-aos="fade-up">
-                            <div class="breadcrumb-custom">
-                                <a href="<?php echo esc_url(home_url('/')); ?>" class="me-2">Inicio <i class="fas fa-chevron-right ms-1"></i></a>
-                                <span class="text-white">Ubicacion</span>
-                            </div>
-                            <?php
-                            // Obtener la primera ubicación publicada
-                            $ubicaciones = get_posts(array(
-                                'post_type'      => 'ubicaciones',
-                                'posts_per_page' => 1
-                            ));
 
-                            if (!empty($ubicaciones)) {
-                                $ubicacion = $ubicaciones[0];
-                            ?>
-                                <h1 class="display-3 fw-bold text-white">
-                                    <?php echo esc_html($ubicacion->post_title); ?>
-                                </h1>
-                                <div class="intro-description text-white mt-3">
-                                    <?php echo esc_html($ubicacion->post_content); ?>
-                                </div>
-                            <?php
-                            } else {
-                                // Texto por defecto si no hay ubicaciones
-                            ?>
-                                <h1 class="display-3 fw-bold text-white">¿Dónde nos ubicamos?</h1>
-                                <div class="intro-description text-white mt-3"></div>
-                            <?php
-                            }
-                            ?>
-                        </div>
-                    </div>
 
-                    <!-- Columna de imagen en un cuadro -->
-                    <div class="col-lg-5 d-flex justify-content-center" data-aos="fade-up">
-                        <div class="image-box" style="max-width: 600px; height: 400px; border-radius: 8px; overflow: hidden; margin-left: 33px;">
-                            <img src="http://localhost/vertisub/wp-content/uploads/2025/09/14a8aacb-725a-480b-b5ab-cdbbe099d0df.jpeg"
-                                alt="Imagen Nosotros"
-                                class="img-fluid">
-                        </div>
-                    </div>
-                </div>
+        <!-- Columna de imagen en un cuadro -->
+        <div class="col-lg-5 d-flex justify-content-center" data-aos="fade-up">
+            <div class="image-box" style="max-width: 600px; height: 400px; border-radius: 8px; overflow: hidden; margin-left: 33px;">
+                <img src="http://localhost/vertisub/wp-content/uploads/2025/09/14a8aacb-725a-480b-b5ab-cdbbe099d0df.jpeg"
+                    alt="Imagen Nosotros"
+                    class="img-fluid">
             </div>
+        </div>
+        </div>
+        </div>
         </section>
 
         <!-- About Section -->
