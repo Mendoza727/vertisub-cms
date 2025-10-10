@@ -1,4 +1,18 @@
-/* Sancho Landing Page Styles - Solo Loader */
+/**
+ * Theme Name:        VertiSub Theme
+ * Description:       Custom theme for VertiSub. Dependencies: Advanced Custom Fields
+ * Version:           1.0.0
+ * Author:            Vertisub
+ * Author URI:        https://vertisub.com
+ * Tags:              templates
+ * Text Domain:       vertisub-theme
+ * Tested up to:      6.4
+ * Requires at least: 6.1
+ * Requires PHP:      8.0
+ * License:           GNU General Public License v2.0 or later
+ * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+ */
+
 /* work-item relative flex cursor-pointer group justify-end */
 /* CSS Variables */
 :root {
@@ -64,7 +78,7 @@ body {
 
 .loader-logo {
   max-width: 80vw; /* Se adapta al ancho de pantalla */
-  max-height: 60vh; /* Se adapta a la altura de la pantalla */
+  max-height: 50vh; /* Se adapta a la altura de la pantalla */
   width: auto;
   height: auto;
   margin-bottom: 1rem;
@@ -270,7 +284,6 @@ body {
 /* Agregando links visibles al nav principal */
 .nav-links {
   display: none;
-  gap: 0rem;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -1136,7 +1149,7 @@ body.loaded {
 
 .certification-item {
   flex-shrink: 0;
-  padding: 3rem 3rem;
+  padding: 1rem 3rem;
   background: rgba(255, 255, 255, 0.8);
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
@@ -1420,47 +1433,50 @@ body.loaded {
 
 /* Back to Top Button Styles */
 .whatsapp-button {
-  position: fixed;
-  bottom: 1rem;
-  right: 1.3rem;
-  width: 60px;
-  height: 60px;
-  background: green !important;
-  border: none;
-  border-radius: 50%;
-  color: white;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(20px);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  z-index: 1000;
+    position: fixed;
+    bottom: 1rem;
+    right: 1.3rem;
+    width: 60px;
+    height: 60px;
+    background: green !important;
+    border: none;
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+    display: flex
+;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: all 0.3s 
+cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 1000;
 }
 
 .back-to-top {
-  position: fixed;
-  bottom: 5.5rem;
-  right: 1.3rem;
-  width: 60px;
-  height: 60px;
-  background: var(--accent-color);
-  border: none;
-  border-radius: 50%;
-  color: white;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(20px);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  z-index: 1000;
+    position: fixed;
+    bottom: 5.5rem;
+    right: 1.3rem;
+    width: 60px;
+    height: 60px;
+    background: var(--accent-color);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: all 0.3s 
+    cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 1000;
 }
 
 .whatsapp-button,
@@ -2122,7 +2138,7 @@ body.loaded {
 .footer-social-link {
   width: 45px;
   height: 45px;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--bs-body-bg);
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -3097,6 +3113,7 @@ body.loaded {
   box-shadow: 0 0 0 0.2rem rgba(187, 12, 43, 0.1);
 }
 
+
 /* Mobile Small (hasta 480px) */
 @media (max-width: 480px) {
   .hero-about-section {
@@ -3765,7 +3782,7 @@ body.loaded {
 }
 
 .contact-info-card {
-  background: var(--text-light);
+  background: var(--primary-color);
   border-radius: 20px;
   padding: 2.5rem 2rem;
   text-align: center;
@@ -3822,10 +3839,14 @@ body.loaded {
 }
 
 .contact-info h4 {
-  color: var(--primary-color);
+  color: white;
   font-weight: 700;
   margin-bottom: 0.5rem;
   font-size: 1.4rem;
+}
+
+.contact-info p {
+	color: white!important;
 }
 
 .contact-link {
@@ -5069,13 +5090,13 @@ body.loaded {
 
 /* certification section */
 .certifications-section {
-  padding: 120px 0;
+  padding: 0px 0;
   background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
 }
 
 .section-header {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 4rem;
 }
 
 .section-title {
