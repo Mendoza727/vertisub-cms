@@ -212,7 +212,7 @@ function vertisub_save_multimedia_meta($post_id)
     update_post_meta($post_id, '_video_urls_reseña', $urls);
 }
 add_action('save_post', 'vertisub_save_multimedia_meta');
-==
+
 function vertisub_servicios_paises_callback($post)
 {
     $paises = get_posts(array(
@@ -233,8 +233,6 @@ function vertisub_servicios_paises_callback($post)
     echo '</select>';
 }
 
-
-// ========== Guardar selector múltiple ==========
 function vertisub_save_servicios_meta($post_id)
 {
     if (array_key_exists('servicio_paises', $_POST)) {
