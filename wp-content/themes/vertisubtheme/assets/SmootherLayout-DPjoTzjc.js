@@ -8361,7 +8361,7 @@ function wb(t, e) {
 }
 function Cb(t, e, r) {
   //const n = `https://backoffice.sanchobbdo.site/wp-json/wp/v2/${t}/${e}`;
-  const n = `/vertisub/wp-content/themes/vertisubtheme/${t}/${e}.json`;
+  const n = `wp-content/themes/vertisubtheme/${t}/${e}.json`;
   return Z1(n, r);
 }
 const z1 = async (t, e) =>

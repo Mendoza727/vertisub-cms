@@ -79,7 +79,7 @@ add_action('save_post', 'vertisub_save_about_extra');
  *
  * @param string $field_name The name of the ACF field to retrieve.
  * @param bool $option_page Optional. Whether to retrieve the field value from the 'option' page. Default is false.
- * @return string The value of the ACF field, or an empty string if the field does not exist or the get_field() function does not exist.
+ * @return string|object The value of the ACF field, or an empty string if the field does not exist or the get_field() function does not exist.
  */
 function vertisub_get_acf_field(string $field_name, bool $option_page = false)
 {
