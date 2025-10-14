@@ -20,65 +20,59 @@ Template Name: Servicios
     <?php get_template_part('loader'); ?>
 
     <main class="mt-5">
-        <!-- Hero Section -->
-        <section class="hero-about-section">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-7">
-                        <div class="hero-about-content" data-aos="fade-up">
-                            <div class="breadcrumb-custom">
-                                <a href="<?php echo esc_url(home_url('/')); ?>" class="me-2">Inicio <i class="fas fa-chevron-right ms-1"></i></a>
-                                <span class="text-white">Servicios</span>
-                            </div>
-                            <?php
-                            // Obtener todos los servicios de introducción publicados
-                            $servicios = get_posts(array(
-                                'post_type'      => 'servicios_intro',
-                                'posts_per_page' => -1 // todos los servicios
-                            ));
-
-                            ?>
-                            <h1 class="display-3 fw-bold text-white">Nuestros Servicios</h1>
-                            <div class="intro-description text-white mt-3">
-                                <?php if (!empty($servicios)) : ?>
-                                    <?php foreach ($servicios as $servicio) : ?>
-                                        <?php echo esc_html($servicio->post_content); ?>
-                                    <?php endforeach; ?>
-                                <?php else : ?>
-                                    <p>Próximamente agregaremos nuestros servicios.</p>
+        <?php if (vertisub_get_acf_field('mostrar_hero')) : ?>
+            <?php $hero_data = vertisub_get_acf_field('hero'); ?>
+            <section class="hero-about-section">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-7">
+                            <div class="hero-about-content" data-aos="fade-up">
+                                <?php if ($hero_data['breadcrumb']) : ?>
+                                    <div class="breadcrumb-custom">
+                                        <a href="<?php echo esc_url(home_url('/')); ?>" class="me-2">Inicio <i class="fas fa-chevron-right ms-1"></i></a>
+                                        <span class="text-white"><?= $hero_data['breadcrumb']; ?></span>
+                                    </div>
                                 <?php endif; ?>
+
+                                <?php if ($hero_data['titulo']) : ?>
+                                    <h1 class="display-3 fw-bold text-white"><?= $hero_data['titulo']; ?></h1>
+                                <?php endif; ?>
+
+                                <?php if ($hero_data['descripcion']) : ?>
+                                    <div class="intro-description text-white mt-3">
+                                        <p style="font-size: 20px;"><?= $hero_data['descripcion']; ?></p>
+                                    </div>
+                                <?php endif; ?>
+
                             </div>
-
                         </div>
-                    </div>
 
-                    <!-- Columna de imagen en un cuadro -->
-                    <div class="col-lg-5 d-flex justify-content-center" data-aos="fade-up">
-                        <div class="image-box" style="max-width: 600px; height: 400px; border-radius: 8px; overflow: hidden; margin-left: 33px;">
-                            <img src="http://localhost/vertisub/wp-content/uploads/2025/09/14a8aacb-725a-480b-b5ab-cdbbe099d0df.jpeg"
-                                alt="Imagen Nosotros"
-                                class="img-fluid">
+                        <?php $right_image = $hero_data['imagen_lateral'] ? $hero_data['imagen_lateral'] : 'https://vertisub.com/wp-content/uploads/2025/10/46d12bd5-0646-4eeb-a0c0-0f4cc1fe8181.jpg'; ?>
+                        <div class="col-lg-5 d-flex justify-content-center" data-aos="fade-up">
+                            <div class="image-box" style="max-width: 600px; height: 400px; border-radius: 8px; overflow: hidden; margin-left: 33px; margin-top: 20px">
+                                <img src="<?= $right_image; ?>"
+                                    alt="Imagen Nosotros"
+                                    class="img-fluid">
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            </div>
-        </section>
+                </div>
+            </section>
+        <?php endif; ?>
 
         <!-- About Section -->
         <section class="sancho-services-section">
             <div class="container">
-                <div class="row">
-                    <div class="col-lg-8 mx-auto text-center mb-5" data-aos="fade-up">
-                        <p class="lead text-muted">
-                            Ofrecemos una amplia gama de servicios de construcción e ingeniería con la más alta calidad y profesionalismo. Cada proyecto es único y merece atención especializada.
-                        </p>
+                <?php if (vertisub_get_acf_field('servicios')) : ?>
+                    <div class="row">
+                        <div class="col-lg-8 mx-auto text-center mb-5" data-aos="fade-up">
+                            <p class="lead text-muted"><?= vertisub_get_acf_field('servicios')['titulo']; ?></p>
+                        </div>
                     </div>
-                </div>
+                <?php endif; ?>
 
                 <div class="services-grid" data-aos="fade-up" data-aos-delay="200">
-                    <!-- Service 1 - Construcción -->
-
                     <?php
                     global $wpdb;
 
@@ -239,18 +233,18 @@ Template Name: Servicios
         </section>
 
         <!-- Contact Section -->
-        <section class="sancho-contact-section d-none">
+        <section class="sancho-contact-section">
             <div class="container">
-                <!-- Contact Info -->
-                <div class="row mb-5">
-                    <div class="col-lg-8 mx-auto text-center" data-aos="fade-up">
-                        <span class="section-subtitle">Contáctanos</span>
-                        <h2 class="section-title">Información de Contacto</h2>
-                        <p class="lead text-muted mb-5">
-                            Estamos listos para hacer realidad tu proyecto. Contáctanos para recibir asesoramiento personalizado y una cotización detallada.
-                        </p>
+                <?php $contact_data =  vertisub_get_acf_field('contacto') ?>
+                <?php if ($contact_data) : ?>
+                    <div class="row mb-5">
+                        <div class="col-lg-8 mx-auto text-center" data-aos="fade-up">
+                            <span class="section-subtitle"><?= $contact_data['subtitulo']; ?></span>
+                            <h2 class="section-title"><?= $contact_data['titulo']; ?></h2>
+                            <p class="lead text-muted mb-5"><?= $contact_data['descripcion']; ?></p>
+                        </div>
                     </div>
-                </div>
+                <?php endif; ?>
 
                 <?php
                 global $wpdb;
@@ -264,10 +258,10 @@ Template Name: Servicios
                 // 2️⃣ Obtener el ID del país según el slug
                 $pais_id = $wpdb->get_var($wpdb->prepare(
                     "SELECT post_id 
-     FROM $wpdb->postmeta 
-     WHERE meta_key = '_pais_slug' 
-       AND LOWER(meta_value) = %s 
-     LIMIT 1",
+                    FROM $wpdb->postmeta 
+                    WHERE meta_key = '_pais_slug' 
+                    AND LOWER(meta_value) = %s 
+                    LIMIT 1",
                     $pais_slug
                 ));
 
@@ -345,7 +339,7 @@ Template Name: Servicios
                 ?>
 
                 <!-- Contact Form -->
-                <div class="row justify-content-center">
+                <div class="row justify-content-center d-none">
                     <div class="col-lg-8" data-aos="fade-up" data-aos-delay="400">
                         <div class="contact-form-wrapper">
                             <div class="contact-form-header">
