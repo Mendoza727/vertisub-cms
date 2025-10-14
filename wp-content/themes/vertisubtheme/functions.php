@@ -20,6 +20,7 @@ require_once VERTISUB_DIR . '/inc/cpts/clients.php';
 require_once VERTISUB_DIR . '/inc/cpts/countries.php';
 require_once VERTISUB_DIR . '/inc/cpts/courses.php';
 require_once VERTISUB_DIR . '/inc/cpts/documents.php';
+require_once VERTISUB_DIR . '/inc/cpts/services.php';
 
 // Utils.
 require_once VERTISUB_DIR . '/inc/utils.php';
