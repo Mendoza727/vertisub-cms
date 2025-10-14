@@ -1,6 +1,5 @@
 <?php
 
-/*************  ✨ Windsurf Command ⭐  *************/
 /**
  * Registers a post type for courses.
  *
@@ -9,7 +8,6 @@
  * @return void
  */
 
-/*******  ddbb5b30-eed5-475b-b350-99387845f133  *******/
 function vertisub_create_cursos_post_type()
 {
     register_post_type(

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Register post type for countries.
  *
