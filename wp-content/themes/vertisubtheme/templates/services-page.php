@@ -57,7 +57,6 @@ Template Name: Servicios
                         </div>
                     </div>
                 </div>
-                </div>
             </section>
         <?php endif; ?>
 
@@ -239,9 +238,17 @@ Template Name: Servicios
                 <?php if ($contact_data) : ?>
                     <div class="row mb-5">
                         <div class="col-lg-8 mx-auto text-center" data-aos="fade-up">
-                            <span class="section-subtitle"><?= $contact_data['subtitulo']; ?></span>
-                            <h2 class="section-title"><?= $contact_data['titulo']; ?></h2>
-                            <p class="lead text-muted mb-5"><?= $contact_data['descripcion']; ?></p>
+                            <?php if ($contact_data['subtitulo']) : ?>
+                                <span class="section-subtitle"><?= $contact_data['subtitulo']; ?></span>
+                            <?php endif; ?>
+
+                            <?php if ($contact_data['titulo']) : ?>
+                                <h2 class="section-title"><?= $contact_data['titulo']; ?></h2>
+                            <?php endif; ?>
+
+                            <?php if ($contact_data['descripcion']) : ?>
+                                <p class="lead text-muted mb-5"><?= $contact_data['descripcion']; ?></p>
+                            <?php endif; ?>
                         </div>
                     </div>
                 <?php endif; ?>
