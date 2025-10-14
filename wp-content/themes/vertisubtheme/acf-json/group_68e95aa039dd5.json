@@ -1,6 +1,6 @@
 {
     "key": "group_68e95aa039dd5",
-    "title": "Ubicación template",
+    "title": "Ubicación - template",
     "fields": [
         {
             "key": "field_68e95aa16b606",
@@ -63,5 +63,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1760134554
+    "modified": 1760411486
 }

@@ -1,0 +1,26 @@
+{
+    "key": "ui_options_page_68edbe8302c40",
+    "title": "Configuraciones Globales",
+    "active": true,
+    "menu_order": 0,
+    "page_title": "Configuraciones Globales",
+    "menu_slug": "configuraciones-globales",
+    "parent_slug": "none",
+    "advanced_configuration": 1,
+    "icon_url": "",
+    "menu_title": "",
+    "position": "",
+    "redirect": 1,
+    "description": "",
+    "menu_icon": {
+        "type": "dashicons",
+        "value": "dashicons-admin-generic"
+    },
+    "update_button": "Actualizar",
+    "updated_message": "Opciones Actualizadas",
+    "capability": "edit_posts",
+    "data_storage": "options",
+    "post_id": "",
+    "autoload": 0,
+    "modified": 1760411315
+}
