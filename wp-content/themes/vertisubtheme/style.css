@@ -519,6 +519,11 @@ body {
   animation-delay: 0.5s;
 }
 
+/* Hide the "Noticias" menu item  */
+#menu-inicio .nav-item:nth-child(6) {
+  display: none;
+}
+
 .nav-link {
   font-size: 2rem;
   font-weight: 600;
