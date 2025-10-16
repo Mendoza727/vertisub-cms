@@ -80,6 +80,8 @@ Template Name: Home
 </head>
 
 <body>
+
+    <?php get_header() ?>
     <?php $banner_id = vertisub_get_acf_field('banner'); ?>
     <?php if ($banner_id) : ?>
         <?php $banner_image = wp_get_attachment_image($banner_id, 'full'); ?>
