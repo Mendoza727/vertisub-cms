@@ -122,7 +122,13 @@ function sancho_enqueue_assets()
     wp_enqueue_script('amcharts-animated', 'https://cdn.amcharts.com/lib/5/themes/Animated.js', array('amcharts-core'), null, true);
 
     if (is_page('ubicacion')) {
-        wp_enqueue_script('maps-js', get_template_directory_uri() . '/assets/js/map.js', array('amcharts-core', 'amcharts-map', 'amcharts-world', 'amcharts-animated'), '1.0', true);
+        wp_enqueue_script(
+            'maps-js',
+            get_template_directory_uri() . '/assets/js/map.js',
+            array('amcharts-core', 'amcharts-map', 'amcharts-world', 'amcharts-animated'),
+            fileatime(get_template_directory() . '/assets/js/map.js'),
+            true
+        );
 
         // === Pasar datos de países a JS ===
         $args = array(
