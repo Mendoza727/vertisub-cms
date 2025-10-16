@@ -3,12 +3,15 @@
   min-height: 60vh;
   width: 100%;
   margin-bottom: -250px;
+}
 
-  @media (max-width: 768px) {
+@media (max-width: 768px) {
+  .video-banner {
     height: 80vh;
     margin-bottom: -100px;
   }
 }
+
 
 .video-banner video {
   height: 100%;
