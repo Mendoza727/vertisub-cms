@@ -14,9 +14,6 @@ Template Name: Politicas Privacidad
 
 <body <?php body_class(); ?>>
     <?php get_header(); ?>
-
-    <?php get_template_part('loader'); ?>
-
     <section class="privacy-hero-privacy mt-5">
         <div class="container">
             <div class="hero-icon-privacy" data-aos="zoom-in">
@@ -467,7 +464,6 @@ Template Name: Politicas Privacidad
     </div>
 
     <!-- Custom JS -->
-    <script src="<?php echo get_template_directory_uri(); ?>/script.js"></script>
     <script>
         AOS.init({
             duration: 800,

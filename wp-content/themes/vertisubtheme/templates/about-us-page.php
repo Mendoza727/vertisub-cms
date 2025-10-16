@@ -7,14 +7,15 @@ Template Name: Nosotros
 <head>
     <title>About Us</title>
     <?php wp_head(); ?>
+    <style>
+        .contact-info p {
+            color: black!important;
+        }
+    </style>
 </head>
 
 <body <?php body_class(); ?>>
     <?php get_header(); ?>
-
-    <?php get_template_part('loader'); ?>
-
-
 
     <main class="mt-5">
         <?php
@@ -63,8 +64,8 @@ Template Name: Nosotros
 
                                 <!-- Columna de imagen en un cuadro -->
                                 <div class="col-lg-5 d-flex justify-content-center" data-aos="fade-up">
-                                    <div class="image-box" style="max-width: 600px; height: 400px; border-radius: 8px; overflow: hidden; margin-left: 33px;">
-                                        <img src="http://localhost/vertisub/wp-content/uploads/2025/09/14a8aacb-725a-480b-b5ab-cdbbe099d0df.jpeg"
+                                    <div class="image-box" style="max-width: 600px; height: 290px; border-radius: 8px; overflow: hidden; margin-left: 33px; margin-top: 80px;">
+                                        <img src="https://vertisub.com/wp-content/uploads/2025/10/23a002b8-8c78-4fa8-95e7-e0ae22f114cb.jpg"
                                             alt="Imagen Nosotros"
                                             class="img-fluid">
                                     </div>
@@ -327,7 +328,7 @@ Template Name: Nosotros
                                         <h3 class="card-title">CONTÁCTENOS</h3>
                                         <div class="card-content">
                                             <p class="card-description">Estamos aquí para escucharte.</p>
-                                            <div class="contact-info">
+                                            <div>
                                                 <p><strong>Email:</strong> <?php echo esc_html(get_theme_mod('contacto_email')); ?></p>
                                                 <p><strong>Teléfono:</strong> <?php echo esc_html(get_theme_mod('contacto_telefono')); ?></p>
                                                 <p><strong>Dirección:</strong> <?php echo esc_html(get_theme_mod('contacto_direccion')); ?></p>
@@ -435,7 +436,6 @@ Template Name: Nosotros
     </script>
 
     <!-- Custom JS -->
-    <script src="<?php echo get_template_directory_uri(); ?>/script.js"></script>
     <?php get_template_part('components/floating-buttons'); ?>
     <?php get_footer(); ?>
 </body>

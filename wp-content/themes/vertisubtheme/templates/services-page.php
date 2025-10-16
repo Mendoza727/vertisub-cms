@@ -17,8 +17,6 @@ Template Name: Servicios
 <body <?php body_class(); ?>>
     <?php get_header(); ?>
 
-    <?php get_template_part('loader'); ?>
-
     <main class="mt-5">
         <?php if (vertisub_get_acf_field('mostrar_hero')) : ?>
             <?php $hero_data = vertisub_get_acf_field('hero'); ?>

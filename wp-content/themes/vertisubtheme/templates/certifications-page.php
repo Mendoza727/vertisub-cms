@@ -74,8 +74,6 @@ Template Name: Certificaciones
 <body <?php body_class(); ?>>
     <?php get_header(); ?>
 
-    <?php get_template_part('loader'); ?>
-
     <main class="mt-5">
 
         <?php if (vertisub_get_acf_field('mostrar_hero')) : ?>
@@ -284,7 +282,6 @@ Template Name: Certificaciones
     </script>
 
     <!-- Custom JS -->
-    <script src="<?php echo get_template_directory_uri(); ?>/script.js"></script>
     <?php get_template_part('components/floating-buttons'); ?>
     <?php get_footer(); ?>
 </body>

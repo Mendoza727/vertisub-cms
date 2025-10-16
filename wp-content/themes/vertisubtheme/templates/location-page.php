@@ -11,7 +11,6 @@ Template Name: Ubicacion
 <body <?php body_class(); ?>>
     <?php get_header(); ?>
 
-    <?php get_template_part('loader'); ?>
 
     <main class="mt-5">
         <!-- About Section -->
@@ -52,7 +51,6 @@ Template Name: Ubicacion
     </main>
 
     <!-- Custom JS -->
-    <script src="<?php echo get_template_directory_uri(); ?>/script.js"></script>
 
     <?php get_template_part('components/floating-buttons'); ?>
     <?php get_footer(); ?>

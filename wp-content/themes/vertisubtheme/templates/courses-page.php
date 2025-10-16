@@ -12,8 +12,6 @@ Template Name: Formaciones
 <body <?php body_class(); ?>>
     <?php get_header(); ?>
 
-    <?php get_template_part('loader'); ?>
-
     <main class="mt-5">
         <?php if (vertisub_get_acf_field('mostrar_hero')) : ?>
             <?php $hero_data = vertisub_get_acf_field('hero'); ?>
@@ -363,7 +361,7 @@ Template Name: Formaciones
 
     </main>
     <!-- Custom JS -->
-    <script src="<?php echo get_template_directory_uri(); ?>/script.js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <script>
         // Initialize AOS

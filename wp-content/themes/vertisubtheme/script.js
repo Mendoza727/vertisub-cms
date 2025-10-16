@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const letters = document.querySelectorAll(".letter");
 
   document.body.style.overflow = "hidden";
-   document.documentElement.style.overflow = "hidden";
+  document.documentElement.style.overflow = "hidden";
 
   // Animación de progreso con porcentaje
   let progress = 0;
@@ -49,22 +49,26 @@ document.addEventListener("DOMContentLoaded", () => {
       }, index * 100);
     });
 
-    // Fade out del loader completo
-    setTimeout(() => {
-      loader.classList.add("fade-out");
-
+    if (loader) {
+      // Fade out del loader completo
       setTimeout(() => {
-        loader.style.display = "none";
-        document.body.classList.add("loaded");
-        document.body.style.overflowY = "auto";
-         document.documentElement.style.overflow = "visible";
-        showMainContent();
-        initNavbar();
-        initVideoHero();
-        initAboutSection();
-        initBackToTop();
-      }, 1000);
-    }, 600);
+
+        loader.classList.add("fade-out");
+
+        setTimeout(() => {
+          loader.style.display = "none";
+          document.body.classList.add("loaded");
+          document.body.style.overflowY = "auto";
+          document.documentElement.style.overflow = "visible";
+          showMainContent();
+          initNavbar();
+          initVideoHero();
+          initAboutSection();
+          initBackToTop();
+        }, 1000);
+      }, 600);
+    }
+
   };
 
   const showMainContent = () => {
