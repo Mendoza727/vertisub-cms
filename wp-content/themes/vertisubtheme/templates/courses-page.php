@@ -59,11 +59,11 @@ Template Name: Formaciones
 
 
         <!-- About Section -->
-        <section class="sancho-services-section">
-            <div class="container">
+        <section class="sancho-services-section mt-5">
+            <div class="container pt-5">
                 <?php $courses_data =  vertisub_get_acf_field('formaciones') ?>
                 <?php if ($courses_data) : ?>
-                    <div class="row mb-5">
+                    <div class="row">
                         <div class="col-lg-8 mx-auto text-center" data-aos="fade-up">
                             <?php if ($courses_data['subtitulo']) : ?>
                                 <span class="section-subtitle"><?= $courses_data['subtitulo']; ?></span>
@@ -74,7 +74,7 @@ Template Name: Formaciones
                             <?php endif; ?>
 
                             <?php if ($courses_data['descripcion']) : ?>
-                                <p class="lead text-muted mb-5"><?= $courses_data['descripcion']; ?></p>
+                                <p class="lead text-muted"><?= $courses_data['descripcion']; ?></p>
                             <?php endif; ?>
                         </div>
                     </div>
@@ -358,6 +358,8 @@ Template Name: Formaciones
                         </div>
                     </div>
                 </div>
+            </div>
+        </section>
 
     </main>
     <!-- Custom JS -->
