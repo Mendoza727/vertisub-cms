@@ -521,7 +521,7 @@ body {
 
 /* Hide the "Noticias" menu item  */
 #menu-inicio .nav-item:nth-child(6) {
-  display: none;
+  display: none !important;
 }
 
 .nav-link {

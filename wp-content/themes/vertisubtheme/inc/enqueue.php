@@ -96,7 +96,7 @@ function sancho_enqueue_assets()
         'sancho-script',
         get_template_directory_uri() . '/script.js',
         array('jquery', 'bootstrap'),
-        wp_get_theme()->get('Version'),
+        filemtime(get_template_directory() . '/script.js'),
         true
     );
 
