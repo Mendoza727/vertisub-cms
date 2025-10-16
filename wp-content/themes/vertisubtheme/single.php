@@ -12,14 +12,14 @@
     <?php $galery = vertisub_get_acf_field('galeria'); ?>
 
 
-    <main class="mt-5">
-        <section class="certifications-section single-noticia">
+    <main class="mt-5 mb-5">
+        <section class="single-noticia pt-5">
             <div class="container single-noticia-container">
                 <div class="row align-items-start">
 
                     <!-- CARRUSEL LATERAL -->
                     <?php if ($galery && is_array($galery)) : ?>
-                        <div class="col-md-5">
+                        <div class="col-md-5 mt-5">
                             <div id="galeriaCarousel" class="carousel slide" data-bs-ride="carousel">
                                 <div class="carousel-inner">
                                     <?php foreach ($galery as $index => $img) :
@@ -48,7 +48,7 @@
                     <!-- CONTENIDO PRINCIPAL -->
                     <div class="<?php echo $galery ? 'col-md-7' : 'col-md-12'; ?>">
                         <article id="post-<?php the_ID(); ?>" <?php post_class('cert-content'); ?>>
-                            <header class="entry-header mb-4">
+                            <header class="entry-header mb-4 mt-5">
                                 <h1 class="cert-title"><?php the_title(); ?></h1>
                             </header>
 
