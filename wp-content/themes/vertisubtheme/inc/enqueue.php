@@ -92,15 +92,13 @@ function sancho_enqueue_assets()
     wp_enqueue_script('aos', 'https://unpkg.com/aos@2.3.4/dist/aos.js', array(), '2.3.4', true);
 
     // Script principal del tema
-    if (is_front_page()) {
-        wp_enqueue_script(
-            'sancho-script',
-            get_template_directory_uri() . '/script.js',
-            array('jquery', 'bootstrap'),
-            wp_get_theme()->get('Version'),
-            true
-        );
-    }
+    wp_enqueue_script(
+        'sancho-script',
+        get_template_directory_uri() . '/script.js',
+        array('jquery', 'bootstrap'),
+        wp_get_theme()->get('Version'),
+        true
+    );
 
     // Detecta si estoy en la plantilla "about-us-page.php"
     wp_enqueue_script(
