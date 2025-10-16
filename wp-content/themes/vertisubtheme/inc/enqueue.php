@@ -255,18 +255,3 @@ JS;
     wp_add_inline_script('vertisub-inline', $inline_js);
 }
 add_action('admin_enqueue_scripts', 'vertisub_admin_assets');
-
-// Modify the src attribute of the script tags to use the crossorigin attribute
-add_filter('script_loader_tag', function ($tag, $handle, $src) {
-    $modules = [
-        'vertisub-main',
-        'vertisub-cardnews-di3ywfu3-js',
-        'vertisub-home-dbjzf9m-js',
-        'vertisub-smootherlayout-dpjotzjc-js',
-        'vertisub-uppercircle-cxml2tqv-js'
-    ];
-    if (in_array($handle, $modules, true)) {
-        return '<script type="module" src="' . esc_url($src) . '" crossorigin></script>';
-    }
-    return $tag;
-}, 10, 3);
