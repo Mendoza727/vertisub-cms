@@ -14,8 +14,8 @@ Template Name: Ubicacion
 
     <main class="mt-5">
         <!-- About Section -->
-        <section class="map-section">
-            <div class="map-container">
+        <section class="map-section mt-5">
+            <div class="map-container pt-5">
                 <div class="section-header">
                     <h2 class="section-title"><?= vertisub_get_acf_field("titulo"); ?></h2>
                     <p class="section-subtitle"><?= vertisub_get_acf_field("descripcion"); ?></p>
