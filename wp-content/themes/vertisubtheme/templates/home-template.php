@@ -120,7 +120,7 @@ Template Name: Home
         <?php $proyectos_data = vertisub_get_acf_field('proyectos'); ?>
         <?php if ($proyectos_data) : ?>
             <section id="work-section">
-                <div class="bg-white w-full pt-[200px] lg:pt-[130px] pb-[120px] lg:pb-[160px]">
+                <div class="bg-white w-full pt-[92px] lg:pt-[120px] pb-[96px] lg:pb-[120px]">
                     <div class="container mx-auto px-[23px] xl:px-0 flex justify-end">
                         <div id="work-container" class="w-full lg:w-[70%]">
 
@@ -163,7 +163,7 @@ Template Name: Home
         <?php $news_data = vertisub_get_acf_field('novedades'); ?>
         <?php if ($news_data) : ?>
             <section id="news-section" class="bg-gray">
-                <div class="container mx-auto w-full px-[23px] pt-[92px] 2xl:px-0 lg:pt-[120px] lg:pb-[120px]">
+                <div class="container mx-auto w-full px-[23px] pt-[92px] 2xl:px-0 lg:pt-[120px] pb-[96px] lg:pb-[120px]">
 
                     <?php if ($news_data['titulo']) : ?>
                         <h2 class="text-black-500 font-helvetica-extrabold text-[26px] min-[400px]:text-[31px] leading-[38.75px] mb-[56px] sm:mb-[32px] lg:text-[48px] lg:leading-[60px] uppercase">

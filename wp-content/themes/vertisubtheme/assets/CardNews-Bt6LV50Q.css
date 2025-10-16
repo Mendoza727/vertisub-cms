@@ -11,6 +11,18 @@
   -webkit-backface-visibility: hidden;
 }
 
+
+@media (max-width: 768px) {
+  .feed-news {
+    flex-direction: column !important;
+
+    div {
+      width: 100% !important;
+    }
+  }
+}
+
+
 .feed-news a:nth-of-type(7),
 .feed-news a:nth-of-type(8),
 .feed-news a:nth-of-type(9) {
@@ -42,6 +54,7 @@
 }
 
 @media screen and (min-width: 769px) {
+
   .feed-news a:nth-of-type(7),
   .feed-news a:nth-of-type(8),
   .feed-news a:nth-of-type(9) {
@@ -194,18 +207,22 @@
     }
   }
 }
+
 /* Contenedor de la imagen circular */
 .short-description__image {
   width: 90vw;
   max-width: 350px;
-  height: 90vw;              /* Mismo valor que width para asegurar círculo */
-  max-height: 350px;         /* Mismo valor que max-width */
+  height: 90vw;
+  /* Mismo valor que width para asegurar círculo */
+  max-height: 350px;
+  /* Mismo valor que max-width */
   border-radius: 50%;
   overflow: hidden;
   margin: 0 auto;
   display: block;
   position: relative;
-  flex-shrink: 0;            /* Evita que se comprima */
+  flex-shrink: 0;
+  /* Evita que se comprima */
 }
 
 /* Asegurar que la imagen llene el contenedor circular */
@@ -222,8 +239,10 @@
   .short-description__image {
     width: 50vw;
     max-width: 600px;
-    height: 50vw;           /* Mismo valor que width */
-    max-height: 600px;      /* Mismo valor que max-width */
+    height: 50vw;
+    /* Mismo valor que width */
+    max-height: 600px;
+    /* Mismo valor que max-width */
     margin: 0 auto;
   }
 }
@@ -233,8 +252,10 @@
   .short-description__image {
     width: 40vw;
     max-width: 750px;
-    height: 40vw;           /* Mismo valor que width */
-    max-height: 750px;      /* Mismo valor que max-width */
+    height: 40vw;
+    /* Mismo valor que width */
+    max-height: 750px;
+    /* Mismo valor que max-width */
     margin: 0;
   }
 }
@@ -251,9 +272,10 @@
   .short-description__image::before {
     content: "";
     display: block;
-    padding-top: 100%;      /* Mantiene proporción 1:1 */
+    padding-top: 100%;
+    /* Mantiene proporción 1:1 */
   }
-  
+
   .short-description__image img {
     position: absolute;
     top: 0;
@@ -335,9 +357,7 @@
 .card-news:hover .card-news__image img {
   --tw-scale-x: 1.1;
   --tw-scale-y: 1.1;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-    rotate(var(--tw-rotate)) skew(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-    scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skew(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
   opacity: 0.3;
 }
 

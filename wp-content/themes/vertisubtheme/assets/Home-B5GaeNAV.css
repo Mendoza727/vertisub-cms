@@ -1,11 +1,23 @@
 .video-banner {
-  height: 80vh;
-  min-height: 100vh;
+  height: 100vh;
+  min-height: 60vh;
   width: 100%;
-  margin-bottom: -200px;
+  margin-bottom: -250px;
+
+  @media (max-width: 768px) {
+    height: 80vh;
+    margin-bottom: -100px;
+  }
 }
 
 .video-banner video {
+  height: 100%;
+  width: 100%;
+  -o-object-fit: cover;
+  object-fit: cover;
+}
+
+.video-banner img {
   height: 100%;
   width: 100%;
   -o-object-fit: cover;
