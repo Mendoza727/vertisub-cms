@@ -5,11 +5,10 @@ Template Name: Nosotros
 ?>
 
 <head>
-    <title>About Us</title>
     <?php wp_head(); ?>
     <style>
         .contact-info p {
-            color: black!important;
+            color: black !important;
         }
     </style>
 </head>

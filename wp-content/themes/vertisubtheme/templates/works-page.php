@@ -6,7 +6,6 @@ Template Name: trabaja con nosotros
 
 <head>
     <?php wp_head(); ?>
-    <title>Trabaja Con Nosotros - Vertisub</title>
     <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/assets/css/works-styles.css">
 </head>
 

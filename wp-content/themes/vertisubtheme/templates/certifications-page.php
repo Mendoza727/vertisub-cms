@@ -6,7 +6,6 @@ Template Name: Certificaciones
 
 <head>
     <?php wp_head(); ?>
-    <title>Certificaciones Vertisub</title>
 
     <style>
         #modal {
