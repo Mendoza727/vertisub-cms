@@ -141,7 +141,7 @@ Template Name: Home
     <?php get_header() ?>
     <?php $banners = vertisub_get_acf_field('banners'); ?>
     <?php if ($banners) : ?>
-        <div class="relative w-full 60vh md:h-[100vh] !mb-[-250px] overflow-hidden" id="bannerCarousel">
+        <div class="relative w-full h-[100vh] !mb-[-250px] overflow-hidden" id="bannerCarousel">
             <!-- Slides -->
             <?php foreach ($banners as $index => $banner) : ?>
                 <div class="absolute inset-0 <?= $index === 0 ? 'opacity-100' : 'opacity-0'; ?> transition-opacity duration-[5000ms] ease-[cubic-bezier(0.4,0,0.2,1)] slide">
