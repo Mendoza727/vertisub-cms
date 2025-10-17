@@ -584,6 +584,9 @@ Template Name: Home
             });
         </script>
 
+        <?php get_template_part('loader'); ?>
+        <?php get_template_part(slug: 'components/floating-buttons'); ?>
+
         <?php get_footer(); ?>
 </body>
 
