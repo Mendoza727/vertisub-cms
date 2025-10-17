@@ -79,12 +79,12 @@ Template Name: Home
     <?php wp_head(); ?>
 </head>
 
-<body>
+<body class="scroll-smooth">
 
     <?php get_header() ?>
     <?php $banners = vertisub_get_acf_field('banners'); ?>
     <?php if ($banners) : ?>
-        <div class="relative w-full h-[600px] overflow-hidden" id="bannerCarousel">
+        <div class="relative w-full 60vh md:h-[100vh] !mb-[-250px] overflow-hidden" id="bannerCarousel">
             <!-- Slides -->
             <?php foreach ($banners as $index => $banner) : ?>
                 <div class="absolute inset-0 <?= $index === 0 ? 'opacity-100' : 'opacity-0'; ?> transition-opacity duration-[5000ms] ease-[cubic-bezier(0.4,0,0.2,1)] slide">
@@ -151,8 +151,11 @@ Template Name: Home
             </section>
         <?php endif; ?>
 
-        <?php $proyectos_data = vertisub_get_acf_field('proyectos'); ?>
-        <?php if ($proyectos_data) : ?>
+        <?php
+        $mostrar_proyectos = vertisub_get_acf_field('mostrar_proyectos');
+        $proyectos_data = vertisub_get_acf_field('proyectos');
+        ?>
+        <?php if ($proyectos_data && $mostrar_proyectos) : ?>
             <section id="work-section">
                 <div class="bg-white w-full pt-[92px] lg:pt-[120px] pb-[96px] lg:pb-[120px]">
                     <div class="container mx-auto px-[23px] xl:px-0 flex justify-end">
