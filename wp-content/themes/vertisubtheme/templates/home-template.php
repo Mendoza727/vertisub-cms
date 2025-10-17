@@ -24,13 +24,10 @@ Template Name: Home
         /* Ocultar y mostrar el modal (#modal) */
         #modal {
             display: none;
-            /* Ocultar por defecto */
         }
 
-        /* Usamos la clase 'active' añadida por JS para mostrarlo */
         #modal.active {
             display: flex;
-            /* Mostrar cuando está activo */
         }
 
         /* Flechas de navegación del modal */
@@ -62,24 +59,84 @@ Template Name: Home
             right: 15px;
         }
 
-        /* Estilos para el flip del modal - Asegurar que inicia mirando al frente (0deg) */
+        /* Estilos para el flip del modal */
         .modal-flip {
             transition: transform 0.6s;
             transform-style: preserve-3d;
             transform: rotateY(0deg);
         }
 
-        /* Asegurar que el contenido trasero inicie mirando al frente */
         #modal-back {
             transform: rotateY(0deg) !important;
             backface-visibility: hidden;
+        }
+
+        /* === ESTILOS PARA SMOOTH SCROLL Y OVERLAPPING === */
+
+        /* Asegurar que las secciones tengan contexto de apilamiento */
+        #short-description-section,
+        #work-section,
+        #news-section {
+            position: relative;
+            will-change: transform, opacity;
+        }
+
+        /* Overlapping: cada sección se superpone a la anterior */
+        #short-description-section {
+            z-index: 2;
+            margin-top: -120px;
+            /* Ajusta este valor según necesites más o menos overlap */
+        }
+
+        #work-section {
+            z-index: 3;
+            margin-top: -100px;
+        }
+
+        #news-section {
+            z-index: 4;
+            margin-top: -80px;
+        }
+
+
+        /* Asegurar que el contenido sea visible durante la animación */
+        #short-description-section,
+        #work-section,
+        #news-section {
+            opacity: 0;
+            /* GSAP manejará la opacidad */
+            transform: translateY(0);
+        }
+
+        /* Mejorar el rendimiento de las animaciones */
+        .work-item,
+        .card-news {
+            will-change: transform, opacity;
+        }
+
+        /* Efecto de difuminado en los bordes superiores */
+        #work-section::before,
+        #news-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50px;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        #news-section::before {
+            background: linear-gradient(to bottom, rgba(243, 244, 246, 0), rgba(243, 244, 246, 1));
         }
     </style>
 
     <?php wp_head(); ?>
 </head>
 
-<body class="scroll-smooth">
+<body <?php body_class("scroll-smooth bg-white text-gray-900"); ?>>
 
     <?php get_header() ?>
     <?php $banners = vertisub_get_acf_field('banners'); ?>
@@ -283,49 +340,144 @@ Template Name: Home
             </div>
         </div>
 
+        <!-- GSAP ANIMACIONES DE SCROLL CON SMOOTH SCROLL Y OVERLAPPING -->
         <script>
-            // Inicializar GSAP ScrollTrigger
-            gsap.registerPlugin(ScrollTrigger);
+            document.addEventListener("DOMContentLoaded", function() {
+                gsap.registerPlugin(ScrollTrigger);
 
-            // --- GSAP ANIMACIONES DE SCROLL ---
-            gsap.to("#video-section", {
-                scrollTrigger: {
-                    trigger: "#video-section",
-                    pin: true,
-                    pinSpacing: false
+                // Configuración global de ScrollTrigger para suavidad
+                ScrollTrigger.config({
+                    syncInterval: 5,
+                });
+
+                // === ANIMACIÓN DEL BANNER ===
+                gsap.to("#bannerCarousel", {
+                    scrollTrigger: {
+                        trigger: "#bannerCarousel",
+                        start: "top top",
+                        end: "bottom top",
+                        pin: false,
+                        scrub: 1,
+                    }
+                });
+
+                // === SECCIÓN DE DESCRIPCIÓN CORTA (Short Description) ===
+                gsap.fromTo("#short-description-section", {
+                    y: 100,
+                    opacity: 0
+                }, {
+                    y: 0,
+                    opacity: 1,
+                    scrollTrigger: {
+                        trigger: "#short-description-section",
+                        start: "top 80%",
+                        end: "top 30%",
+                        scrub: 1.5,
+                    }
+                });
+
+                // Animación del parallax
+                const timeline = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: "#short-description-container",
+                        start: "20% top",
+                        end: "bottom 20%",
+                        scrub: 1.5
+                    }
+                });
+
+                timeline.to("#short-description__info", {
+                    xPercent: -100
+                }, "a");
+                timeline.to("#short-description__image", {
+                    xPercent: 100
+                }, "a");
+
+                // === SECCIÓN DE PROYECTOS (Work Section) ===
+                gsap.fromTo("#work-section", {
+                    y: 150,
+                    opacity: 0
+                }, {
+                    y: 0,
+                    opacity: 1,
+                    scrollTrigger: {
+                        trigger: "#work-section",
+                        start: "top 85%",
+                        end: "top 25%",
+                        scrub: 2,
+                    }
+                });
+
+                // Animar cada proyecto individualmente
+                const workItems = document.querySelectorAll(".work-item");
+                if (workItems.length > 0) {
+                    gsap.fromTo(workItems, {
+                        y: 80,
+                        opacity: 0
+                    }, {
+                        y: 0,
+                        opacity: 1,
+                        stagger: 0.15,
+                        scrollTrigger: {
+                            trigger: "#work-items-container",
+                            start: "top 75%",
+                            end: "top 25%",
+                            scrub: 1.5,
+                        }
+                    });
+                }
+
+                // === SECCIÓN DE NOTICIAS (News Section) ===
+                gsap.fromTo("#news-section", {
+                    y: 150,
+                    opacity: 0
+                }, {
+                    y: 0,
+                    opacity: 1,
+                    scrollTrigger: {
+                        trigger: "#news-section",
+                        start: "top 85%",
+                        end: "top 25%",
+                        scrub: 2,
+                    }
+                });
+
+                // Animar cards de noticias
+                const newsCards = document.querySelectorAll(".card-news");
+                if (newsCards.length > 0) {
+                    gsap.fromTo(newsCards, {
+                        y: 100,
+                        opacity: 0,
+                        scale: 0.95
+                    }, {
+                        y: 0,
+                        opacity: 1,
+                        scale: 1,
+                        stagger: 0.2,
+                        scrollTrigger: {
+                            trigger: ".feed-news",
+                            start: "top 75%",
+                            end: "top 25%",
+                            scrub: 1.5,
+                        }
+                    });
                 }
             });
-
-            const timeline = gsap.timeline({
-                scrollTrigger: {
-                    trigger: "#short-description-container",
-                    start: "20% top",
-                    end: "bottom 20%",
-                    scrub: true
-                }
-            });
-
-            timeline.to("#short-description__info", {
-                xPercent: -100
-            }, "a");
-            timeline.to("#short-description__image", {
-                xPercent: 100
-            }, "a");
         </script>
 
+        <!-- JS del modal de proyectos -->
         <script>
             document.addEventListener("DOMContentLoaded", function() {
                 const modal = document.getElementById("modal");
                 const modalImage = document.getElementById("modal-image");
                 const modalTitle = document.getElementById("modal-title");
-                const modalCountry = document.getElementById("modal-country"); // Nuevo elemento
+                const modalCountry = document.getElementById("modal-country");
                 const modalDescription = document.getElementById("modal-description");
                 const closeBtn = document.getElementById("closeModal");
 
-                // Selector actualizado para los elementos de proyecto
                 const projectItems = Array.from(document.querySelectorAll(".work-item.open-modal-btn"));
-                const prevBtn = document.getElementById("prev-cert"); // Se mantiene el ID del HTML anterior
-                const nextBtn = document.getElementById("next-cert"); // Se mantiene el ID del HTML anterior
+                const prevBtn = document.getElementById("prev-cert");
+                const nextBtn = document.getElementById("next-cert");
 
                 let currentIndex = -1;
 
@@ -351,17 +503,14 @@ Template Name: Home
                     document.body.style.overflow = '';
                 }
 
-                // Abrir modal al hacer clic en un proyecto
                 projectItems.forEach((item, index) => {
                     item.addEventListener("click", (e) => {
-                        // Asegurar que el clic sea en el item o en un hijo del item
                         if (e.currentTarget.classList.contains("open-modal-btn")) {
                             openModal(index);
                         }
                     });
                 });
 
-                // Cerrar modal
                 closeBtn.addEventListener("click", closeModal);
                 modal.addEventListener("click", function(e) {
                     if (e.target.classList.contains('modal-container')) {
@@ -369,7 +518,6 @@ Template Name: Home
                     }
                 });
 
-                // Navegar entre proyectos
                 function showNextProject() {
                     if (projectItems.length === 0) return;
                     let nextIndex = (currentIndex + 1) % projectItems.length;
@@ -385,7 +533,6 @@ Template Name: Home
                 prevBtn.addEventListener("click", showPrevProject);
                 nextBtn.addEventListener("click", showNextProject);
 
-                // Navegación por teclado
                 document.addEventListener("keydown", function(e) {
                     if (!modal.classList.contains("active")) return;
                     if (e.key === "ArrowRight") showNextProject();
@@ -395,7 +542,7 @@ Template Name: Home
             });
         </script>
 
-        <!-- JS del carrusel -->
+        <!-- JS del carrusel de banners -->
         <script>
             document.addEventListener("DOMContentLoaded", function() {
                 const slides = document.querySelectorAll("#bannerCarousel .slide");
@@ -420,12 +567,10 @@ Template Name: Home
                     showSlide(next);
                 }
 
-                // Iniciar carrusel automático
                 function startCarousel() {
                     interval = setInterval(nextSlide, 6000);
                 }
 
-                // Reiniciar cuando se hace clic manualmente
                 indicators.forEach((dot, index) => {
                     dot.addEventListener("click", () => {
                         clearInterval(interval);
@@ -434,7 +579,6 @@ Template Name: Home
                     });
                 });
 
-                // Mostrar el primer slide correctamente
                 showSlide(0);
                 startCarousel();
             });
