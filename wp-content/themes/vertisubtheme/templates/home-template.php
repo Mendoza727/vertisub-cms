@@ -147,7 +147,7 @@ Template Name: Home
                 <div class="absolute inset-0 <?= $index === 0 ? 'opacity-100' : 'opacity-0'; ?> transition-opacity duration-[5000ms] ease-[cubic-bezier(0.4,0,0.2,1)] slide">
                     <img src="<?= esc_url($banner['imagen']); ?>"
                         alt="<?= esc_attr($banner['titulo']); ?>"
-                        class="w-full h-full object-cover">
+                        class="w-full h-full" style="object-fit: cover!important;">
 
                     <!-- Contenido alineado a la izquierda con márgenes -->
                     <div class="absolute inset-0 bg-black/40 flex flex-col justify-center text-white">
