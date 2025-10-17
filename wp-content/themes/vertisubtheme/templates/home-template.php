@@ -82,12 +82,46 @@ Template Name: Home
 <body>
 
     <?php get_header() ?>
-    <?php $banner_id = vertisub_get_acf_field('banner'); ?>
-    <?php if ($banner_id) : ?>
-        <?php $banner_image = wp_get_attachment_image($banner_id, 'full'); ?>
-        <section class="video-banner">
-            <?= $banner_image; ?>
-        </section>
+    <?php $banners = vertisub_get_acf_field('banners'); ?>
+    <?php if ($banners) : ?>
+        <div class="relative w-full h-[600px] overflow-hidden" id="bannerCarousel">
+            <!-- Slides -->
+            <?php foreach ($banners as $index => $banner) : ?>
+                <div class="absolute inset-0 <?= $index === 0 ? 'opacity-100' : 'opacity-0'; ?> transition-opacity duration-[5000ms] ease-[cubic-bezier(0.4,0,0.2,1)] slide">
+                    <img src="<?= esc_url($banner['imagen']); ?>"
+                        alt="<?= esc_attr($banner['titulo']); ?>"
+                        class="w-full h-full object-cover">
+
+                    <!-- Contenido alineado a la izquierda con márgenes -->
+                    <div class="absolute inset-0 bg-black/40 flex flex-col justify-center text-white">
+                        <div class="container mx-auto px-4 md:px-8 lg:px-16 text-left">
+                            <?php if (!empty($banner['subtitulo'])) : ?>
+                                <p class="text-base mb-2"><?= esc_html($banner['subtitulo']); ?></p>
+                            <?php endif; ?>
+
+                            <?php if (!empty($banner['titulo'])) : ?>
+                                <h2 class="!text-4xl md:!text-5xl font-bold mb-2"><?= esc_html($banner['titulo']); ?></h2>
+                            <?php endif; ?>
+
+                            <?php if (!empty($banner['descripcion'])) : ?>
+                                <p class="text-lg md:text-xl max-w-2xl"><?= esc_html($banner['descripcion']); ?></p>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+
+            <!-- Indicadores -->
+            <?php if (count($banners) > 1) : ?>
+                <div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-3 z-10">
+                    <?php foreach ($banners as $i => $_) : ?>
+                        <button
+                            class="w-3 h-3 rounded-full border border-white transition-all duration-300 indicator <?= $i === 0 ? 'bg-white' : 'bg-transparent'; ?>">
+                        </button>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+        </div>
     <?php endif; ?>
 
     <?php $soluciones_data = vertisub_get_acf_field('soluciones'); ?>
@@ -355,6 +389,51 @@ Template Name: Home
                     if (e.key === "ArrowLeft") showPrevProject();
                     if (e.key === "Escape") closeModal();
                 });
+            });
+        </script>
+
+        <!-- JS del carrusel -->
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const slides = document.querySelectorAll("#bannerCarousel .slide");
+                const indicators = document.querySelectorAll("#bannerCarousel .indicator");
+                let current = 0;
+                let interval;
+
+                function showSlide(index) {
+                    slides.forEach((slide, i) => {
+                        slide.classList.toggle("opacity-100", i === index);
+                        slide.classList.toggle("opacity-0", i !== index);
+                    });
+                    indicators.forEach((dot, i) => {
+                        dot.classList.toggle("bg-white", i === index);
+                        dot.classList.toggle("bg-transparent", i !== index);
+                    });
+                    current = index;
+                }
+
+                function nextSlide() {
+                    const next = (current + 1) % slides.length;
+                    showSlide(next);
+                }
+
+                // Iniciar carrusel automático
+                function startCarousel() {
+                    interval = setInterval(nextSlide, 6000);
+                }
+
+                // Reiniciar cuando se hace clic manualmente
+                indicators.forEach((dot, index) => {
+                    dot.addEventListener("click", () => {
+                        clearInterval(interval);
+                        showSlide(index);
+                        startCarousel();
+                    });
+                });
+
+                // Mostrar el primer slide correctamente
+                showSlide(0);
+                startCarousel();
             });
         </script>
 
