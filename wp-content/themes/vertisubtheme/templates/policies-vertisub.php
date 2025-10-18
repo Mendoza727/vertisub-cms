@@ -6,7 +6,6 @@ Template Name: Politicas Vertisub
 
 <head>
     <?php wp_head(); ?>
-    <title>Politicas - Vertisub</title>
     <style>
         /* On hover, show minus icon and hide plus icon */
         .work-item:hover .collapse-icon .icon-plus {
@@ -30,6 +29,7 @@ Template Name: Politicas Vertisub
             max-height: 500px;
             opacity: 1;
             padding-top: 1.5rem;
+			overflow-y: auto;
         }
 
         .work-content {
@@ -640,9 +640,6 @@ Template Name: Politicas Vertisub
 <body <?php body_class() ?>>
     <?php get_header(); ?>
 
-    <!-- lodader -->
-    <?php get_template_part('loader'); ?>
-
     <main class="mt-5">
         <!-- Hero Section -->
         <section class="hero-about-section">
@@ -785,7 +782,6 @@ Template Name: Politicas Vertisub
         <?php endif; ?>
     </main>
     <!-- Custom JS -->
-    <script src="<?php echo get_template_directory_uri(); ?>/script.js"></script>
 
     <?php get_template_part('components/floating-buttons'); ?>
     <?php get_footer(); ?>

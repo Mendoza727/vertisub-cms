@@ -12,8 +12,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const progressPercentage = document.querySelector(".progress-percentage");
   const letters = document.querySelectorAll(".letter");
 
-  document.body.style.overflow = "hidden";
-   document.documentElement.style.overflow = "hidden";
+  if (loader) {
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+  }
 
   // Animación de progreso con porcentaje
   let progress = 0;
@@ -24,10 +26,12 @@ document.addEventListener("DOMContentLoaded", () => {
       progress = 100;
       clearInterval(progressInterval);
 
-      // Esperar un poco más antes de ocultar el loader
-      setTimeout(() => {
-        hideLoader();
-      }, 150);
+      if (loader) {
+        setTimeout(() => {
+          hideLoader();
+        }, 150);
+      }
+
     }
 
     // Actualizar barra de progreso y porcentaje
@@ -49,23 +53,40 @@ document.addEventListener("DOMContentLoaded", () => {
       }, index * 100);
     });
 
-    // Fade out del loader completo
-    setTimeout(() => {
-      loader.classList.add("fade-out");
-
+    if (loader) {
+      // Fade out del loader completo
       setTimeout(() => {
-        loader.style.display = "none";
-        document.body.classList.add("loaded");
-        document.body.style.overflowY = "auto";
-         document.documentElement.style.overflow = "visible";
-        showMainContent();
-        initNavbar();
-        initVideoHero();
-        initAboutSection();
-        initBackToTop();
-      }, 1000);
-    }, 600);
+
+        loader.classList.add("fade-out");
+
+        setTimeout(() => {
+          loader.style.display = "none";
+          document.body.classList.add("loaded");
+          document.body.style.overflowY = "auto";
+          document.documentElement.style.overflow = "visible";
+          showMainContent();
+          initNavbar();
+          initVideoHero();
+          initAboutSection();
+          initBackToTop();
+        }, 1000);
+      }, 600);
+    }
+
   };
+
+  if (!loader) {
+    setTimeout(() => {
+      document.body.classList.add("loaded");
+      document.body.style.overflowY = "auto";
+      document.documentElement.style.overflow = "visible";
+      showMainContent();
+      initNavbar();
+      initVideoHero();
+      initAboutSection();
+      initBackToTop();
+    }, 1000);
+  }
 
   const showMainContent = () => {
     const mainContent = document.getElementById("main-content");
@@ -484,26 +505,29 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   };
 
+  if (loader) {
+    letters.forEach((letter) => {
+      letter.addEventListener("mouseenter", () => {
+        letter.style.transform = "scale(1.1) rotateY(10deg)";
+        letter.style.color = "var(--accent-color)";
+      });
+
+      letter.addEventListener("mouseleave", () => {
+        letter.style.transform = "scale(1) rotateY(0deg)";
+        letter.style.color = "var(--primary-color)";
+      });
+    });
+
+    // Efecto de pulsación en el loader
+    setTimeout(() => {
+      const loaderContent = document.querySelector(".loader-content");
+      if (loaderContent) {
+        loaderContent.style.animation = "pulse 2s ease-in-out infinite";
+      }
+    }, 2000);
+  }
   // Efecto de hover en las letras durante la carga
-  letters.forEach((letter) => {
-    letter.addEventListener("mouseenter", () => {
-      letter.style.transform = "scale(1.1) rotateY(10deg)";
-      letter.style.color = "var(--accent-color)";
-    });
 
-    letter.addEventListener("mouseleave", () => {
-      letter.style.transform = "scale(1) rotateY(0deg)";
-      letter.style.color = "var(--primary-color)";
-    });
-  });
-
-  // Efecto de pulsación en el loader
-  setTimeout(() => {
-    const loaderContent = document.querySelector(".loader-content");
-    if (loaderContent) {
-      loaderContent.style.animation = "pulse 2s ease-in-out infinite";
-    }
-  }, 2000);
 
   // Agregar estilos dinámicos
   const style = document.createElement("style");

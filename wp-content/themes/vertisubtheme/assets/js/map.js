@@ -1,7 +1,7 @@
 // Global chart variable for map control
 let globalChart = null;
 
-console.log("Contact Data:", contactData);
+//+console.log("Contact Data:", contactData);
 
 // Obtener colores desde CSS :root
 const rootStyles = getComputedStyle(document.documentElement);
@@ -53,8 +53,8 @@ function initializeMap() {
       panX: "translateX",
       panY: "translateY",
       projection: am5map.geoMercator(),
-      homeZoomLevel: 2.5, // 👈 más zoom
-      homeGeoPoint: { longitude: -60, latitude: 0 },
+      homeZoomLevel: 1.9,// 👈 más zoom
+      homeGeoPoint: { longitude: -60, latitude: -10 },
     })
   );
 
@@ -62,7 +62,7 @@ function initializeMap() {
   chart.events.on("datavalidated", function () {
     chart.goHome();
   });
-
+  
   var polygonSeries = chart.series.push(
     am5map.MapPolygonSeries.new(root, {
       geoJSON: am5geodata_worldLow,
@@ -183,7 +183,11 @@ function initializeMap() {
     chart.goHome();
   });
 
-  chart.appear(1000, 100);
+
+  chart.appear(500, 0).then(function () {
+    chart.goHome();
+  });
+
 }
 
 // Enhanced function to show contact modal
@@ -211,30 +215,30 @@ function showContactModal(countryCode) {
         content = `
                             <div class="contact-list">
                                 ${contactInfo.values
-                                  .map(
-                                    (phone) => `
+            .map(
+              (phone) => `
                                     <div class="contact-list-item">
                                         <strong>${phone.label}:</strong>
                                         <a href="${phone.link}">${phone.number}</a>
                                     </div>
                                 `
-                                  )
-                                  .join("")}
+            )
+            .join("")}
                             </div>
                         `;
       } else if (key === "whatsapp") {
         content = `
                             <div class="whatsapp-list">
                                 ${contactInfo.values
-                                  .map(
-                                    (wa) => `
+            .map(
+              (wa) => `
                                     <a href="${wa.link}" target="_blank" class="whatsapp-btn">
                                         <i class="fab fa-whatsapp"></i>
                                         ${wa.number}
                                     </a>
                                 `
-                                  )
-                                  .join("")}
+            )
+            .join("")}
                             </div>
                         `;
       }

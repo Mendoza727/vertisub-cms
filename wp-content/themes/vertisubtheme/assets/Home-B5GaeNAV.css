@@ -1,9 +1,26 @@
 .video-banner {
   height: 100vh;
-  min-height: 100vh;
+  min-height: 60vh;
   width: 100%;
+  margin-bottom: -250px;
 }
+
+@media (max-width: 768px) {
+  .video-banner {
+    height: 80vh;
+    margin-bottom: -100px;
+  }
+}
+
+
 .video-banner video {
+  height: 100%;
+  width: 100%;
+  -o-object-fit: cover;
+  object-fit: cover;
+}
+
+.video-banner img {
   height: 100%;
   width: 100%;
   -o-object-fit: cover;
@@ -23,25 +40,72 @@
   height: 100%;
   object-fit: cover;
   opacity: 0;
-  animation: slideAnim 44s infinite; /* 11 imágenes * 4s por imagen */
+  animation: slideAnim 44s infinite;
+  /* 11 imágenes * 4s por imagen */
 }
 
-.pointer-events-none img.carousel-img:nth-child(1)  { animation-delay: 0s; }
-.pointer-events-none img.carousel-img:nth-child(2)  { animation-delay: 4s; }
-.pointer-events-none img.carousel-img:nth-child(3)  { animation-delay: 8s; }
-.pointer-events-none img.carousel-img:nth-child(4)  { animation-delay: 12s; }
-.pointer-events-none img.carousel-img:nth-child(5)  { animation-delay: 16s; }
-.pointer-events-none img.carousel-img:nth-child(6)  { animation-delay: 20s; }
-.pointer-events-none img.carousel-img:nth-child(7)  { animation-delay: 24s; }
-.pointer-events-none img.carousel-img:nth-child(8)  { animation-delay: 28s; }
-.pointer-events-none img.carousel-img:nth-child(9)  { animation-delay: 32s; }
-.pointer-events-none img.carousel-img:nth-child(10) { animation-delay: 36s; }
-.pointer-events-none img.carousel-img:nth-child(11) { animation-delay: 40s; }
+.pointer-events-none img.carousel-img:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.pointer-events-none img.carousel-img:nth-child(2) {
+  animation-delay: 4s;
+}
+
+.pointer-events-none img.carousel-img:nth-child(3) {
+  animation-delay: 8s;
+}
+
+.pointer-events-none img.carousel-img:nth-child(4) {
+  animation-delay: 12s;
+}
+
+.pointer-events-none img.carousel-img:nth-child(5) {
+  animation-delay: 16s;
+}
+
+.pointer-events-none img.carousel-img:nth-child(6) {
+  animation-delay: 20s;
+}
+
+.pointer-events-none img.carousel-img:nth-child(7) {
+  animation-delay: 24s;
+}
+
+.pointer-events-none img.carousel-img:nth-child(8) {
+  animation-delay: 28s;
+}
+
+.pointer-events-none img.carousel-img:nth-child(9) {
+  animation-delay: 32s;
+}
+
+.pointer-events-none img.carousel-img:nth-child(10) {
+  animation-delay: 36s;
+}
+
+.pointer-events-none img.carousel-img:nth-child(11) {
+  animation-delay: 40s;
+}
 
 @keyframes slideAnim {
-  0%   { opacity: 0; }
-  8%   { opacity: 1; }
-  33%  { opacity: 1; }
-  41%  { opacity: 0; }
-  100% { opacity: 0; }
+  0% {
+    opacity: 0;
+  }
+
+  8% {
+    opacity: 1;
+  }
+
+  33% {
+    opacity: 1;
+  }
+
+  41% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 0;
+  }
 }

@@ -6,7 +6,6 @@ Template Name: Politicas Privacidad
 
 <head>
     <?php wp_head(); ?>
-    <title>Politicas De Privacidad</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
@@ -14,9 +13,6 @@ Template Name: Politicas Privacidad
 
 <body <?php body_class(); ?>>
     <?php get_header(); ?>
-
-    <?php get_template_part('loader'); ?>
-
     <section class="privacy-hero-privacy mt-5">
         <div class="container">
             <div class="hero-icon-privacy" data-aos="zoom-in">
@@ -467,7 +463,6 @@ Template Name: Politicas Privacidad
     </div>
 
     <!-- Custom JS -->
-    <script src="<?php echo get_template_directory_uri(); ?>/script.js"></script>
     <script>
         AOS.init({
             duration: 800,

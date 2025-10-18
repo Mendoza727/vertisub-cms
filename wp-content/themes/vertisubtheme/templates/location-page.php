@@ -6,35 +6,19 @@ Template Name: Ubicacion
 
 <head>
     <?php wp_head(); ?>
-    <title>Mapa - Oficinas Vertisub</title>
 </head>
 
 <body <?php body_class(); ?>>
     <?php get_header(); ?>
 
-    <?php get_template_part('loader'); ?>
 
     <main class="mt-5">
-
-
-        <!-- Columna de imagen en un cuadro -->
-        <div class="col-lg-5 d-flex justify-content-center" data-aos="fade-up">
-            <div class="image-box" style="max-width: 600px; height: 400px; border-radius: 8px; overflow: hidden; margin-left: 33px;">
-                <img src="http://localhost/vertisub/wp-content/uploads/2025/09/14a8aacb-725a-480b-b5ab-cdbbe099d0df.jpeg"
-                    alt="Imagen Nosotros"
-                    class="img-fluid">
-            </div>
-        </div>
-        </div>
-        </div>
-        </section>
-
         <!-- About Section -->
-        <section class="map-section">
-            <div class="map-container">
+        <section class="map-section mt-5">
+            <div class="map-container pt-5">
                 <div class="section-header">
-                    <h2 class="section-title">Nuestras Oficinas Globales</h2>
-                    <p class="section-subtitle">Haz clic en cualquier país destacado para obtener información de contacto de nuestras oficinas</p>
+                    <h2 class="section-title"><?= vertisub_get_acf_field("titulo"); ?></h2>
+                    <p class="section-subtitle"><?= vertisub_get_acf_field("descripcion"); ?></p>
                 </div>
 
                 <!-- map wrapper -->
@@ -67,7 +51,6 @@ Template Name: Ubicacion
     </main>
 
     <!-- Custom JS -->
-    <script src="<?php echo get_template_directory_uri(); ?>/script.js"></script>
 
     <?php get_template_part('components/floating-buttons'); ?>
     <?php get_footer(); ?>
