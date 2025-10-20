@@ -59,7 +59,12 @@
                                 }
                                 the_content();
                                 ?>
+
+                                <a href="<?php echo esc_url(home_url('/noticias')); ?>" class="btn-expand" style="width: fit-content; margin: 0;">
+                                    <i class="fas fa-plus me-2"></i>Ver más noticias
+                                </a>
                             </div>
+
 
                         </article>
                     </div>
